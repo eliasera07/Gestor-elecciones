@@ -1,0 +1,1 @@
+//protected $fillable = ['nombre', 'motivo', 'cargodeautoridad', 'gestion', 'tipodevotantes', 'convocatoria', 'fecha', 'tipodeeleccion', 'descripcion'];

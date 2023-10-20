@@ -1,0 +1,27 @@
+-Instalar primero node.js de la pagina oficial https://nodejs.org/en/download/current
+ejecutar los siguientes comandos para usar el motor de login de laravel
+
+- composer require laravel/ui:^2.4
+- php artisan ui bootstrap
+- php artisan ui bootstrap --auth
+- npm install
+- npm run dev
+
+Despues crear la base de datos desde phpadmin entrando desde xammp con nombre "administradordeelecciones" y de tipo "utf8mb4_general_ci" Esto es importante para q no tengamos conflicto con git y tengamos la misma base todos
+
+-Despues hacer las migraciones con el comando "php artisan migrate" para q cree las tablas en la base de datos y ejecutar el servidor "php artisan serve" porq cambie el nombre de la tabla donde se guardaran las elecciones creadas
+
+-Creen el ususario con 
+nombre Admin 
+usuario: admindevgenius@gmail.com 
+contraseña: 12345678
+
+comando para crear modelos y controlador:
+php artisan make:model Models\nombre modelo -mcr
+
+Ya hice lo de crear la lista de las elcciones y la de editar una elccion las direciones para entrar son:
+
+Crear
+"http://localhost:8000/elecciones/create"
+lista de elecciones con la posibilidad de deditar ya una elccion 
+"http://localhost:8000/elecciones"
