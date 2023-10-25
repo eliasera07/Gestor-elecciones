@@ -49,7 +49,6 @@
 
         <li><a href="{{ url('/') }}">Inicio</a></li>
             <li><a href="{{ url('/elecciones') }}">Elecciones</a></li>
-            <li><a href="{{ url('/comunicados') }}">Comunicados</a></li>
             <li><a href="#">Documentación</a></li>
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contacto</a></li> --}}
@@ -75,7 +74,7 @@
 
                 
 
-                    <label for="nombreMiembro">Nombre Miembro Comite:</label>
+                    <label for="id_eleccion">Eleccion:</label>
                     <select name="id_eleccion" required>
                         <option value="">Selecciona una elección</option>
                           @if (isset($elecciones))
@@ -83,7 +82,9 @@
                         <option value="{{ $eleccion->id }}" @if(isset($comite) && $comite->id_eleccion == $eleccion->id) selected @endif>{{ $eleccion->nombre }}</option>
                           @endforeach
                           @endif
-                       </select>
+                       </select><br><br>
+
+                    <label for="nombreMiembro">Nombre Miembro Comite:</label>
                     <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')" name="nombreMiembro"
                         placeholder="Escribe el nombre del miembro aquí..."
                         value="{{ isset($comite) ? $comite->nombreMiembro : '' }}" id="nombreMiembro" required>
