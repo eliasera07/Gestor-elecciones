@@ -18,13 +18,13 @@ use App\Http\Controllers\FrenteController;
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::resource('/', 'WelcomeController');
 
 //Route::get('/elecciones', 'EleccionController@index');
 Route::get('/elecciones/{id}/archivar', 'EleccionController@archivar');
@@ -44,6 +44,8 @@ Route::get('/header', function () {
 Route::resource('comite', 'ComiteController');
 
 Route::resource('frente', 'FrenteController');
+
+Route::resource('comunicados', 'ComunicadoController');
 
 //Route::get('/registro-votante', function () {
     //return view('votante.form');

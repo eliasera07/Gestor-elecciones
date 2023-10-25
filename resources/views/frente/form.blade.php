@@ -301,6 +301,7 @@
 
             <li><a href="{{ url('/') }}">Inicio</a></li>
             <li><a href="{{ url('/elecciones') }}">Elecciones</a></li>
+            <li><a href="{{ url('/comunicados') }}">Comunicados</a></li>
             <li><a href="#">Documentación</a></li>
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contactos</a></li> --}}
@@ -355,7 +356,8 @@
                         <p>{{ $frente->fotofrente }}</p>
                     @endif
                     <input type="file" title="Subir Logotipo o foto del frente" name="fotofrente" required
-                        {{ isset($frente) && $frente->fotofrente ? '' : '' }}><br><br>
+                    accept=".png, .jpg, .jpeg"   
+                    {{ isset($frente) && $frente->fotofrente ? '' : '' }}><br><br>
 
                 <label for="nombrecandidato1">Nombre Candidato de Frente:</label>
                 <input type="text" placeholder="Escribe el Cnombre aquí..." maxlength="30"
