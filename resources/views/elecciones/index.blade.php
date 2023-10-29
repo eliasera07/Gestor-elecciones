@@ -120,6 +120,11 @@
             </div>
 
             <div class="botones">
+                <a href="{{ url('/mesas') }}" class="buttons">Lista de Mesas</a>
+            </div>
+
+
+            <div class="botones">
                 <input type="text" id="search" placeholder="Buscar...">
                 <button class="buttons" onclick="search()">Buscar</button>
             </div>

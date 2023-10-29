@@ -7,6 +7,7 @@ use App\Http\Controllers\EleccionController;
 use App\Http\Controllers\VotanteController;
 use App\Http\Controllers\ComiteController;
 use App\Http\Controllers\FrenteController;
+use App\Http\Controllers\MesaController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -47,6 +48,17 @@ Route::resource('frente', 'FrenteController');
 
 Route::resource('comunicados', 'ComunicadoController');
 
+Route::resource('mesas', 'MesaController');
+
+//Route::get('/mesas-create', function () {
+  //  return view('mesas.form');
+//});
+//Route::get('/mesas', function () {
+  //  return view('mesas.index');
+//});
+Route::get('/jurados', function () {
+    return view('jurados.jurados');
+});
 //Route::get('/registro-votante', function () {
     //return view('votante.form');
 //});

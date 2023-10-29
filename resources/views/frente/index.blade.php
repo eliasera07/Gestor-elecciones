@@ -154,7 +154,7 @@
                                       <img src="/images/borrar.png" alt="Borrar" class="formato-imagen" />
                                       </button>
                                        </form>
-                                {{-- Fin función borrar --}}
+                                 {{-- Fin función borrar --}}
   
                                     
                                     </td>

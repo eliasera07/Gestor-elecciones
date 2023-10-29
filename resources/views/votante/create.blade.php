@@ -2,5 +2,4 @@
     @csrf
     @include('votante.form');
 
-
 </form>
