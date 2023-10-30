@@ -15,6 +15,7 @@ class JuradoController extends Controller
     public function index()
     {
         //
+
     }
 
     /**
@@ -25,6 +26,7 @@ class JuradoController extends Controller
     public function create()
     {
         //
+        return view('jurados.create');
     }
 
     /**
@@ -36,6 +38,11 @@ class JuradoController extends Controller
     public function store(Request $request)
     {
         //
+        $datosJurado = request()->except('_token');
+    
+        // Inserta los datos en la tabla votantes
+        Jurado::insert($datosJurado);
+    
     }
 
     /**
@@ -55,10 +62,19 @@ class JuradoController extends Controller
      * @param  \App\Models\Jurado  $jurado
      * @return \Illuminate\Http\Response
      */
-    public function edit(Jurado $jurado)
-    {
-        //
+    public function edit($id)
+{
+    // Recupera el jurado por su ID
+    $jurados = Jurado::find($id);
+
+    // Verifica si el jurado existe
+    if (!$jurados) {
+        return redirect('/ruta-donde-quieras-redirigir')->with('error', 'Jurado no encontrado');
     }
+
+    // Retorna la vista del formulario de edición con el jurado
+    return view('jurados.edit', compact('jurados'));
+}
 
     /**
      * Update the specified resource in storage.
@@ -67,9 +83,16 @@ class JuradoController extends Controller
      * @param  \App\Models\Jurado  $jurado
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Jurado $jurado)
+    public function update(Request $request, $id)
     {
         //
+        $datosJurado = $request->except(['_token', '_method']);
+   
+        Jurado::where('id', $id)->update($datosJurado);
+    
+        $jurados = Jurado::findOrFail($id);
+    
+        return redirect('/mesas');
     }
 
     /**
@@ -78,8 +101,10 @@ class JuradoController extends Controller
      * @param  \App\Models\Jurado  $jurado
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Jurado $jurado)
+    public function destroy(Jurado $id)
     {
         //
+        Jurado::destroy($id);
+        return redirect('comite');
     }
 }

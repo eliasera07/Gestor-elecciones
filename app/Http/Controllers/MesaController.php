@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Optional;
 
 use App\Models\Eleccion;
+use App\Models\Votante;
+use App\Models\Jurado;
 use App\Models\Mesa;
 use Illuminate\Http\Request;
 
@@ -118,4 +121,69 @@ class MesaController extends Controller
         Mesa::destroy($id);
         return redirect('mesas');
     }
+
+    public function generateJurados($id)
+{
+    $mesa = Mesa::find($id);
+
+    if (!$mesa) {
+        return redirect('/mesas')->with('error', 'Mesa no encontrada');
+    }
+
+    // Obtén la cantidad de jurados que deseas generar
+    $cantidadSuplentes = 3;
+    $cantidadTitulares = 3;
+    $cantidadPresidente = 1;
+
+    // Obtén los votantes disponibles para esta mesa
+    $votantes = Votante::where('ideleccion', $mesa->id_de_eleccion)->inRandomOrder()->limit($cantidadSuplentes + $cantidadTitulares + $cantidadPresidente)->get();
+
+    // Baraja los votantes aleatoriamente
+    $votantes = $votantes->shuffle();
+
+    $i = 0;
+    $tiposJurado = ['Suplente', 'Titular', 'Titular', 'Suplente', 'Titular', 'Suplente', 'Presidente'];
+
+    // Itera sobre los votantes para asignarlos como jurados
+    foreach ($votantes as $votante) {
+        $tipoJurado = $tiposJurado[$i];
+
+        // Crea una nueva entrada en la tabla de jurados
+        Jurado::create([
+            'iddeeleccion' => $votante->ideleccion,
+            'idmesa' => $mesa->numeromesa,
+            'nombres' => $votante->nombres,
+            'apellidoPaterno' => $votante->apellidoPaterno,
+            'apellidoMaterno' => $votante->apellidoMaterno,
+            'codSis' => $votante->codSis,
+            'CI' => $votante->CI,
+            'tipoJurado' => $tipoJurado,
+        ]);
+
+        $i++;
+    }
+
+    return redirect('/mesas/' . $id . '/lista-jurados')->with('success', 'Se han generado los jurados con éxito.');
+}
+
+public function listaJurados($id)
+{
+    $mesa = Mesa::find($id);
+
+    if (!$mesa) {
+        return redirect('/mesas')->with('error', 'Mesa no encontrada');
+    }
+
+    // Obtén los jurados de esta mesa ordenados por tipo
+    $jurados = Jurado::where('iddeeleccion', $mesa->id_de_eleccion)
+        ->where('idmesa', $mesa->numeromesa)
+        ->orderBy('tipojurado', 'asc')
+        ->get();
+
+    // Obtén el nombre de la elección
+    $eleccion = Eleccion::find($mesa->id_de_eleccion);
+
+    return view('mesas.lista-jurados', compact('jurados', 'eleccion'));
+}
+
 }

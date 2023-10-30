@@ -53,12 +53,10 @@
             @if (isset($elecciones))
                 {{ method_field('PATCH') }}
             @endif
-            <h2 class="form-title1">Elecciones Rector 2023</h2>
-            
-
-
-            
+            <h2 class="form-title1">{{ $eleccion->nombre }}</h2>
+            <br><br>
             <h2 class="form-title">Lista de Jurados</h2>
+
 
             
            
@@ -124,39 +122,41 @@
 
   
 
+<section class="elecciones-section">
+        <div class="container">
 
-<div class="container">
-            <div class="row">
-                <div class="table-responsive">
-                    <table id="juradosTable" class="vistatabla">
-                        <thead>
-                            <tr>
-                                <th>N°</th>
-                                <th>Nombre</th>
-                              <th>Apellido Paterno</th>
-                          <th>Apellido Materno</th>
-                          <th>Tipo Jurado</th>
-                          <th>Cambiar Jurado</th>
+            <table id="juradosTable" class="vistatabla">
+                <thead>
+                    <tr>
+                        <th>Id de elección</th>
+                        <th>N° Mesa</th>
+                        <th>Nombre</th>
+                        <th>Apellido Paterno</th>
+                        <th>Apellido Materno</th>
+                        <th>Tipo Jurado</th>
+                        <th>Cambiar Jurado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach ($jurados as $jurado)
+    <tr>
+        <td>{{ $jurado->iddeeleccion }}</td>
+        <td>{{ $jurado->idmesa }}</td>
+        <td>{{ $jurado->nombres }}</td>
+        <td>{{ $jurado->apellidoPaterno }}</td>
+        <td>{{ $jurado->apellidoMaterno }}</td>
+        <td>{{ $jurado->tipojurado }}</td>
+        
+        <td class="celda-botones">
+    <a href="{{ route('jurados.edit', ['id' => $jurado->id]) }}" class="buttons" style="background-color: 04243C; color: #FFF; padding: 5px 10px; border: none; cursor: pointer;">Editar</a>
+</td>
 
-                                
-                            </tr>
-                        </thead>
-                        <tbody>
-
-
-
-
-
-
-                            
-                           
-
-
-
-
-
-
-
+    </tr>
+@endforeach
+                </tbody>
+            </table>
+        </div>
+    </section>
 
         <div class="footer">
 

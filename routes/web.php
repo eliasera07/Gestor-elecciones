@@ -8,6 +8,7 @@ use App\Http\Controllers\VotanteController;
 use App\Http\Controllers\ComiteController;
 use App\Http\Controllers\FrenteController;
 use App\Http\Controllers\MesaController;
+use App\Http\Controllers\JuradoController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,15 +51,25 @@ Route::resource('comunicados', 'ComunicadoController');
 
 Route::resource('mesas', 'MesaController');
 
+Route::resource('jurados', 'JuradoController');
+
+Route::get('/mesas/{id}/generate-jurados', 'MesaController@generateJurados')->name('mesas.generateJurados');
+
+Route::get('/mesas/{id}/lista-jurados', 'MesaController@listaJurados');
+
+Route::get('/jurados/{id}/edit', 'JuradoController@edit')->name('jurados.edit');
+
+
+
 //Route::get('/mesas-create', function () {
   //  return view('mesas.form');
 //});
 //Route::get('/mesas', function () {
   //  return view('mesas.index');
 //});
-Route::get('/jurados', function () {
-    return view('jurados.jurados');
-});
+//Route::get('/mesas', function () {
+    //return view('mesas.lista-jurados');
+//});
 //Route::get('/registro-votante', function () {
     //return view('votante.form');
 //});

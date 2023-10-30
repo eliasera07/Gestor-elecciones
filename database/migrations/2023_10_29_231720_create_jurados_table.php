@@ -15,6 +15,14 @@ class CreateJuradosTable extends Migration
     {
         Schema::create('jurados', function (Blueprint $table) {
             $table->id();
+            $table->integer('iddeeleccion');
+            $table->integer('idmesa');
+            $table->string('nombres');
+            $table->string('apellidoPaterno');
+            $table->string('apellidoMaterno');
+            $table->string('codSis');
+            $table->string('CI');
+            $table->string('tipojurado');
             $table->timestamps();
         });
     }

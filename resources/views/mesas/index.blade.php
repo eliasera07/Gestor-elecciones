@@ -152,14 +152,13 @@
                                     
 
                                     <td class="celda-botones">
+                                    
+                                    <a href="{{ url('/mesas/' . $mesas->id . '/generate-jurados') }}" class="buttons" 
+                                    style="background-color: 04243C; color: #FFF; padding: 5px 10px; border: none; cursor: pointer;">Generar Jurados</a>
 
 
-
-
-
-                                    {{-- <button class="buttons" style="background-color: 04243C; color: #FFF; padding: 5px 10px; border: none; cursor: pointer;"
-                                     onclick="window.location.href='{{ url('/mesas/' . $mesas->id . '/edit') }}'">Editar
-                                    </button> --}}
+                                    <a href="{{ url('/mesas/' . $mesas->id . '/lista-jurados') }}" class="buttons"
+                                    style="background-color: 04243C; color: #FFF; padding: 5px 10px; border: none; cursor: pointer;">Lista de Jurados</a>
 
                                     <button class="buttons-dentro-tabla" title="Editar Elección"
                                      onclick="window.location.href='{{ url('/mesas/' . $mesas->id . '/edit') }}'">

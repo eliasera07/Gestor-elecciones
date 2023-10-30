@@ -347,7 +347,7 @@
             <option value="{{ $eleccion->id }}" @if(isset($mesas) && $mesas->ideleccion == $eleccion->id) selected @endif>{{ $eleccion->nombre }}</option>
         @endforeach
     @endif
-</select>
+</select><br><br>
 
                      
                 <label for="votantemesa">Tipo de Votante:</label>
@@ -355,7 +355,7 @@
                     <option value="Estudiante">Estudiante</option>
                     <option value="Docente">Docente</option>
                     <option value="Administrativo">Administrativo</option>
-                </select>
+                </select><br><br>
 
                 <div class="campo-adicional" id="facultadmesa">
                 <label for="facultadmesa">Facultad de la mesa:</label>
