@@ -152,7 +152,7 @@
                                     <form id="delete-form-{{ $votante->id }}" action="{{ url('/votante/' . $votante->id) }}" method="post" style="display: inline;">
                                     @csrf
                                  {{ method_field('DELETE') }}
-                                     <button class="buttons-dentro-tabla" title="Borrar Elección" onclick="return confirm ('Quieres borrar este votante?')">
+                                     <button class="buttons-dentro-tabla" title="Borrar Votante" onclick="return confirm ('Quieres borrar este votante?')">
                                       <img src="/images/borrar.png" alt="Borrar" class="formato-imagen" />
                                       </button>
                                        </form>

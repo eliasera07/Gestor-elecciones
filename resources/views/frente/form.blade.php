@@ -358,11 +358,42 @@
                     <input type="file" title="Subir Logotipo o foto del frente" name="fotofrente" required
                     accept=".png, .jpg, .jpeg"   
                     {{ isset($frente) && $frente->fotofrente ? '' : '' }}><br><br>
-
-                <label for="nombrecandidato1">Nombre Candidato de Frente:</label>
+                
+                <label for="">Cantidad de Candidatos:</label>
+                <select name="" id="cantCandidatos" required>
+                    <option value="candidato1">1</option>
+                    <option value="candidato2">2</option>
+                    <option value="candidato3">3</option>
+                    <option value="candidato4">4</option>
+                </select>    
+                <div class="campo-adicional" id="candidato1">
+                <label for="profesion">Nombre Candidato de Frente 1:</label>
                 <input type="text" placeholder="Escribe el Cnombre aquí..." maxlength="30"
                 oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
                 name="nombrecandidato1" value="{{ isset($frente) ? $frente->nombrecandidato1 : old('nombrecandidato1') }}" id="codSis" required>
+                </div>
+                <div class="campo-adicional" id="candidato2">
+                <label for="profesion">Nombre Candidato de Frente 2:</label>
+                <input type="text" placeholder="Escribe el Cnombre aquí..." maxlength="30"
+                oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
+                name="nombrecandidato2" value="{{ isset($frente) ? $frente->nombrecandidato1 : old('nombrecandidato2') }}" id="codSis" >
+                </div>
+                <div class="campo-adicional" id="candidato3">
+                <label for="profesion">Nombre Candidato de Frente 3:</label>
+                <input type="text" placeholder="Escribe el Cnombre aquí..." maxlength="30"
+                oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
+                name="nombrecandidato3" value="{{ isset($frente) ? $frente->nombrecandidato3 : old('nombrecandidato1') }}" id="codSis" >
+                </div>
+                <div class="campo-adicional" id="candidato4">
+                <label for="profesion">Nombre Candidato de Frente 4:</label>
+                <input type="text" placeholder="Escribe el Cnombre aquí..." maxlength="30"
+                oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
+                name="nombrecandidato4" value="{{ isset($frente) ? $frente->nombrecandidato4 : old('nombrecandidato1') }}" id="codSis" >
+                </div>
+
+
+
+                
                 @error('nombrecandidato1')
                 <span class="error-message">{{ $message }}</span>
                 @enderror<br><br>
@@ -422,6 +453,46 @@
             }
         }
 
+    </script>
+    <script>
+        function mostrarCampoAdicional() {
+            var cantCandidatos = document.getElementById("cantCandidatos").value;
+            var candidato1 = document.getElementById("candidato1");
+            var candidato2 = document.getElementById("candidato2");
+            var candidato3 = document.getElementById("candidato3");
+            var candidato4 = document.getElementById("candidato4")
+            
+            candidato1.style.display = "none";
+            candidato2.style.display = "none";
+            candidato3.style.display = "none";
+            candidato4.style.display = "none";
+            
+            if (cantCandidatos === "candidato1") {
+                candidato1.style.display = "block";
+            } else if (cantCandidatos === "candidato2") {
+                candidato1.style.display = "block";
+                candidato2.style.display = "block";
+            } else if (cantCandidatos === "candidato3") {
+                candidato1.style.display = "block";
+                candidato2.style.display = "block";
+                candidato3.style.display = "block";
+            } else if(cantCandidatos === "candidato4") {
+                candidato1.style.display = "block";
+                candidato2.style.display = "block";
+                candidato3.style.display = "block";
+                candidato4.style.display = "block";
+            } else{
+                candidato1.style.display = "block";
+                candidato2.style.display = "block";
+                candidato3.style.display = "block";
+                candidato4.style.display = "block";
+            }
+
+        }
+
+        document.getElementById("cantCandidatos").addEventListener("change", mostrarCampoAdicional);
+
+        mostrarCampoAdicional();
     </script>
 
 

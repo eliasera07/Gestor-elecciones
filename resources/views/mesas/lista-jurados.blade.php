@@ -8,6 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link rel="stylesheet" href="{{ asset('css/Form.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Elecciones_Creadas.css') }}">
+    
 
 
 </head>
@@ -75,32 +77,67 @@
             color: #fff; 
             padding: 1% 2%;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: #A70606;
-            color: #FFFFFF;
-        }
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-        .edit-button {
-            background-color: #04243C;
-            color: #FFF;
-            padding: 5px 5px;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
+        <style>
+            .elecciones-section {
+                background-color: white;
+                padding: 20px;
+            }
+
+            .centered-container {
+                text-align: center;
+            }
+
+            .styled-button {
+                width: 10%;
+                height: 100%;
+                background: rgba(4, 36, 60, 0.99);
+                box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+                border-radius: 5px;
+                border: 1px solid rgba(198, 69, 196, 0.30);
+                color: #fff;
+                padding: 1% 2%;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            table, th, td {
+                border: 1px solid #ddd;
+            }
+
+            th, td {
+                padding: 8px;
+                text-align: center;
+            }
+
+            th {
+                background-color: #A70606;
+                color: #FFFFFF;
+            }
+
+            tr:hover {
+                background-color: #f5f5f5;
+            }
+
+            .edit-button {
+                background-color: #04243C;
+                color: #FFF;
+                padding: 5px 5px;
+                border: none;
+                cursor: pointer;
+            }
+            .botones {
+
+            display: inline-block;
+            margin-right: 10px;
+            }
+            .botones {
+             margin: 10px;
+        /* Espacio entre los botones (ajusta según tus preferencias) */
+            }
+        </style>
 </head>
 <body>
 <!DOCTYPE html>
@@ -109,18 +146,13 @@
 
 </head>
 <body>
-<div>
-<div>
-  <button id="crearJurados" class="styled-button">Crear</button>
-</div>
+<div class="centered-container">
+<div class="botones">
+                <a href="{{ url('mesas/create') }}" class="buttons">Crear Mesa</a>
 
-</div>
+            </div>
 
-
-
-   
-
-  
+        
 
 <section class="elecciones-section">
         <div class="container">
@@ -148,8 +180,11 @@
         <td>{{ $jurado->tipojurado }}</td>
         
         <td class="celda-botones">
-    <a href="{{ route('jurados.edit', ['id' => $jurado->id]) }}" class="buttons" style="background-color: 04243C; color: #FFF; padding: 5px 10px; border: none; cursor: pointer;">Editar</a>
+    <a href="{{ route('jurados.edit', ['id' => $jurado->id]) }}" class="buttons-dentro-tabla">
+        <img src="/images/editar.png" alt="Editar" class="formato-imagen" />
+    </a>
 </td>
+
 
     </tr>
 @endforeach

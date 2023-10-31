@@ -118,6 +118,9 @@
                                 <th>IdEleccion</th>
                                 <th>Nombre de frente</th>
                                 <th>Nombre candidato</th>
+                                <th>Nombre 2do candidato</th>
+                                <th>Nombre 3er candidato</th>
+                                <th>Nombre 4to candidato </th>
                                 <th>Cargo de postulacion</th>
                                 <th>Acciones</th>
                             </tr>
@@ -128,6 +131,9 @@
                                     <td>{{ $frente->ideleccionfrente }}</td>
                                     <td>{{ $frente->nombrefrente }}</td>
                                     <td>{{ $frente->nombrecandidato1 }}</td>
+                                    <td>{{ $frente->nombrecandidato2 }}</td>
+                                    <td>{{ $frente->nombrecandidato3 }}</td>
+                                    <td>{{ $frente->nombrecandidato4 }}</td>
                                     <td>{{ $frente->cargopostulacion }}</td>
 
                                     <td class="celda-botones">

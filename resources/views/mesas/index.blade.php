@@ -153,12 +153,28 @@
 
                                     <td class="celda-botones">
                                     
-                                    <a href="{{ url('/mesas/' . $mesas->id . '/generate-jurados') }}" class="buttons" 
-                                    style="background-color: 04243C; color: #FFF; padding: 5px 10px; border: none; cursor: pointer;">Generar Jurados</a>
+                                    {{-- <a href="{{ url('/mesas/' . $mesas->id . '/generate-jurados') }}" class="buttons" 
+                                    style="background-color: 04243C; color: #FFF; padding: 5px 10px; border: none; cursor: pointer;">Generar Jurados </a>
 
 
                                     <a href="{{ url('/mesas/' . $mesas->id . '/lista-jurados') }}" class="buttons"
-                                    style="background-color: 04243C; color: #FFF; padding: 5px 10px; border: none; cursor: pointer;">Lista de Jurados</a>
+                                    style="background-color: 04243C; color: #FFF; padding: 5px 10px; border: none; cursor: pointer;">Lista de Jurados</a> --}}
+
+                                    <button class="buttons-dentro-tabla" title="Generar Jurados"
+                                    onclick="window.location.href='{{ url('/mesas/' . $mesas->id . '/generate-jurados') }}'" class="buttons'" >
+                                   <img src="/images/generarjurados.png" alt="Editar" class="formato-imagen" />
+                                </button>
+
+
+                                    <button class="buttons-dentro-tabla" title="Lista de Jurados"
+                                    onclick="window.location.href='{{ url('/mesas/' . $mesas->id . '/lista-jurados') }}'">
+                                   <img src="/images/listajurados.png" alt="Editar" class="formato-imagen" />
+                                </button>
+
+
+                                    
+
+
 
                                     <button class="buttons-dentro-tabla" title="Editar Elección"
                                      onclick="window.location.href='{{ url('/mesas/' . $mesas->id . '/edit') }}'">
@@ -170,7 +186,7 @@
                                     <form id="delete-form-{{ $mesas->id }}" action="{{ url('/mesas/' . $mesas->id) }}" method="post" style="display: inline;">
                                     @csrf
                                  {{ method_field('DELETE') }}
-                                     <button class="buttons-dentro-tabla" title="Borrar Elección" onclick="return confirm ('Quieres borrar esta mesa?')">
+                                     <button class="buttons-dentro-tabla" title="Borrar Mesa" onclick="return confirm ('Quieres borrar esta mesa?')">
                                       <img src="/images/borrar.png" alt="Borrar" class="formato-imagen" />
                                       </button>
                                        </form>

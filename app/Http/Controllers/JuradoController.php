@@ -69,7 +69,7 @@ class JuradoController extends Controller
 
     // Verifica si el jurado existe
     if (!$jurados) {
-        return redirect('/ruta-donde-quieras-redirigir')->with('error', 'Jurado no encontrado');
+        return redirect('/elecciones')->with('error', 'Jurado no encontrado');
     }
 
     // Retorna la vista del formulario de edición con el jurado
