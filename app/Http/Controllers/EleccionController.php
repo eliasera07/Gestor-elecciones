@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Eleccion;
+use App\Models\Frente;
 use Illuminate\Http\Request;
 
 class EleccionController extends Controller
@@ -121,5 +122,12 @@ class EleccionController extends Controller
         $eleccion->save();
 
         return redirect('/elecciones');
+    }
+
+    public function showBoleta($id) {
+        $eleccion = Eleccion::find($id);
+        $frentes = Frente::where('ideleccionfrente', $id)->get();
+    
+        return view('elecciones.boleta', compact('eleccion', 'frentes'));
     }
 }

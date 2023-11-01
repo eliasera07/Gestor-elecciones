@@ -59,6 +59,9 @@ Route::get('/mesas/{id}/lista-jurados', 'MesaController@listaJurados');
 
 Route::get('/jurados/{id}/edit', 'JuradoController@edit')->name('jurados.edit');
 
+Route::get('/elecciones/{id}/boleta', 'EleccionController@showBoleta')->name('elecciones.boleta');
+
+
 
 
 //Route::get('/mesas-create', function () {

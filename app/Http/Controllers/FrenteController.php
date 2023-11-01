@@ -47,6 +47,10 @@ class FrenteController extends Controller
     ]);
 
     $datosFrente = request()->except('_token');
+    
+    if($request->hasFile('fotofrente')){
+        $datosFrente['fotofrente']=$request->file('fotofrente')->store('uploads','public');
+    }
 
     Frente::insert($datosFrente);
 
