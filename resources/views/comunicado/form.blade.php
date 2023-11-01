@@ -111,8 +111,8 @@
 
                     <label for="titulo">Título:</label>
                     @error('titulo')<span style="color:red">{{ $message }}</span> @enderror
-                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9, .\-]+/g, '')"
-                    name="titulo" placeholder="Escribe el titulo del comunicado..." value="{{ isset($comunicado) ? $comunicado->titulo : '' }}" id="titulo" maxlength="180" required
+                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')" maxlength="40"
+                    name="titulo" placeholder="Escribe el título del comunicado..." value="{{ isset($comunicado) ? $comunicado->titulo : '' }}" id="titulo" maxlength="180" required
                     >
                     
                     <div class="file-upload-container">
@@ -131,7 +131,7 @@
                     value="{{ isset($comunicado) ? $comunicado->inicio : '' }}" required 
                     min="{{ now()->subDays(1)->format('Y-m-d') }}">-->
 
-                    <label for="fin">Fecha Fin:</label>
+                    <label for="fin">Fecha Fín:</label>
                     <input type="date" id="fin" name="fin"
                     value="{{ isset($comunicado) ? $comunicado->fin : '' }}"
                     min="{{ now()->addDay(1)->format('Y-m-d') }}">

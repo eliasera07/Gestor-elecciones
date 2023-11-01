@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear/Editar jurados</title>
+    <title>Crear/Editar Jurados</title>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link rel="stylesheet" href="{{ asset('css/Form.css') }}">
@@ -71,50 +71,50 @@
             <br>
                 <div class="column">
 
-                    <label for="iddeeleccion">ideleccion:</label>
+                    <label for="iddeeleccion">Id Eleccion:</label>
                     <input type="number"  name="iddeeleccion"
                         placeholder="Escribe el nombre del miembro aquí..."
                         value="{{ isset($jurados) ? $jurados->iddeeleccion : '' }}" id="iddeeleccion" required>
 
-                    <label for="idmesa">idmesa:</label>
+                    <label for="idmesa">Id Mesa:</label>
                     <input type="number" 
                         name="idmesa" placeholder="Escribe el apellido paterno aquí..."
                         value="{{ isset($jurados) ? $jurados->idmesa : '' }}" id="idmesa"
                         required>
 
-                        <label for="nombres">nombres:</label>
-                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')"
+                        <label for="nombres">Nombres:</label>
+                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')" maxlength="30"
                         name="nombres" placeholder="Escribe el apellido materno aquí..."
                         value="{{ isset($jurados) ? $jurados->nombres : '' }}" id="nombres"
                         required>
 
                         <label for="apellidoPaterno">Apellido Materno:</label>
-                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')"
+                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')" maxlength="30"
                         name="apellidoPaterno" placeholder="Escribe el apellido materno aquí..."
                         value="{{ isset($jurados) ? $jurados->apellidoPaterno : '' }}" id="apellidoPaterno"
                         required>
 
                         <label for="apellidoMaterno">Apellido Materno:</label>
-                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')"
+                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')" maxlength="30"
                         name="apellidoMaterno" placeholder="Escribe el apellido materno aquí..."
                         value="{{ isset($comite) ? $comite->apellidoMaterno : '' }}" id="apellidoMaterno"
                         required>
 
-                        <label for="codSis">codSis:</label>
+                        <label for="codSis">Cod-SiS:</label>
                     <input type="number" 
                         name="codSis" placeholder="Escribe el codSis"
-                        value="{{ isset($jurados) ? $jurados->codSis : '' }}" id="codSis"
+                        value="{{ isset($jurados) ? $jurados->codSis : '' }}" id="codSis" maxlength="10"
                         required>
 
                         <label for="CI">CI:</label>
                     <input type="text" 
                         name="CI" placeholder="Escribe el carnet de identidad"
-                        value="{{ isset($jurados) ? $jurados->CI : '' }}" id="CI"
+                        value="{{ isset($jurados) ? $jurados->CI : '' }}" id="CI" maxlength="10"
                         required>
 
-                        <label for="tipojurado">tipojurado:</label>
+                        <label for="tipojurado">Tipo Jurado:</label>
                     <input type="text" 
-                        name="tipojurado" placeholder="Escribe el tipo de jurado"
+                        name="tipojurado" placeholder="Escribe el tipo de jurado" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')" maxlength="30"
                         value="{{ isset($jurados) ? $jurados->tipojurado : '' }}" id="tipojurado"
                         required>
 

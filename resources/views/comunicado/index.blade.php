@@ -64,7 +64,7 @@
                         <thead>
                             <tr>
                                 <th>Nro</th>
-                                <th>Titulo</th>
+                                <th>Título</th>
                                 <th>Añadido el:</th>
                                 <th>Finaliza el:</th>
                                 <th>Acciones</th>

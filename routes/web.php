@@ -61,6 +61,17 @@ Route::get('/jurados/{id}/edit', 'JuradoController@edit')->name('jurados.edit');
 
 Route::get('/elecciones/{id}/boleta', 'EleccionController@showBoleta')->name('elecciones.boleta');
 
+Route::get('/votantes/carga', 'VotanteController@showCarga')->name('votante.carga');
+
+Route::post('/votantes/importCsv', 'VotanteController@importCsv')->name('votantes.importCsv');
+
+
+
+
+
+
+
+
 
 
 

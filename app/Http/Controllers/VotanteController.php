@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use App\Models\Eleccion;
 use App\Models\Votante;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class VotanteController extends Controller
 {
@@ -134,4 +137,91 @@ class VotanteController extends Controller
         Votante::destroy($id);
         return redirect('votante');
     }
+
+    public function import(Request $request)
+{
+    $request->validate([
+        'ideleccion' => 'required',
+        'cargarListaCSV' => 'required|file|mimes:csv,txt',
+    ]);
+
+    $file = $request->file('cargarListaCSV');
+
+    $handle = fopen($file->getPathname(), 'r');
+
+    if ($handle !== false) {
+        while (($row = fgetcsv($handle)) !== false) {
+            // Procesa y almacena cada fila del archivo CSV en la base de datos
+            Votante::create([
+                'ideleccion' => $request->ideleccion,
+                'nombres' => $row[0],
+                'apellidoPaterno' => $row[1],
+                'apellidoMaterno' => $row[2],
+                'codSis' => $row[3],
+                'CI' => $row[4],
+                'tipoVotante' => $row[5],
+                'carrera' => $row[6],
+                'profesion' => $row[7],
+                'cargoAdministrativo' => $row[8],
+                'facultad' => $row[9],
+                'celular' => $row[10],
+                'email' => $row[11],
+            ]);
+        }
+        fclose($handle);
+    }
+
+    return redirect('/elecciones')->with('success', 'Votantes importados exitosamente');
+}
+
+public function showCarga(){
+    
+    $elecciones = Eleccion::where('estado', 1)->get();
+    return view('votante.carga', compact('elecciones'));
+}
+
+
+    /**
+     * Process the uploaded CSV file to import voters.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function importCsv(Request $request)
+{
+    $request->validate([
+        'ideleccion' => 'required',
+        'cargarListaCSV' => 'required|file|mimes:csv,txt',
+    ]);
+
+    $file = $request->file('cargarListaCSV');
+
+    $handle = fopen($file->getPathname(), 'r');
+
+    if ($handle !== false) {
+        while (($row = fgetcsv($handle)) !== false) {
+            // Procesa y almacena cada fila del archivo CSV en la base de datos
+            Votante::create([
+                'ideleccion' => $request->ideleccion,
+                'nombres' => $row[0],
+                'apellidoPaterno' => $row[1],
+                'apellidoMaterno' => $row[2],
+                'codSis' => $row[3],
+                'CI' => $row[4],
+                'tipoVotante' => $row[5],
+                'carrera' => $row[6],
+                'profesion' => $row[7],
+                'cargoAdministrativo' => $row[8],
+                'facultad' => $row[9],
+                'celular' => $row[10],
+                'email' => $row[11],
+            ]);
+        }
+        fclose($handle);
+    }
+
+    return redirect('/elecciones')->with('success', 'Votantes importados exitosamente');
+}
+
+
 }

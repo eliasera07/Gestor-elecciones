@@ -410,8 +410,6 @@
                 name="email" value="{{ isset($votante) ? $votante->email : '' }}" id="email" required><br><br>
 
 
-                <label for="cargarLista">Cargar lista de votantes:</label>
-                <input type="file" title="Subir Archivo CSV o Excel" name="cargarLista" id="cargarLista" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
                 
         </div>
         <input type="submit" value="Registrar"
@@ -422,6 +420,11 @@
         <label for=""></label><br><br>
         
     </form>
+
+    
+</div>
+<br><br>
+<br><br>
     <div class="footer">
 
         <div class="footer-izq">

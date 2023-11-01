@@ -115,13 +115,13 @@
                     <table id="eleccionesTable" class="vistatabla">
                         <thead>
                             <tr>
-                                <th>IdEleccion</th>
-                                <th>Nombre de frente</th>
-                                <th>Nombre candidato</th>
-                                <th>Nombre 2do candidato</th>
-                                <th>Nombre 3er candidato</th>
-                                <th>Nombre 4to candidato </th>
-                                <th>Cargo de postulacion</th>
+                                <th>IdElección</th>
+                                <th>Nombre de Frente</th>
+                                <th>Nombre Candidato</th>
+                                <th>Nombre 2do Candidato</th>
+                                <th>Nombre 3er Candidato</th>
+                                <th>Nombre 4to Candidato </th>
+                                <th>Cargo de Postulación</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>

@@ -1,10 +1,9 @@
-{{-- crear/editar mesas --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RegistrarMesa</title>
+    <title>RegistrarVottantesporcsv</title>
     <style>
         * {
             margin: 0;
@@ -13,12 +12,16 @@
             font-family: "Uni Sans" , sans-serif;
         }
         .company-logo {
-            border-radius: 8%;
-            max-width: 15%;
-            height: auto;
-            float: left;
-            margin-right: 40px;
-        }
+    border-radius: 8%;
+
+    max-width: 15%;
+    /* Ajusta el ancho máximo de la imagen al 100% del contenedor */
+    height: auto;
+    /* Permite que la altura se ajuste automáticamente para mantener la proporción */
+    /* Alinea verticalmente la imagen en el medio del texto */
+    float: left;
+    margin-right: 40px;
+}
         nav {
             display:flex;
             align-items: center;
@@ -135,7 +138,7 @@
             padding: 2px 0;
         }
         
-        .mesa-form-container {
+        .votante-form-container {
             font-family: Arial, sans-serif;
             background-color: #fff;
             margin: 20px auto;
@@ -145,32 +148,20 @@
             max-width: 700px;
         }
 
-        .mesa-form-container .form-title {
+        .votante-form-container .form-title {
             font-size: 28px;
             margin-bottom: 20px;
             text-align: center;
         }
 
-        .mesa-columns {
+        .votante-columns {
             display: flex;
             justify-content: space-between;
         }
 
-        .mesa-column {
+        .votante-column {
             flex: 1;
             padding: 10px;
-        }
-        
-
-        /* Estilo para el selector de "Tipo de Votante" */
-        #tipoVotante {
-            flex: 1; /* Ocupa todo el espacio restante en la línea */
-            margin-right: 10px; /* Agrega un margen derecho entre los elementos */
-        }   
-
-        /* Estilo para el elemento de "Cantidad" */
-        #cantidad {
-            font-weight: bold; /* Opcional: Estiliza la fuente en negrita */
         }
 
         label {
@@ -180,9 +171,9 @@
         input[type="text"],
         input[type="date"],
         input[type="file"],
-        input[type="number"],
+       
         select {
-        width: 95%;
+        width: 92%;
         padding: 10px;
         margin-bottom: 10px;
         border: 1px solid #ccc;
@@ -196,8 +187,7 @@
             padding: 10px 20px;
             border: none;
             border-radius: 3px;
-            cursor: pointer;   
-            margin-bottom: 10px; 
+            cursor: pointer;    
         }
         input[type="reset"]{
             background-color: #A70606;
@@ -212,10 +202,6 @@
         input[type="reset"]:hover {
             background-color: #0056b3;
         }
-        .centered {
-            text-align: center; 
-        }
-
         .footer {
             background-color: #003770;
             color: white;
@@ -320,8 +306,6 @@
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contactos</a></li> --}}
             <li><a href="#">Ingreso</a></li>
-            <img src="/images/img.png"  class="company-logo">
-
         </ul>
         <div class="menu-icon"></div>
     </nav>
@@ -329,82 +313,42 @@
             <label for=""></label><br><br>
            
             </div>
-    <div class="mesa-form-container">
-    <form action="{{ url('/mesas') }}" method="post" enctype="multipart/form-data">
-        @csrf
-        @if (isset($mesas))
-                {{ method_field('PATCH') }}
+    <div class="votante-form-container">
+    <form action="{{ route('votantes.importCsv') }}" method="post" enctype="multipart/form-data">
+    @csrf
+    <div class="csv-upload-section">
+        <h2>Cargar Votantes Masivamente desde CSV</h2>
+        <br><br>
+        <label for="ideleccion">Elegir Elección:</label>
+        <select name="ideleccion" id="ideleccion" required>
+            <option value="">Selecciona una elección</option>
+            @if (isset($elecciones))
+                @foreach ($elecciones as $eleccion)
+                    <option value="{{ $eleccion->id }}">{{ $eleccion->nombre }}</option>
+                @endforeach
             @endif
-        <label for=""></label><br><br>
-        <h2 class="form-title">Registrar Mesa de Votación</h2>
-        <div class="column">
+        </select>
 
-        <label for="id_de_eleccion">Elección Asociada:</label>
-<select name="id_de_eleccion" id="id_de_eleccion" required>
-    <option value="">Selecciona una elección</option>
-    @if (isset($elecciones))
-        @foreach ($elecciones as $eleccion)
-            <option value="{{ $eleccion->id }}" @if(isset($mesas) && $mesas->ideleccion == $eleccion->id) selected @endif>{{ $eleccion->nombre }}</option>
-        @endforeach
-    @endif
-</select><br><br>
+       
+        <label for="cargarListaCSV">Archivo CSV:</label> <p>Selecciona un archivo CSV para cargar múltiples votantes a la vez.</p>
+        <input type="file" name="cargarListaCSV" id="cargarListaCSV" accept=".csv">
+        
+        <input type="submit" value="Cargar Votantes CSV" onclick="confirmarCargaCSV()">
+    </div>
+        
 
-                     
-                <label for="votantemesa">Tipo de Votante:</label>
-                <select name="votantemesa" value="{{ isset($mesas) ? $mesas->votantemesa : '' }}" id="votantemesa" required>
-                    <option value="Estudiante">Estudiante</option>
-                    <option value="Docente">Docente</option>
-                    <option value="Administrativo">Administrativo</option>
-                </select><br><br>
-
-                <div class="campo-adicional" id="facultadmesa">
-                <label for="facultadmesa">Facultad de la Mesa:</label>
-                <input type="text" placeholder="Escribe la facultad aquí..." maxlength="40" 
-                oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
-                name="facultadmesa" value="{{ isset($mesas) ? $mesas->facultadmesa : '' }}" id="facultadmesa" ><br><br>
-                </div>
-
-                <div class="campo-adicional" id="carreramesa">
-                <label for="carreramesa">Carrera:</label>
-                <input type="text" placeholder="Escribe la Carrera aquí..." maxlength="40" 
-                oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
-                name="carreramesa" value="{{ isset($mesas) ? $mesas->carreramesa : '' }}" id="carreramesa" ><br><br>
-                </div>
-
-                <div class="campo-adicional" id="ubicacionmesa">
-                <label for="ubicacionmesa">Ubicación de Mesa:</label>
-                <input type="text" placeholder="Escribe la ubicación aquí..." maxlength="40" 
-                oninput="this.value = this.value.replace(/[^A-Za-z,. 0-9]+/g, '')"
-                name="ubicacionmesa" value="{{ isset($mesas) ? $mesas->ubicacionmesa : '' }}" id="mesas" ><br><br>
-                </div>
-
-                <div class="campo-adicional" id="numerodevotantes">
-                <label for="numerodevotantes">Número de Votantes:</label>
-                <input type="number" placeholder="Escribe el número de votantes aquí..." maxlength="1000000"
-                name="numerodevotantes" value="{{ isset($mesas) ? $mesas->numerodevotantes : '' }}" id="numerodevotantes" ><br><br>
-                </div>
-                {{--
-                <label for=""></label>
-                <div class="campo-adicional">
-                <label for="numeroMesas">Número de Mesas:</label>
-                <div class="input-group">
-                    <input type="number" name="numeroMesas" id="numeroMesas" value="1" min="1">
-                    
-                </div>
-                <label for=""></label>--}}
-                
-                <br><br>      
                 
         </div>
-        <div class="botones centered">
-            <input type="submit" value="{{ isset($mesas) ? 'Actualizar' : 'Crear' }}" onclick="confirmacion()">
-            <input type="reset" value="Cancelar" onclick="cancelacion()">
-            <label for=""></label><br><br>
-            <label for=""></label><br><br>
-        </div>
-
-
+        
+       <br><br>
+        <br><br>
+        
     </form>
+
+    
+</div>
+<br><br>
+<br><br>
     <div class="footer">
 
         <div class="footer-izq">
@@ -436,15 +380,15 @@
             var confirmacion = confirm("¿Seguro que deseas cancelar? Los cambios no se guardarán.");
             if (confirmacion) {
 
-                window.location.href = "/mesas";
+                window.location.href = "/elecciones";
             }
         }
 
         function confirmacion() {
-            var confirmacion = confirm("Estas seguro de registrar esta mesa?");
+            var confirmacion = confirm("Estas seguro de registrar este votante?");
             if (confirmacion) {
 
-                window.location.href = "/mesas";    
+                window.location.href = "/votante";
             }
         }
 
@@ -453,30 +397,6 @@
 
 
 </div>
-    <script>
-        function mostrarCampoAdicional() {
-            var tipoVotante = document.getElementById("tipoVotante").value;
-            var campoProfesion = document.getElementById("campoProfesion");
-            var campoCargo = document.getElementById("campoCargo");
-            var campoCarrera = document.getElementById("campoCarrera")
-            
-            campoProfesion.style.display = "none";
-            campoCargo.style.display = "none";
-            campoCarrera.style.display = "none";
-            
-            if (tipoVotante === "Estudiante") {
-                campoCarrera.style.display = "block";
-            } else if (tipoVotante === "Docente") {
-                campoProfesion.style.display = "block";
-            } else if (tipoVotante === "Administrativo") {
-                campoCargo.style.display = "block";
-            }
-        }
-
-        document.getElementById("tipoVotante").addEventListener("change", mostrarCampoAdicional);
-
-        mostrarCampoAdicional();
-    </script>
     
 </body>
 </html> 
