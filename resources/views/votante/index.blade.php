@@ -101,7 +101,11 @@
 
 
             <div class="botones">
+            
+
+
                 <a href="{{ url('votante/create') }}" class="buttons">Añadir Votantes</a>
+                <a href="{{ url('/votantes/carga') }}" class="buttons">Añadir Votantes por CSV</a>
 
             </div>
 
