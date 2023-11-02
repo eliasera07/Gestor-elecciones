@@ -294,6 +294,7 @@
             <li><a href="{{ url('/comunicados') }}">Comunicados</a></li>
             <li><a href="#">Documentación</a></li>
             <li><a href="#">Ingreso</a></li>
+            <img src="/images/img.png"  class="company-logo">
             <!--<li class="show-on-mobile"><a href="#">Acerca de</a></li>
             <li class="show-on-mobile"><a href="#">Contactos</a></li>-->
         </ul>

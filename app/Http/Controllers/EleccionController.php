@@ -50,6 +50,11 @@ class EleccionController extends Controller
         ]);
 
         $datosEleccion = request()->except('_token');
+
+        if($request->hasFile('convocatoria')){
+            $datosEleccion['convocatoria']=$request->file('convocatoria')->store('uploads','public');
+        }
+
         $datosEleccion['estado'] = $request->input('estado', 1);
         Eleccion::insert($datosEleccion);
 

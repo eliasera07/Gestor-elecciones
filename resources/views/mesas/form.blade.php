@@ -336,10 +336,10 @@
                 {{ method_field('PATCH') }}
             @endif
         <label for=""></label><br><br>
-        <h2 class="form-title">Registrar Mesa de Votación</h2>
+        <h2 class="form-title">Registrar Mesa de Votacion</h2>
         <div class="column">
 
-        <label for="id_de_eleccion">Elección Asociada:</label>
+        <label for="id_de_eleccion">Elección asociada:</label>
 <select name="id_de_eleccion" id="id_de_eleccion" required>
     <option value="">Selecciona una elección</option>
     @if (isset($elecciones))
@@ -358,8 +358,8 @@
                 </select><br><br>
 
                 <div class="campo-adicional" id="facultadmesa">
-                <label for="facultadmesa">Facultad de la Mesa:</label>
-                <input type="text" placeholder="Escribe la facultad aquí..." maxlength="40" 
+                <label for="facultadmesa">Facultad de la mesa:</label>
+                <input type="text" placeholder="Escribe la fac aquí..." maxlength="40" 
                 oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
                 name="facultadmesa" value="{{ isset($mesas) ? $mesas->facultadmesa : '' }}" id="facultadmesa" ><br><br>
                 </div>
@@ -372,15 +372,15 @@
                 </div>
 
                 <div class="campo-adicional" id="ubicacionmesa">
-                <label for="ubicacionmesa">Ubicación de Mesa:</label>
-                <input type="text" placeholder="Escribe la ubicación aquí..." maxlength="40" 
+                <label for="ubicacionmesa">Ubicacion de mesa:</label>
+                <input type="text" placeholder="Escribe la ubicacion aquí..." maxlength="40" 
                 oninput="this.value = this.value.replace(/[^A-Za-z,. 0-9]+/g, '')"
                 name="ubicacionmesa" value="{{ isset($mesas) ? $mesas->ubicacionmesa : '' }}" id="mesas" ><br><br>
                 </div>
 
                 <div class="campo-adicional" id="numerodevotantes">
-                <label for="numerodevotantes">Número de Votantes:</label>
-                <input type="number" placeholder="Escribe el número de votantes aquí..." maxlength="1000000"
+                <label for="numerodevotantes">Numero de votantes:</label>
+                <input type="number" placeholder="Escribe el numero de votantes aquí..." maxlength="1000000"
                 name="numerodevotantes" value="{{ isset($mesas) ? $mesas->numerodevotantes : '' }}" id="numerodevotantes" ><br><br>
                 </div>
                 {{--

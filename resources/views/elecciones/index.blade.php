@@ -45,51 +45,11 @@
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contacto</a></li> --}}
             <li><a href="#">Ingreso</a></li>
+            <img src="/images/img.png"  class="company-logo">
         </ul>
         <div class="menu-icon"></div>
     </nav>
-    <header>
-
-
-
-        {{-- <div class="back">
-            <div class="menu container">
-
-
-
-                <a href="#" class="logo">
-                    <img src="images/Logo_TE.png" alt="Logo de la Empresa" class="company-logo">
-                    Administrador de Elecciones
-                    <br>
-                    Universidad Mayor de San Simon
-
-                </a>
-                <input type="checkbox" id="menu" />
-                <label for="menu">
-                    <img src="images/menu.png" class="menu-icono" alt="">
-                </label>
-                <nav class="navbar">
-                    <ul>
-                        <li><a href="#">Salir</a></li>
-                        
-                        <li class="icon-list">
-                            <a href="#" class="admin-link">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="40" fill="white" class="bi bi-person-circle" viewBox="0 0 16 16">
-                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                                </svg>
-                                <span class="admin-text">Administrador</span>
-                            </a>
-                        </li>
-                        
-                        
-
-
-                    </ul>
-                </nav>
-            </div>
-        </div> --}}
-    </header>
+    
 
 
     <section class="fondoo" id="fondoo">
@@ -156,7 +116,10 @@
 
                                     <td class="celda-botones">
 
-                                    <a href="{{ route('elecciones.boleta', ['id' => $elecciones->id]) }}" class="buttons" style="background-color: #04243C; color: #FFF; padding: 5px 10px; border: none; cursor: pointer;">Imprimir Boleta</a>
+                                    <button class="buttons-dentro-tabla" title="Imprimir Boleta"
+                                        onclick="window.location.href='{{ route('elecciones.boleta', ['id' => $elecciones->id]) }}'">
+                                        <img src="/images/imprimir.png" alt="Editar" class="formato-imagen" />
+                                    </button>
 
 
                                         <button class="buttons-dentro-tabla" title="Editar Elección"

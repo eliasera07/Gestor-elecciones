@@ -200,31 +200,7 @@
 
 
           
-        <div class="footer">
-
-            <div class="footer-izq">
-                Av. Oquendo y calle Jordán asd
-                <br>
-                Mail: Tribunal_electoral@umss.edu
-                <br>
-                www.umss.edu.bo Cochabamba - Bolivia
-                <br>
-                Design: DevGenius
-
-            </div>
-            <div class="footer-medio">
-
-                Copyright © 2023 Tribunal Electoral Universitario Todos los derechos Reservados
-
-            </div>
-            <div class="footer-der">
-                <a href="{{ url('/') }}">Acerca de</a>
-                <span>&nbsp;|&nbsp;</span> <!-- Para agregar un separador -->
-                <a href="{{ url('/') }}">Contactos</a>
-
-            </div>
-
-        </div>
+       
 
 
 
@@ -239,6 +215,36 @@
                 </div>
             </div>
         </div>
+        <br><br>
+        <br><br>
+        <br><br>
+        <br><br>
+        <br><br>
+        <div class="footer">
+
+<div class="footer-izq">
+    Av. Oquendo y calle Jordán asd
+    <br>
+    Mail: Tribunal_electoral@umss.edu
+    <br>
+    www.umss.edu.bo Cochabamba - Bolivia
+    <br>
+    Design: DevGenius
+
+</div>
+<div class="footer-medio">
+
+    Copyright © 2023 Tribunal Electoral Universitario Todos los derechos Reservados
+
+</div>
+<div class="footer-der">
+    <a href="{{ url('/') }}">Acerca de</a>
+    <span>&nbsp;|&nbsp;</span> <!-- Para agregar un separador -->
+    <a href="{{ url('/') }}">Contactos</a>
+
+</div>
+
+</div>
     </section>
 </body>
 

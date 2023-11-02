@@ -40,6 +40,7 @@
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contacto</a></li> --}}
             <li><a href="#">Ingreso</a></li>
+            <img src="/images/img.png"  class="company-logo">
         </ul>
         <div class="menu-icon"></div>
     </nav>
@@ -168,7 +169,25 @@
 
                                     
                                     
-                                    <div class="footer">
+                                    
+
+
+
+
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br><br>
+        <br><br>
+        <br><br>
+        <br><br>
+        <br><br>
+        <div class="footer">
 
                                         <div class="footer-izq">
                                             Av. Oquendo y calle Jordán asd
@@ -195,18 +214,6 @@
 
                                     </div>
 
-
-
-
-
-
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </section>
 </body>
 
