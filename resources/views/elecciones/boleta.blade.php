@@ -166,7 +166,7 @@
 <body>
     <div class="container">
         <div class="datosEleccion">
-            <h1>Imprimir Boleta de Sufragio</h1>
+            <h1>Boleta de Sufragio</h1>
             <br><br>
             <label for="">Nombre de Eleccion</label>
             <p>{{ $eleccion->nombre }}</p>

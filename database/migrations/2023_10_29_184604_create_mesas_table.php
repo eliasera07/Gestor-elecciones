@@ -17,11 +17,11 @@ class CreateMesasTable extends Migration
         $table->id();
         $table->integer('id_de_eleccion');
         $table->string('numeromesa')->nullable();
-        $table->string('votantemesa');
-        $table->string('facultadmesa');
-        $table->string('carreramesa');
-        $table->string('ubicacionmesa');
-        $table->string('numerodevotantes');
+        $table->string('votantemesa')->nullable();;
+        $table->string('facultadmesa')->nullable();;
+        $table->string('carreramesa')->nullable();;
+        $table->string('ubicacionmesa')->nullable();;
+        $table->string('numerodevotantes')->nullable();;
         $table->timestamps();
     });
 }

@@ -170,6 +170,10 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+
+        'id_de_eleccion' => [
+            'unique' => 'Ya se asigno la(s) mesa(s) a esta elección escoja otra por favor.',
+        ],
     ],
 
     /*

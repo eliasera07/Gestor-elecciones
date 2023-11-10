@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RegistrarFrente</title>
+    <script src="{{ asset('js/Elecciones_Creadas.js') }}"></script>
+
     <style>
         * {
             margin: 0;
@@ -302,7 +304,7 @@
             <li><a href="{{ url('/') }}">Inicio</a></li>
             <li><a href="{{ url('/elecciones') }}">Elecciones</a></li>
             <li><a href="{{ url('/comunicados') }}">Comunicados</a></li>
-            <li><a href="#">Documentación</a></li>
+            <li><a href="{{ url('/documentaciones') }}">Documentación</a></li>
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contactos</a></li> --}}
             <li><a href="#">Ingreso</a></li>
@@ -355,6 +357,7 @@
                 <label for="fotofrente">Logo del Frente:</label>
                     @if (isset($frente) && $frente->fotofrente)
                         <p>{{ $frente->fotofrente }}</p>
+                        <img src="{{ asset('storage/' . $frente->fotofrente) }}" alt="" width="27%" height="27%">
                     @endif
                     <input type="file" title="Subir Logotipo o foto del frente" name="fotofrente" required
                     accept=".png, .jpg, .jpeg"   

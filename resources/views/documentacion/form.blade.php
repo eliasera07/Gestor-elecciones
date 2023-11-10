@@ -98,45 +98,42 @@
     </style>
     <body>
         <div class="container">
-            <form action="{{ isset($comunicado) ? url('/comunicados/' . $comunicado->id) : url('/comunicados') }}"
+            <form action="{{ isset($documentacion) ? url('/documentaciones/' . $documentacion->id) : url('/documentaciones') }}"
                 method="post" enctype="multipart/form-data">
                 @csrf
-                @if (isset($comunicado))
+                @if (isset($documentacion))
                     {{ method_field('PATCH') }}
                 @endif
 
-                <h2 class="form-title">Registrar Comunicado</h2>
+                <h2 class="form-title">Registrar Documento</h2>
 
                 <div class="column">
 
                     <label for="titulo">Título:</label>
                     @error('titulo')<span style="color:red">{{ $message }}</span> @enderror
                     <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,. 0-9]+/g, '')" maxlength="40"
-                    name="titulo" placeholder="Escribe el título del comunicado..." value="{{ isset($comunicado) ? $comunicado->titulo : '' }}" id="titulo" maxlength="180" required
+                    name="titulo" placeholder="Escribe el título del documento..." value="{{ isset($documentacion) ? $documentacion->titulo : '' }}" id="titulo" maxlength="180" required
                     >
-                    
+                    <label for="tipodedocumento">Tipo de Documento:</label>
+                        <select name="tipodedocumento" id="tipodedocumento" required>
+                            <option value="">Selecciona el tipo de documento</option>
+                            <option value="Acta" {{ isset($documentacion) && $documentacion->tipodedocumento === 'Acta' ? 'selected' : '' }}>Acta</option>
+                            <option value="Impugnacion" {{ isset($documentacion) && $documentacion->tipodedocumento === 'Impugnacion' ? 'selected' : '' }}>Impugnación</option>
+                            <option value="Observacion" {{ isset($documentacion) && $documentacion->tipodedocumento === 'Observacion' ? 'selected' : '' }}>Observación</option>
+                        </select><br><br>
                     <div class="file-upload-container">
                         <label for="pdf">Archivo(PDF):</label>
-                        @if (isset($comunicado) && $comunicado->pdf)
-                            <p>{{ $comunicado->pdf}}</p>
+                        @if (isset($documentacion) && $documentacion->pdf)
+                            <p>{{ $documentacion->pdf}}</p>
+                            <embed src="{{ asset('storage/' . $documentacion->pdf) }}" type="">
                         @endif
                         <input type="file" accept="application/pdf" title="Subir archivo PDF" name="pdf"
-                            {{ isset($comunicado) && $comunicado->pdf ? '' : 'required' }} 
+                            {{ isset($documentacion) && $documentacion->pdf ? '' : 'required' }} 
                         >
                         @error('pdf')<span style="color:red">{{ $message }}</span> @enderror
                     </div>
                     
-                    <!--<label for="inicio">Fecha de Inicio:</label>
-                    <input type="date" id="inicio" name="inicio" 
-                    value="{{ isset($comunicado) ? $comunicado->inicio : '' }}" required 
-                    min="{{ now()->subDays(1)->format('Y-m-d') }}">-->
-
-                    <label for="fin">Fecha Fín:</label>
-                    <input type="date" id="fin" name="fin"
-                    value="{{ isset($comunicado) ? $comunicado->fin : '' }}"
-                    min="{{ now()->addDay(1)->format('Y-m-d') }}">
-
-                    <input type="submit" value="{{ isset($comunicado) ? 'Actualizar' : 'Registrar' }}" onclick="return confirm ('¿Está seguro que registrar este comunicado?')">
+                    <input type="submit" value="{{ isset($documetacion) ? 'Actualizar' : 'Registrar' }}" onclick="return confirm ('¿Está seguro que registrar este documento?')">
                     <input type="reset" value="Cancelar" onclick="cancelacion()">
                 </div>
             </form>
@@ -148,7 +145,7 @@
         var confirmacion = confirm("¿Seguro que deseas cancelar? Los cambios no se guardarán.");
             if (confirmacion) {
         
-                window.location.href = "/comunicados";
+                window.location.href = "/documentaciones";
             }
         }
     </script>

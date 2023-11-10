@@ -18,7 +18,7 @@ class VotanteController extends Controller
     public function index()
     {
         //
-        $votantescreados = Votante::orderBy('ideleccion', 'asc')->paginate(20);
+        $votantescreados = Votante::orderBy('ideleccion', 'asc')->paginate(500);
         return view('votante.index', compact('votantescreados'));
     }
 

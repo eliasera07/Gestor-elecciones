@@ -49,6 +49,8 @@ Route::resource('frente', 'FrenteController');
 
 Route::resource('comunicados', 'ComunicadoController');
 
+Route::resource('documentaciones', 'DocumentacionController');
+
 Route::resource('mesas', 'MesaController');
 
 Route::resource('jurados', 'JuradoController');
@@ -64,6 +66,14 @@ Route::get('/elecciones/{id}/boleta', 'EleccionController@showBoleta')->name('el
 Route::get('/votantes/carga', 'VotanteController@showCarga')->name('votante.carga');
 
 Route::post('/votantes/importCsv', 'VotanteController@importCsv')->name('votantes.importCsv');
+
+
+
+
+
+
+
+
 
 
 

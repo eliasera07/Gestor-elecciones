@@ -316,7 +316,7 @@
             <li><a href="{{ url('/') }}">Inicio</a></li>
             <li><a href="{{ url('/elecciones') }}">Elecciones</a></li>
             <li><a href="{{ url('/comunicados') }}">Comunicados</a></li>
-            <li><a href="#">Documentación</a></li>
+            <li><a href="{{ url('/documentaciones') }}">Documentación</a></li>
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contactos</a></li> --}}
             <li><a href="#">Ingreso</a></li>
@@ -329,8 +329,9 @@
             <label for=""></label><br><br>
            
             </div>
-    <div class="mesa-form-container">
-    <form action="{{ url('/mesas') }}" method="post" enctype="multipart/form-data">
+            <div class="mesa-form-container">
+            <form action="{{ isset($mesas) ? url('/mesas/' . $mesas->id) : url('/mesas') }}"
+            method="post" enctype="multipart/form-data">
         @csrf
         @if (isset($mesas))
                 {{ method_field('PATCH') }}
@@ -340,49 +341,45 @@
         <div class="column">
 
         <label for="id_de_eleccion">Elección asociada:</label>
-<select name="id_de_eleccion" id="id_de_eleccion" required>
-    <option value="">Selecciona una elección</option>
-    @if (isset($elecciones))
-        @foreach ($elecciones as $eleccion)
-            <option value="{{ $eleccion->id }}" @if(isset($mesas) && $mesas->ideleccion == $eleccion->id) selected @endif>{{ $eleccion->nombre }}</option>
-        @endforeach
-    @endif
-</select><br><br>
+             <select name="id_de_eleccion" id="id_de_eleccion" required {{ $editar ? 'disabled' : '' }}>
+            <option value="">Selecciona una elección</option>
+             @if (isset($elecciones))
+              @foreach ($elecciones as $eleccion)
+            <option value="{{ $eleccion->id }}" {{ (isset($mesas) && $mesas->id_de_eleccion == $eleccion->id) ? 'selected' : '' }}>
+                {{ $eleccion->nombre }}
+            </option>
+              @endforeach
+              @endif
+              </select>
+              <span class="error-message">{{ $errors->first('id_de_eleccion') }}</span>
+               <br><br>
 
-                     
-                <label for="votantemesa">Tipo de Votante:</label>
-                <select name="votantemesa" value="{{ isset($mesas) ? $mesas->votantemesa : '' }}" id="votantemesa" required>
-                    <option value="Estudiante">Estudiante</option>
-                    <option value="Docente">Docente</option>
-                    <option value="Administrativo">Administrativo</option>
-                </select><br><br>
 
-                <div class="campo-adicional" id="facultadmesa">
-                <label for="facultadmesa">Facultad de la mesa:</label>
-                <input type="text" placeholder="Escribe la fac aquí..." maxlength="40" 
-                oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
-                name="facultadmesa" value="{{ isset($mesas) ? $mesas->facultadmesa : '' }}" id="facultadmesa" ><br><br>
-                </div>
+               
 
-                <div class="campo-adicional" id="carreramesa">
-                <label for="carreramesa">Carrera:</label>
-                <input type="text" placeholder="Escribe la Carrera aquí..." maxlength="40" 
-                oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
-                name="carreramesa" value="{{ isset($mesas) ? $mesas->carreramesa : '' }}" id="carreramesa" ><br><br>
-                </div>
 
-                <div class="campo-adicional" id="ubicacionmesa">
-                <label for="ubicacionmesa">Ubicacion de mesa:</label>
-                <input type="text" placeholder="Escribe la ubicacion aquí..." maxlength="40" 
-                oninput="this.value = this.value.replace(/[^A-Za-z,. 0-9]+/g, '')"
-                name="ubicacionmesa" value="{{ isset($mesas) ? $mesas->ubicacionmesa : '' }}" id="mesas" ><br><br>
-                </div>
+                 <div class="campo-adicional" id="facultadmesa">
+                 <label for="facultadmesa">Facultad de la mesa:</label>
+                 <input type="text" placeholder="Escribe la fac aquí..." maxlength="40" 
+                   oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
+                   name="facultadmesa" value="{{ isset($mesas) ? $mesas->facultadmesa : '' }}" id="facultadmesa" ><br><br>
+                 </div>
 
-                <div class="campo-adicional" id="numerodevotantes">
-                <label for="numerodevotantes">Numero de votantes:</label>
-                <input type="number" placeholder="Escribe el numero de votantes aquí..." maxlength="1000000"
-                name="numerodevotantes" value="{{ isset($mesas) ? $mesas->numerodevotantes : '' }}" id="numerodevotantes" ><br><br>
-                </div>
+                 <div class="campo-adicional" id="carreramesa">
+                 <label for="carreramesa">Carrera:</label>
+                  <input type="text" placeholder="Escribe la Carrera aquí..." maxlength="40" 
+                  oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
+                  name="carreramesa" value="{{ isset($mesas) ? $mesas->carreramesa : '' }}" id="carreramesa" ><br><br>
+                 </div>
+
+                 @if ($editar)
+                  <label for="ubicacionmesa">Ubicacion de mesa:</label>
+                  <input type="text" placeholder="Escribe la ubicacion aquí..." maxlength="40" 
+                    oninput="this.value = this.value.replace(/[^A-Za-z,. 0-9]+/g, '')"
+                    name="ubicacionmesa" value="{{ isset($mesas) ? $mesas->ubicacionmesa : '' }}" id="mesas" ><br><br>
+                 @endif
+
+                
                 {{--
                 <label for=""></label>
                 <div class="campo-adicional">
@@ -477,6 +474,9 @@
 
         mostrarCampoAdicional();
     </script>
+
+
+
     
 </body>
 </html> 
