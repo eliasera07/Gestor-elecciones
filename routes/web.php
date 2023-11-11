@@ -67,6 +67,9 @@ Route::get('/votantes/carga', 'VotanteController@showCarga')->name('votante.carg
 
 Route::post('/votantes/importCsv', 'VotanteController@importCsv')->name('votantes.importCsv');
 
+Route::get('/previsualizacion', function () {
+  return view('elecciones.previsualizacion');
+});
 
 
 

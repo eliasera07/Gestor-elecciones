@@ -578,6 +578,11 @@ td:first-child {
 
                                     <td class="celda-botones">
 
+                                    <button class="buttons-dentro-tabla" title="Previsualizar registro"
+                                    onclick="previsuali()">
+                                        <img src="/images/previ.png" alt="Editar" class="formato-imagen" />
+                                    </button>
+
                                     <button class="buttons-dentro-tabla" title="Imprimir Boleta"
                                         onclick="window.location.href='{{ route('elecciones.boleta', ['id' => $elecciones->id]) }}'">
                                         <img src="/images/imprimir.png" alt="Editar" class="formato-imagen" />
@@ -630,6 +635,15 @@ td:first-child {
                                                 // No se hace nada si el usuario hace clic en "Cancelar"
                                             }
                                         }
+                                    </script>
+
+                                    <script>
+                                        function previsuali() {
+                                          
+                                                window.location.href = '/previsualizacion';
+                                           
+                                        }
+                                        
                                     </script>
 
                                     <div class="footer">
