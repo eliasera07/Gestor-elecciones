@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Eleccion;
+use App\Models\Votante;
 use App\Models\Frente;
 use Illuminate\Http\Request;
 
@@ -83,11 +84,14 @@ class EleccionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
-        $elecciones=Eleccion::FindOrFail($id);
-        return view('elecciones.edit', compact('elecciones'));
-    }
+{
+    $elecciones = Eleccion::findOrFail($id);
+    
+    // Agrega la lógica para obtener las carreras por facultad
+    $carrerasPorFacultad = []; // Asegúrate de obtener las carreras correctas aquí
+    
+    return view('elecciones.edit', compact('elecciones', 'carrerasPorFacultad'));
+}
 
     /**
      * Update the specified resource in storage.
@@ -135,4 +139,12 @@ class EleccionController extends Controller
     
         return view('elecciones.boleta', compact('eleccion', 'frentes'));
     }
+
+    public function mostrarPrevisualizacion($id) {
+        $eleccion = Eleccion::findOrFail($id);
+        $numVotantes = Votante::where('ideleccion', $id)->count();
+    
+        return view('elecciones.previsualizacion', compact('eleccion', 'numVotantes'));
+    }
+    
 }

@@ -328,6 +328,25 @@
         transform-origin: center;
         overflow: hidden;
     }
+
+    .boton-descarga-pdf {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #04243C;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+
+    .boton-descarga-pdf:hover {
+        background-color: #0056b3;
+    }
+
+    .no-votantes {
+    font-size: 20px; /* Ajusta el tamaño del texto según sea necesario */
+    color: #888; /* Cambia el color del texto si lo deseas */
+    }
 </style>
 
 <body>
@@ -360,12 +379,18 @@
 
     <div class="acomodar">
         <div class="column1">
-            <h2 class="form-title1"> Eleccion Rector 2023</h2>
-            <h2 class="form-title"> Nº de Votantes:</h2>
+            <h2 class="form-title1"> {{ $eleccion->nombre }}</h2>
+            @if ($numVotantes > 0)
+    <h2 class="form-title"> Nº de Votantes: {{ $numVotantes }}</h2>
+@else
+    <h2 class="form-title">
+        Nº de Votantes:
+        <span class="no-votantes">No hay votantes registrados en esta elección</span>
+    </h2>
+@endif
         </div>
         <div class="column2">
-            <input type="submit" class="boton1" value="{{ isset($elecciones) ? 'Actualizar' : 'Registrar resultados' }}"
-                onclick="confirmarConfirmacion()">
+        <input type="button" class="boton1" value="Registrar resultados" onclick="registroRes()">
             <input type="submit" class="boton" value="{{ isset($elecciones) ? 'Actualizar' : 'Editar resultados' }}"
                 onclick="confirmarConfirmacion()">
         </div>
@@ -383,37 +408,52 @@
                 <div class="column">
                 <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;">Motivo de eleccion:</h2>
 
-                <label for="nom" > Motivo de eleccion:</label>
+                <label for="nom" > {{ $eleccion->motivo }}</label>
                     <br><br>
                     <h2 class="forms"style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;"> Cargo de Autoridad:</h2>
-                    <label for="nombre"> Cargo de Autoridad:</label>
+                    <label for="nombre"> {{ $eleccion->cargodeautoridad }} </label>
                     <br><br>
                     <h2 class="forms"style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;"> Gestion:</h2>
-                    <label for="nom"> Gestion:</label>
+                    <label for="nom">{{ $eleccion->gestioninicio }} - {{ $eleccion->gestionfin }} </label>
                     <br><br>
                     <h2 class="forms"style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;"> Tipo de Votantes:</h2>
-                    <label for="nom"> Tipo de Votantes:</label>
+                    <label for="nom"> {{ $eleccion->tipodevotantes }}</label>
                     <br><br>
                     <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;"> Fecha de inscripcion de frentes:</h2>
-                    <label for="nom"> Fecha de inscripcion de frentes:</label>
-                    <br><br>
+                    <label for="nom"> {{ $eleccion->fechainscripcion }}
+                    <br><br>  
                     <h2 class="forms"style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;">Fecha de eleccion:</h2>
-                    <label for="nom"> Fecha de eleccion:</label>
+                    <label for="nom"> {{ $eleccion->fecha }}</label>
                 </div>
 
                 <div class="column">
-                <h2 class="forms"style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;">Convocatoria (PDF):</h2>
+                <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px; font-weight: 400; word-wrap: break-word;">Convocatoria (PDF):</h2>
+                @if (isset($eleccion) && $eleccion->convocatoria)
+                 <p>
+                     {{ $eleccion->convocatoria }}
+                   <a href="{{ asset('storage/' . $eleccion->convocatoria) }}" download="Convocatoria.pdf" class="boton-descarga-pdf">Descargar PDF</a>
+                 </p>
+                      <embed src="{{ asset('storage/' . $eleccion->convocatoria) }}" type="">
+                @endif
 
-                    <br><br>
-                    <br><br>
-                    <br><br>
-                    <br><br>
-                    
+            
+                    <br><br>        
                     <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;" >Tipo de Eleccion:</h2>
-                    <label for="nom"> Tipo de Eleccion:</label>
+                    <label for="nom"> {{ $eleccion->tipodeeleccion }}</label>
+                    <br><br>        
+                    <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;" >Descripcion:</h2>
+                    <label for="nom"> {{ $eleccion->descripcion }}</label>
                 </div>
             </div>
         </form>
+        <script>
+                       function registroRes() {
+                                          
+                      window.location.href = '/registroResultados';
+                                           
+                                        }
+                                        
+                                    </script>
 
         <div class="footer">
             <div class="footer-izq">

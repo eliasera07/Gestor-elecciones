@@ -108,7 +108,19 @@
                 <h2 class="form-title">Registrar Documento</h2>
 
                 <div class="column">
-
+                <label for="idEleccionD">Eleccion:</label>
+                    <select name="idEleccionD" id="idEleccionD" required>
+                        <option value="">Selecciona una elección</option>
+                            @if (isset($elecciones))
+                                @foreach ($elecciones as $eleccion)
+                                    <option value="{{ $eleccion->id }}" @if(isset($documentacion) && $documentacion->ideleccion == $eleccion->id) selected @endif>{{ $eleccion->nombre }}</option>
+                                @endforeach
+                            @endif
+                    </select><br><br>
+                        @error('idEleccionD')
+                            <span class="error-message">{{ $message }}</span>
+                        @enderror
+                            
                     <label for="titulo">Título:</label>
                     @error('titulo')<span style="color:red">{{ $message }}</span> @enderror
                     <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,. 0-9]+/g, '')" maxlength="40"

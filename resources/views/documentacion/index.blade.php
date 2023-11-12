@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,25 +65,28 @@
                     <table id="eleccionesTable" class="vistatabla">
                         <thead>
                             <tr>
-                                <th>Nro</th>
+                                <th>id de Eleccion</th>
                                 <th>Título</th>
+                                <th>Elección</th>
+                                <th>Tipo de documento</th>
                                 <th>Añadido el:</th>
-                                
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($documentaciones as $documentacion)
-                                <tr>
-                                    <td>{{ $documentacion->id}}</td>
-                                    <td>{{ $documentacion->titulo}}
-                                    <td>
-                                        @if ($documentacion->inicio)
-                                            {{ \Carbon\Carbon::parse($documentacion->inicio)->format('d/m/y') }}
-                                        @else
-                                            Sin fecha
-                                        @endif
-                                    </td>
+                            <tr>
+                              <td>{{ $documentacion->idEleccionD }}</td>
+                              <td>{{ $documentacion->titulo }}</td>
+                              <td>{{ $documentacion->eleccion->nombre }}</td>
+                              <td>{{ $documentacion->tipodedocumento }}</td>
+                            <td>
+                              @if ($documentacion->inicio)
+                              {{ \Carbon\Carbon::parse($documentacion->inicio)->format('d/m/y') }}
+                                @else
+                                   Sin fecha
+                                @endif
+                            </td>
 
                                     <td class="celda-botones">
                                     <button class="buttons-dentro-tabla" title="Editar documento" onclick="window.location.href='{{ url('/documentaciones/' . $documentacion->id . '/edit') }}'">

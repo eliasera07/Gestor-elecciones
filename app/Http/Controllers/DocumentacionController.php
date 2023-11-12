@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+
+
 use Illuminate\Http\Request;
 use App\Models\Documentacion;
+use App\Models\Eleccion;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
@@ -16,9 +19,9 @@ class DocumentacionController extends Controller
      */
     public function index()
     {
-        $documentaciones = Documentacion::where('estado', 1)->get();
+        //$documentaciones = Documentacion::with('idEleccionD')->get();
         $fechaActual = Carbon::today('America/La_Paz');
-        $documentaciones = Documentacion::where('estado', 1)
+        $documentaciones = Documentacion::with('eleccion')->where('estado', 1)
             ->orderBy('inicio', 'asc')
             ->paginate(5);
         return view('documentacion.index', compact('documentaciones'));
@@ -31,7 +34,8 @@ class DocumentacionController extends Controller
      */
     public function create()
     {
-        return view('documentacion.create');
+        $elecciones = Eleccion::where('estado', 1)->get();
+        return view('documentacion.create', compact('elecciones'));
     }
 
     /**
@@ -41,31 +45,31 @@ class DocumentacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'titulo' => 'required',
-            'pdf' => 'max:2048',
-        ], [
-            'pdf.max' => 'El archivo PDF no debe superar los 2 MB.',
-            'pdf.uploaded' => 'PDF máximo: 2048 KB.',
-        ]);        
+{
+    $request->validate([
+        'titulo' => 'required',
+        'pdf' => 'max:2048'
+    ],[
+        'pdf.max' => 'El archivo PDF no debe superar los 2 MB.',
+        'pdf.uploaded' => 'PDF máximo: 2048 KB.',
+    ]);        
 
-        $datos = $request->except('_token');
-        
-        if ($request->hasFile('pdf')) {
-            $titulo = Str::slug($request->input('titulo')); 
-            $pdfPath = $request->file('pdf')->storeAs('uploads', $titulo . '.pdf', 'public');
-            $datos['pdf'] = $pdfPath;
-        }
-        
-        $fechaActual = Carbon::today('America/La_Paz');
-        $datos['estado'] = $request->input('estado', 1);
-        $datos['inicio'] = $request->input('inicio', $fechaActual);
+    $datos = request()->except('_token');
 
-        Documentacion::create($datos);
-
-        return redirect('/documentaciones');
+    if ($request->hasFile('pdf')) {
+        $titulo = Str::slug($request->input('titulo')); 
+        $pdfPath = $request->file('pdf')->storeAs('uploads', $titulo . '.pdf', 'public');
+        $datos['pdf'] = $pdfPath;
     }
+
+    $fechaActual = Carbon::today('America/La_Paz');
+    $datos['estado'] = $request->input('estado', 1);
+    $datos['inicio'] = $request->input('inicio', $fechaActual);
+
+    Documentacion::insert($datos);
+
+    return redirect('/documentaciones')->with('success', 'El documento se ha guardado con éxito.');
+}
 
     /**
      * Display the specified resource.
@@ -87,7 +91,8 @@ class DocumentacionController extends Controller
     public function edit($id)
     {
         $documentacion=Documentacion::FindOrFail($id);
-        return view('documentacion.edit', compact('documentacion'));
+        $elecciones = Eleccion::where('estado', 1)->get();
+        return view('documentacion.edit', compact('documentacion','elecciones'));
     }
 
     /**
@@ -97,20 +102,11 @@ class DocumentacionController extends Controller
      * @param  \App\Models\Documentacion  $documentacion
      * @return \Illuminate\Http\Response
      */
-    /*public function update(Request $request, $id)
-    {
-        $datos = $request->except(['_token','_method']);
-        if ($request->hasFile('pdf')) {
-            $titulo = Str::slug($request->input('titulo')) . '-' . $id;
-            $pdfPath = $request->file('pdf')->storeAs('uploads', $titulo . '.pdf', 'public');
-            $datos['pdf'] = $pdfPath;
-        }
-        Documetacion::where('id',$id)->update($datos);
-        return redirect('/documentaciones');
-    }*/
+    
     public function update(Request $request, $id){
     $request->validate([
         'titulo' => 'required|max:255',
+        'idEleccionD' => 'required',
         'pdf' => 'max:2048',
         ], [
             'pdf.max' => 'El archivo PDF no debe superar los 2 MB.',

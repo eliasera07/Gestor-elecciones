@@ -88,7 +88,7 @@ class MesaController extends Controller
                 ->where('tipoVotante', 'docente')->count();
 
             // Asignar mesas para estudiantes
-            for ($i = 0; $i <= $cantidadMesas; $i++) {
+            for ($i = 1; $i <= $cantidadMesas; $i++) {
                 $datosMesas = request()->except('_token');
                 $datosMesas['numeromesa'] = $i;
                 $datosMesas['numerodevotantes'] = ceil($totalVotantesEstudiantes / $cantidadMesas);
@@ -108,7 +108,7 @@ class MesaController extends Controller
             }
         } else {
             // Caso: Otros tipos de votantes, asigna mesas según la lógica actual
-            for ($i = 0; $i <= $cantidadMesas; $i++) {
+            for ($i = 1; $i <= $cantidadMesas; $i++) {
                 $datosMesas = request()->except('_token');
                 $datosMesas['numeromesa'] = $i;
                 $datosMesas['numerodevotantes'] = $votantesPorMesa;

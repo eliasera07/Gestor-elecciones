@@ -448,16 +448,44 @@ input[type="reset"]:hover {
                       <br><br>
 
 
-                        <label for="tipodevotantes">Tipo de Votantes:</label>
-                           <select name="tipodevotantes" id="tipodevotantes" required>
-                             <option value="">Selecciona el tipo de votante</option>
-                             <option value="Estudiantes" {{ isset($elecciones) && $elecciones->tipodevotantes === 'Estudiantes' ? 'selected' : '' }}>Estudiantes</option>
-                             <option value="Docentes" {{ isset($elecciones) && $elecciones->tipodevotantes === 'Docentes' ? 'selected' : '' }}>Docentes</option>
-                             <option value="Administrativos" {{ isset($elecciones) && $elecciones->tipodevotantes === 'Administrativos' ? 'selected' : '' }}>Administrativos</option>
-                             <option value="General" {{ isset($elecciones) && $elecciones->tipodevotantes === 'General' ? 'selected' : '' }}>General</option>
-                            </select><br><br>
+                      <label for="tipodevotantes">Tipo de Votantes:</label>
+                      <select name="tipodevotantes" id="tipodevotantes" required>
+                      <option value="">Selecciona el tipo de votante</option>
+                      <option value="Estudiantes" {{ isset($elecciones) && $elecciones->tipodevotantes === 'Estudiantes' ? 'selected' : '' }}>Estudiantes</option>
+                      <option value="Docentes" {{ isset($elecciones) && $elecciones->tipodevotantes === 'Docentes' ? 'selected' : '' }}>Docentes</option>
+                      <option value="Administrativos" {{ isset($elecciones) && $elecciones->tipodevotantes === 'Administrativos' ? 'selected' : '' }}>Administrativos</option>
+                      <option value="General" {{ isset($elecciones) && $elecciones->tipodevotantes === 'General' ? 'selected' : '' }}>General</option>
+                      </select><br><br>
 
-                    <label for="fechainscripcion">Fecha de inscripcion de frentes:</label>
+                     <div id="facultadField" style="display: none;">
+                     <label for="facultad">Facultad:</label>
+                     <select name="facultad" id="facultad">
+                      <option value="">Selecciona la facultad</option>
+                      <option value="Fac. Humanidades Y Cs. De Educación" {{ isset($elecciones) && $elecciones->facultad === 'Fac. Humanidades Y Cs. De Educación' ? 'selected' : '' }}>Fac. Humanidades Y Cs. De Educación</option>
+                      <option value="Fac. de Ciencias Jurídicas y Políticas" {{ isset($elecciones) && $elecciones->facultad === 'Fac. de Ciencias Jurídicas y Políticas' ? 'selected' : '' }}>Fac. de Ciencias Jurídicas y Políticas</option>
+                      <option value="Fac. Arquitectura y Ciencias del Hábitat" {{ isset($elecciones) && $elecciones->facultad === 'Fac. Arquitectura y Ciencias del Hábitat' ? 'selected' : '' }}>Fac. Arquitectura y Ciencias del Hábitat</option>
+                      <option value="Fac. Ciencias Económicas" {{ isset($elecciones) && $elecciones->facultad === 'Fac. Ciencias Económicas' ? 'selected' : '' }}>Fac. Ciencias Económicas</option>
+                      <option value="Fac. de Ciencias y Tecnología" {{ isset($elecciones) && $elecciones->facultad === 'Fac. de Ciencias y Tecnología' ? 'selected' : '' }}>Fac. de Ciencias y Tecnología</option>
+                      <option value="Fac. Ciencias Sociales" {{ isset($elecciones) && $elecciones->facultad === 'Fac. Ciencias Sociales' ? 'selected' : '' }}>Fac. Ciencias Sociales</option>
+                      <option value="Facultad Medicina" {{ isset($elecciones) && $elecciones->facultad === 'Facultad Medicina' ? 'selected' : '' }}>Facultad Medicina</option>
+                      <option value="Fac. Odontología" {{ isset($elecciones) && $elecciones->facultad === 'Fac. Odontología' ? 'selected' : '' }}>Fac. Odontología</option>
+                      <option value="Fac. Cs .Farmacéuticas Y Bioquímicas" {{ isset($elecciones) && $elecciones->facultad === 'Fac. Cs .Farmacéuticas Y Bioquímicas' ? 'selected' : '' }}>Fac. Cs .Farmacéuticas Y Bioquímicas</option>
+                      <option value="Fac. Enfermería" {{ isset($elecciones) && $elecciones->facultad === 'Fac. Enfermería' ? 'selected' : '' }}>Fac. Enfermería</option>
+                      <option value="Fac. Ciencias Agrícolas Y Pecuarias" {{ isset($elecciones) && $elecciones->facultad === 'Fac. Ciencias Agrícolas Y Pecuarias' ? 'selected' : '' }}>Fac. Ciencias Agrícolas Y Pecuarias</option>
+                      <option value="Fac. Desarrollo Rural y Territorial" {{ isset($elecciones) && $elecciones->facultad === 'Fac. Desarrollo Rural y Territorial' ? 'selected' : '' }}>Fac. Desarrollo Rural y Territorial</option>
+                      <option value="Fac. Ciencias Veterinarias" {{ isset($elecciones) && $elecciones->facultad === 'Fac. Ciencias Veterinarias' ? 'selected' : '' }}>Fac. Ciencias Veterinarias</option>
+                      <option value="Fac. Politécnica del Valle Alto" {{ isset($elecciones) && $elecciones->facultad === 'Fac. Politécnica del Valle Alto' ? 'selected' : '' }}>Fac. Politécnica del Valle Alto</option>
+                     </select><br><br>
+                     </div>
+
+                    <div id="carreraField" style="display: none;">
+                      <label for="carrera">Carrera:</label>
+                     <select name="carrera" id="carrera">
+                     <option value="">Selecciona la carrera</option>
+                     </select><br><br>
+                      </div>
+
+                            <label for="fechainscripcion">Fecha de inscripcion de frentes:</label>
                     <input type="date" name="fechainscripcion" value="{{ isset($elecciones) ? $elecciones->fechainscripcion : '' }}"
                         id="fechainscripcion" required min="<?php echo date('Y-m-d'); ?>">
 
@@ -499,6 +527,7 @@ input[type="reset"]:hover {
             <label for=""></label><br><br>
             <label for=""></label><br><br>
         </form>
+        <br><br>
         <div class="footer">
 
             <div class="footer-izq">
@@ -525,6 +554,167 @@ input[type="reset"]:hover {
 
         </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tipoVotanteInput = document.getElementById('tipodevotantes');
+        var facultadField = document.getElementById('facultadField');
+        var carreraField = document.getElementById('carreraField');
+        var facultadInput = document.getElementById('facultad');
+        var carreraInput = document.getElementById('carrera');
+
+        var opcionesCarrera = {
+            "Fac. Humanidades Y Cs. De Educación": [
+                "Psicología",
+                "Ciencias de la Educación",
+                "Lingüística Aplicada a la Enseñanza de Lenguas",
+                "Comunicación Social",
+                "Trabajo Social",
+                "Música",
+                "Ciencias de la Actividad Física y Deportes",
+                "Licenciatura especial en Educación Intercultural Bilingüe"
+            ],
+            "Fac. de Ciencias Jurídicas y Políticas": [
+                "Licenciatura en Ciencias Jurídicas",
+                "Licenciatura en Ciencias Políticas"
+            ],
+            "Fac. Arquitectura y Ciencias del Hábitat": [
+                "Arquitectura",
+                "Diseño gráfico y Comunicación Visual",
+                "Turismo",
+                "Diseño de Interiores y del Mobiliario",
+                "Planificación del Territorio y el Medio Ambiente",
+                "Construcciones"
+            ],
+            "Fac. Ciencias Económicas": [
+                "Economía",
+                "Administración de Empresas",
+                "Contaduría Pública",
+                "Ingeniería Comercial",
+                "Ingeniería Financiera"
+            ],
+            "Fac. de Ciencias y Tecnología": [
+                "Ingeniería en Alimentos",
+                "Licenciatura en Biología",
+                "Ingeniería Civil",
+                "Ingeniería Mecánica",
+                "Ingeniería Electromecánica",
+                "Ingeniería Industrial",
+                "Ingeniería Eléctrica",
+                "Ingeniería Electrónica",
+                "Ingeniería Informática",
+                "Ingeniería en Sistemas",
+                "Ingeniería Química",
+                "Ingeniería en Matemáticas",
+                "Licenciatura en Matemáticas",
+                "Licenciatura en Física",
+                "Licenciatura en Química",
+                "Ingeniería Petroquimica"
+            ],
+            "Fac. Ciencias Sociales": [
+                "Sociología",
+                "Antropología"
+            ],
+            "Facultad Medicina": [
+                "Medicina",
+                "Fisioterapia y kinesiología",
+                "Nutrición y Dietética"
+            ],
+            "Fac. Odontología": [
+                "Odontologia"
+            ],
+            "Fac. Cs .Farmacéuticas Y Bioquímicas": [
+                "Ciencias Farmacéuticas",
+                "Bioquimica"
+            ],
+            "Fac. Enfermería": [
+                "Enfermeria"
+            ],
+            "Fac. Ciencias Agrícolas Y Pecuarias": [
+                "Agronómica",
+                "Agroindustrial",
+                "Agrícola",
+                "Agronómica Fitotecnista",
+                "Agronómica Zootecnista",
+                "Tec. Sup. Gestión del Territorio Desarrollo Endógeno Sustentable",
+                "Forestal",
+                "Tec. Sup. Forestal",
+                "Medio Ambiente",
+                "Agrícola Tropical y Manejo de Recursos Renovables"
+            ],
+            "Fac. Desarrollo Rural y Territorial": [
+                "Tecnico Superior en Agronomia",
+                "Produccion Agraria y Desarrollo Territoria"
+            ],
+            "Fac. Ciencias Veterinarias": [
+                "Medicina Veterinaria y Zootecnia"
+            ],
+            "Fac. Politécnica del Valle Alto": [
+                "Técnico Universitario Superior en Construcción Civil",
+                "Progr Compl en Mecánica Automotriz y Maquinaria Agroindustrial",
+                "Técnico Universitario Superior en Mecánica Automotriz",
+                "Técnico Universitario Superior en Mecánica Industrial",
+                "Técnico Universitario Superior en Química Industrial",
+                "Técnico Universitario Superior en Industria de Alimentos",
+                "Técnico Universitario Medio en Enfermería"
+            ]
+        };
+
+        function mostrarCamposFacultad() {
+            var tipoVotanteSeleccionado = tipoVotanteInput.value;
+
+            if (tipoVotanteSeleccionado === 'Estudiantes' || tipoVotanteSeleccionado === 'Docentes') {
+                facultadField.style.display = 'block';
+                carreraField.style.display = 'block';
+                var facultadSeleccionada = facultadInput.value;
+                llenarOpcionesCarrera(facultadSeleccionada);
+            } else {
+                facultadField.style.display = 'none';
+                carreraField.style.display = 'none';
+            }
+        }
+
+        function llenarOpcionesCarrera(facultadSeleccionada) {
+
+            carreraInput.innerHTML = '<option value="">Selecciona la carrera</option>';
+
+            if (opcionesCarrera.hasOwnProperty(facultadSeleccionada)) {
+                opcionesCarrera[facultadSeleccionada].forEach(function (opcion) {
+                    var opcionElemento = document.createElement('option');
+                    opcionElemento.value = opcion;
+                    opcionElemento.text = opcion;
+                    carreraInput.appendChild(opcionElemento);
+                });
+            }
+        }
+
+        tipoVotanteInput.addEventListener('change', mostrarCamposFacultad);
+        facultadInput.addEventListener('change', function () {
+            llenarOpcionesCarrera(facultadInput.value);
+        });
+
+        mostrarCamposFacultad();
+    });
+
+    function llenarOpcionesCarrera(facultadSeleccionada) {
+       
+        carreraInput.innerHTML = '<option value="">Selecciona la carrera</option>';
+
+        if (opcionesCarrera.hasOwnProperty(facultadSeleccionada)) {
+            opcionesCarrera[facultadSeleccionada].forEach(function (opcion) {
+                var opcionElemento = document.createElement('option');
+                opcionElemento.value = opcion;
+                opcionElemento.text = opcion;
+                carreraInput.appendChild(opcionElemento);
+            });
+        }
+    }
+
+
+
+</script>
+
+
 </body>
 
 </html>

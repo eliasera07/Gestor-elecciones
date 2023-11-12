@@ -16,6 +16,7 @@ class CreateDocumentacionesTable extends Migration
         Schema::create('documentaciones', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
+            $table->integer('idEleccionD');
             $table->string('tipodedocumento');
             $table->string('pdf');
             $table->date('inicio')->nullable();

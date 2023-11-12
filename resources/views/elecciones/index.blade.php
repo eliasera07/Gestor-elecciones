@@ -578,9 +578,9 @@ td:first-child {
 
                                     <td class="celda-botones">
 
-                                    <button class="buttons-dentro-tabla" title="Previsualizar registro"
-                                    onclick="previsuali()">
-                                        <img src="/images/previ.png" alt="Editar" class="formato-imagen" />
+                                    <button class="buttons-dentro-tabla" title="Previsualizar registro" 
+                                    onclick="window.location.href='{{ route('elecciones.previsualizacion', ['id' => $elecciones->id]) }}'">
+                                        <img src="/images/previ.png" alt="Previsualizar" class="formato-imagen" />
                                     </button>
 
                                     <button class="buttons-dentro-tabla" title="Imprimir Boleta"
@@ -637,14 +637,7 @@ td:first-child {
                                         }
                                     </script>
 
-                                    <script>
-                                        function previsuali() {
-                                          
-                                                window.location.href = '/previsualizacion';
-                                           
-                                        }
-                                        
-                                    </script>
+                                
 
                                     <div class="footer">
 
