@@ -390,7 +390,8 @@
 @endif
         </div>
         <div class="column2">
-        <input type="button" class="boton1" value="Registrar resultados" onclick="registroRes()">
+            <input type="submit" class="boton1" value="{{ isset($elecciones) ? 'Actualizar' : 'Registrar resultados' }}"
+                onclick="registroRes()">
             <input type="submit" class="boton" value="{{ isset($elecciones) ? 'Actualizar' : 'Editar resultados' }}"
                 onclick="confirmarConfirmacion()">
         </div>
@@ -446,6 +447,7 @@
                 </div>
             </div>
         </form>
+
         <script>
                        function registroRes() {
                                           
