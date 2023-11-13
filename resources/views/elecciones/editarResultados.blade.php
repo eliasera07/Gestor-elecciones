@@ -409,55 +409,41 @@ input[type="reset"]:hover {
     <br>
    
     <div class="container">
-    <form action="{{ url('/elecciones/' . $eleccion->id . '/guardarResultados') }}" method="post" enctype="multipart/form-data">
-    @csrf
-    {{ method_field('PATCH') }}
-        
-        <div class="column1">
-            <h2 class="form-title"> {{ $eleccion->nombre }} </h2>
-        </div>
-        <h2 class="form-title1">Registrar resultados</h2>
-        <br><br> 
-            
-        <div class="columns">
-    @php
-        $halfCount = ceil(count($frentes) / 2);
-    @endphp
+        <form action="{{ url('/elecciones/' . $eleccion->id . '/guardarResultados') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            {{ method_field('PATCH') }}
 
-    <div class="column">
-        @foreach ($frentes->take($halfCount) as $index => $frente)
-            <label for="nombrefrente{{ $index + 1 }}">Nombre frente {{ $index + 1 }}:</label><br>
-            <input type="text" name="nombrefrente{{ $index + 1 }}" value="{{ $frente->nombrefrente }}" maxlength="100"
-                style="width: 200px;"><br><br>
+            <div class="column1">
+                <h2 class="form-title"> {{ $eleccion->nombre }} </h2>
+            </div>
+            <h2 class="form-title1">Editar resultados</h2>
+            <br><br>
 
-            <label for="votosfrente{{ $index + 1 }}">Nº de votos frente {{ $index + 1 }}:</label><br>
-            <input type="number" name="votosfrente{{ $index + 1 }}" style="width: 200px;"><br><br>
-        @endforeach
-    </div>
+            <div class="columns">
+                @php
+                $numFrentes = 4; // Puedes cambiar esto según tu límite de frentes
+                @endphp
 
-    <div class="column">
-        @foreach ($frentes->slice($halfCount) as $index => $frente)
-            <label for="nombrefrente{{ $index + 1 }}">Nombre frente {{ $index + 1 }}:</label><br>
-            <input type="text" name="nombrefrente{{ $index + 1 }}" value="{{ $frente->nombrefrente }}" maxlength="100"
-                style="width: 200px;"><br><br>
+                @for ($index = 1; $index <= $numFrentes; $index++)
+                    <div class="column">
+                        <label for="nombrefrente{{ $index }}">Nombre frente {{ $index }}:</label><br>
+                        <input type="text" name="nombrefrente{{ $index }}" value="{{ $eleccion->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;"><br><br>
 
-            <label for="votosfrente{{ $index + 1 }}">Nº de votos frente {{ $index + 1 }}:</label><br>
-            <input type="number" name="votosfrente{{ $index + 1 }}" style="width: 200px;"><br><br>
-        @endforeach
-    </div>
-</div>
-
+                        <label for="votosfrente{{ $index }}">Nº de votos frente {{ $index }}:</label><br>
+                        <input type="number" name="votosfrente{{ $index }}" value="{{ $eleccion->{'votosfrente' . $index} }}" style="width: 200px;"><br><br>
+                    </div>
+                @endfor
+            </div>
 
             <div class="botones">
-            <input type="submit" value="{{ isset($elecciones) ? 'Actualizar' : 'Registrar' }}"
-                onclick="confirmarConfirmacion()">
-            <input type="reset" value="Cancelar" onclick="confirmarCancelación()">
+                <input type="submit" value="{{ isset($elecciones) ? 'Actualizar' : 'Registrar' }}" onclick="confirmarConfirmacion()">
+                <input type="reset" value="Cancelar" onclick="confirmarCancelacion()">
             </div>
             <label for=""></label><br><br>
             <label for=""></label><br><br>
             <br><br>
             <br><br>
-            
+
         </form>
 
         <div class="footer">

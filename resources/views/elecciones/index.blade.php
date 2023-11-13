@@ -614,7 +614,7 @@ td:first-child {
                                            <form id="delete-form-{{ $elecciones->id }}" action="{{ url('/elecciones/' . $elecciones->id) }}" method="post" style="display: inline;">
                                             @csrf
                                             {{ method_field('DELETE') }}
-                                           <button class="buttons-dentro-tabla" title="Borrar Elección" onclick="return confirm ('Quieres borrar este votante?')">
+                                           <button class="buttons-dentro-tabla" title="Borrar Elección" onclick="return confirm ('Quieres borrar esta eleccion? se borraran todos los registros asociados a esta.')">
                                            <img src="/images/borrar.png" alt="Borrar" class="formato-imagen" />
                                            </button>
                                             </form>

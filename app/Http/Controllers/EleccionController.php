@@ -147,4 +147,71 @@ class EleccionController extends Controller
         return view('elecciones.previsualizacion', compact('eleccion', 'numVotantes'));
     }
     
+    public function registroResultados($id) {
+        $eleccion = Eleccion::find($id);
+        $frentes = Frente::where('ideleccionfrente', $id)->get();
+        
+        return view('elecciones.registroResultados', compact('eleccion', 'frentes'));
+    }
+
+    public function guardarResultados(Request $request, $id)
+{
+    // Obtener la elección por su ID
+    $eleccion = Eleccion::findOrFail($id);
+
+    // Iterar sobre los frentes y guardar los datos en la base de datos
+    for ($i = 1; $i <= 4; $i++) { // Asumiendo un máximo de 4 frentes
+        $nombreFrenteKey = 'nombrefrente' . $i;
+        $votosFrenteKey = 'votosfrente' . $i;
+
+        // Obtener el nombre y los votos del frente desde el formulario
+        $nombreFrente = $request->input($nombreFrenteKey);
+        $votosFrente = $request->input($votosFrenteKey);
+
+        // Guardar los datos en la base de datos
+        $eleccion->$nombreFrenteKey = $nombreFrente;
+        $eleccion->$votosFrenteKey = $votosFrente;
+    }
+
+    // Guardar la elección actualizada
+       $eleccion->save();
+
+    // Redirigir a la vista de elecciones u otra vista según sea necesario
+       return redirect('/elecciones');
+}
+
+public function editarRegistroResultados($id)
+{
+    $eleccion = Eleccion::findOrFail($id);
+
+    return view('elecciones.editarResultados', compact('eleccion'));
+}
+
+public function guardarEdicionResultados(Request $request, $id)
+{
+    // Obtener la elección por su ID
+    $eleccion = Eleccion::findOrFail($id);
+
+    // Iterar sobre los frentes y actualizar los datos en la base de datos
+    for ($i = 1; $i <= 4; $i++) { // Asumiendo un máximo de 4 frentes
+        $nombreFrenteKey = 'nombrefrente' . $i;
+        $votosFrenteKey = 'votosfrente' . $i;
+
+        // Obtener el nombre y los votos del frente desde el formulario
+        $nombreFrente = $request->input($nombreFrenteKey);
+        $votosFrente = $request->input($votosFrenteKey);
+
+        // Actualizar los datos en la base de datos
+        $eleccion->$nombreFrenteKey = $nombreFrente;
+        $eleccion->$votosFrenteKey = $votosFrente;
+    }
+
+    // Guardar la elección actualizada
+    $eleccion->save();
+
+    // Redirigir a la vista de elecciones u otra vista según sea necesario
+    return redirect('/elecciones');
+}
+
+
 }

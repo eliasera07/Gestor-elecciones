@@ -169,13 +169,6 @@
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 
-     
-
-
-
-
-
-
     }
 
     h1 {
@@ -347,6 +340,25 @@
     font-size: 20px; /* Ajusta el tamaño del texto según sea necesario */
     color: #888; /* Cambia el color del texto si lo deseas */
     }
+    .alineadosssss {
+                    text-align: center; 
+                } 
+
+                .boton_descargar {
+        display: inline-block;
+        width: 50px; /* Ajusta el ancho según tus necesidades */
+        height: 50px; /* Ajusta la altura según tus necesidades */
+        background-color: #ffffff; /* Cambia el color de fondo según tus preferencias */
+        color: #ffffff; /* Cambia el color del texto según tus preferencias */
+        text-decoration: none;
+        border-radius: 3px; /* Ajusta el radio del borde para que tenga esquinas redondeadas */
+        font-size: 12px; /* Ajusta el tamaño del texto según tus preferencias */
+        cursor: pointer;
+    }
+
+    .boton_descargar:hover {
+        background-color: #a8a8aa;
+    }
 </style>
 
 <body>
@@ -390,10 +402,12 @@
 @endif
         </div>
         <div class="column2">
-            <input type="submit" class="boton1" value="{{ isset($elecciones) ? 'Actualizar' : 'Registrar resultados' }}"
-                onclick="registroRes()">
-            <input type="submit" class="boton" value="{{ isset($elecciones) ? 'Actualizar' : 'Editar resultados' }}"
-                onclick="confirmarConfirmacion()">
+            
+        <a href="{{ route('elecciones.registrarResultados', ['id' => $eleccion->id]) }}" class="boton-descarga-pdf">
+        Registrar resultados</a>
+
+        <a href="{{ route('elecciones.editarResultados', ['id' => $eleccion->id]) }}" class="boton-descarga-pdf">
+    Editar resultados</a>
         </div>
     </div>
 
@@ -429,11 +443,18 @@
 
                 <div class="column">
                 <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px; font-weight: 400; word-wrap: break-word;">Convocatoria (PDF):</h2>
+                <div class="alineadosssss">
                 @if (isset($eleccion) && $eleccion->convocatoria)
-                 <p>
+                 {{-- <p>
                      {{ $eleccion->convocatoria }}
-                   <a href="{{ asset('storage/' . $eleccion->convocatoria) }}" download="Convocatoria.pdf" class="boton-descarga-pdf">Descargar PDF</a>
-                 </p>
+                   <a href="{{ asset('storage/' . $eleccion->convocatoria) }}" download="Convocatoria.pdf" class="boton-descarga-pdf"></a>
+                
+                 </p> --}}
+                    <a href="{{ asset('storage/' . $eleccion->convocatoria) }}" download="Convocatoria.pdf"> 
+                        <img src="{{ asset('/images/descargar.png') }}" alt="Botón Descargar PDF" class="boton_descargar" title="Descargar Convocatoria"  style="cursor: pointer;">
+                    </a>
+                    
+                </div>
                       <embed src="{{ asset('storage/' . $eleccion->convocatoria) }}" type="">
                 @endif
 
@@ -448,14 +469,6 @@
             </div>
         </form>
 
-        <script>
-                       function registroRes() {
-                                          
-                      window.location.href = '/registroResultados';
-                                           
-                                        }
-                                        
-                                    </script>
 
         <div class="footer">
             <div class="footer-izq">
