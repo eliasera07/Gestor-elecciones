@@ -545,6 +545,10 @@ td:first-child {
                 <a href="{{ url('/mesas') }}" class="buttons">Lista de Mesas</a>
             </div>
 
+            <div class="botones">
+                <a href="{{ url('/reporte') }}" class="buttons">Reportes</a>
+            </div>
+
 
             <div class="botones">
                 <input type="text" id="search" placeholder="Buscar...">

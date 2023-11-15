@@ -308,6 +308,28 @@ input[type="reset"]:hover {
 
 }
 
+.buttons-cancel {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #A70606;
+    font-size: 14px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none; /* Quitar subrayado */
+    font-weight: normal; /* Quitar negrita */
+    transition: background-color 0.3s;
+}
+
+.buttons-cancel:hover {
+    background-color: #8b010a;
+}
+
+.buttons-cancel:active {
+    background-color: #8b010a;
+}
+
     </style>
 
 
@@ -316,15 +338,7 @@ input[type="reset"]:hover {
             var confirmacion = confirm("¿Seguro que deseas cancelar? Los cambios no se guardarán.");
             if (confirmacion) {
 
-                window.location.href = "/jurados/jurados";
-            }
-        }
-
-        function confirmarConfirmacion() {
-            var confirmacion = confirm("Los datos han sido registrados con éxito");
-            if (confirmacion) {
-
-                window.location.href = "/jurados/jurados";
+                window.location.href = "/mesas/lista-jurados";
             }
         }
     </script>
@@ -400,7 +414,7 @@ input[type="reset"]:hover {
                         <label for="apellidoMaterno">Apellido Materno:</label>
                     <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')" maxlength="30"
                         name="apellidoMaterno" placeholder="Escribe el apellido materno aquí..."
-                        value="{{ isset($comite) ? $comite->apellidoMaterno : '' }}" id="apellidoMaterno"
+                        value="{{ isset($jurados) ? $jurados->apellidoMaterno : '' }}" id="apellidoMaterno"
                         required>
 
                         <label for="codSis">Cod-SiS:</label>
@@ -426,7 +440,7 @@ input[type="reset"]:hover {
                 </div>
             <input type="submit" value="{{ isset($jurados) ? 'Actualizar' : 'Registrar' }}"
                 onclick="confirmarConfirmacion()">
-            <input type="reset" value="Cancelar" onclick="confirmarCancelación()">
+                <a href="{{ url('/mesas') }}" class="buttons-cancel" id="cancelButton">Cancelar</a>
             
             <label for=""></label><br><br>
         </form>

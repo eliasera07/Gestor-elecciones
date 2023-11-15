@@ -420,20 +420,36 @@ input[type="reset"]:hover {
             <br><br>
 
             <div class="columns">
-                @php
-                $numFrentes = 4; // Puedes cambiar esto según tu límite de frentes
-                @endphp
+           @php
+              $numFrentes = 4; // 
+              $halfCount = ceil($numFrentes / 2);
+           @endphp
 
-                @for ($index = 1; $index <= $numFrentes; $index++)
-                    <div class="column">
-                        <label for="nombrefrente{{ $index }}">Nombre frente {{ $index }}:</label><br>
-                        <input type="text" name="nombrefrente{{ $index }}" value="{{ $eleccion->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;"><br><br>
+             <div class="column">
+               @for ($index = 1; $index <= $halfCount; $index++)
+                 @if (!empty($eleccion->{'nombrefrente' . $index}))
+                <label for="nombrefrente{{ $index }}">Nombre frente {{ $index }}:</label><br>
+                <input type="text" name="nombrefrente{{ $index }}" value="{{ $eleccion->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;"><br><br>
 
-                        <label for="votosfrente{{ $index }}">Nº de votos frente {{ $index }}:</label><br>
-                        <input type="number" name="votosfrente{{ $index }}" value="{{ $eleccion->{'votosfrente' . $index} }}" style="width: 200px;"><br><br>
-                    </div>
-                @endfor
-            </div>
+                <label for="votosfrente{{ $index }}">Nº de votos frente {{ $index }}:</label><br>
+                <input type="number" name="votosfrente{{ $index }}" value="{{ $eleccion->{'votosfrente' . $index} }}" style="width: 200px;"><br><br>
+                 @endif
+              @endfor
+             </div>
+
+              <div class="column">
+                @for ($index = $halfCount + 1; $index <= $numFrentes; $index++)
+                    @if (!empty($eleccion->{'nombrefrente' . $index}))
+                <label for="nombrefrente{{ $index }}">Nombre frente {{ $index }}:</label><br>
+                <input type="text" name="nombrefrente{{ $index }}" value="{{ $eleccion->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;"><br><br>
+
+                <label for="votosfrente{{ $index }}">Nº de votos frente {{ $index }}:</label><br>
+                <input type="number" name="votosfrente{{ $index }}" value="{{ $eleccion->{'votosfrente' . $index} }}" style="width: 200px;"><br><br>
+                    @endif
+                 @endfor
+              </div>
+             </div>
+
 
             <div class="botones">
                 <input type="submit" value="{{ isset($elecciones) ? 'Actualizar' : 'Registrar' }}" onclick="confirmarConfirmacion()">

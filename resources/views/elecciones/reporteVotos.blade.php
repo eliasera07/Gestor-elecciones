@@ -151,6 +151,9 @@
             background-color: #c4babada;
         }
 
+        #mychart{
+            margin-left: 100px;
+        }
         .grafico {
             padding: 5px;
             background-color: #003770;
@@ -158,7 +161,6 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
 
         @media only screen and (max-width: 706px) {
             th,
@@ -224,8 +226,7 @@
                             {{--<option value="Numero de votantes" {{ $fechas['tipo'] === 'Numero de votantes' ? 'selected' : '' }}>Numero de Votantes</option>--}}
                             <option value="Reporte por frentes" {{ $fechas['tipo'] === 'Reporte por frentes' ? 'selected' : '' }}>Reporte por frentes</option>
                         </select>
-                    </div>
-                  
+                    </div>     
                 </div>          
                 <button type="submit" class="generar-reporte">Generar Reporte</button>        
         </form>
@@ -235,12 +236,18 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Nro</th>
                                 <th>Nombre</th>
-                                <th>Motivo</th>
                                 <th>Fecha</th>
                                 <th>Tipo de <br>elección</th>
                                 <th>Tipo de <br>votantes</th>
+                                <th>Nombre <br>Frente 1</th>
+                                <th>Votos <br>Frente 1</th>
+                                <th>Nombre <br>Frente 2</th>
+                                <th>Votos <br>Frente 2</th>
+                                <th>Nombre <br>Frente 3</th>
+                                <th>Votos <br>Frente 3</th>
+                                <th>Nombre <br>Frente 4</th>
+                                <th>Votos <br>Frente 4</th>
                                 <th>Nro de <br>votantes</th>
                                 <th>Frente <br>ganador</th>
                                 <th>Acción</th>
@@ -249,15 +256,26 @@
                         <tbody>
                             
                             @foreach ($registros as $registro)
-                                <tr class="fila-resaltada">
-                                    <td>{{ $registro->id }}</td>
+                                <tr>
                                     <td>{{ $registro->nombre }}</td>
-                                    <td>{{ $registro->motivo }}</td>
                                     <td>{{ $registro->fecha }}</td>
                                     <td>{{ $registro->tipodeeleccion }}</td>
                                     <td>{{ $registro->tipodevotantes }}</td>
+
+                                    <td>{{ isset($registro->nombrefrente1) ? $registro->nombrefrente1 : '----'}}</td>
+                                    <td>{{ isset($registro->votosfrente1) ? $registro->votosfrente1 : '----'}}</td>
+
+                                    <td>{{ isset($registro->nombrefrente2) ? $registro->nombrefrente2 : '----'}}</td>
+                                    <td>{{ isset($registro->votosfrente2) ? $registro->votosfrente2 : '----'}}</td>
+
+                                    <td>{{ isset($registro->nombrefrente3) ? $registro->nombrefrente3 : '----'}}</td>
+                                    <td>{{ isset($registro->votosfrente3) ? $registro->votosfrente3 : '----'}}</td>
+
+                                    <td>{{ isset($registro->nombrefrente4) ? $registro->nombrefrente4 : '----'}}</td>
+                                    <td>{{ isset($registro->votosfrente4) ? $registro->votosfrente4 : '----'}}</td>
+
                                     <td>{{ isset($nroVotantesPorRegistro[$registro->id]) ? $nroVotantesPorRegistro[$registro->id] : 0 }}</td>
-                                    <td>{{ isset($frentesG[$registro->id]) ? $frentesG[$registro->id]->nombrefrente : 'Sin dato' }}</td>
+                                    <td>{{ isset($frentesG[$registro->id]) ? $frentesG[$registro->id]->nombrefrente : '----' }}</td>
                                     <td>
                                         <form action="/reporteGrafico/{{ $registro->id }}" method="get">
                                             <button type="submit" class= "grafico">Gráfico</button>
@@ -265,8 +283,8 @@
                                     </td>
                                 </tr>
                             @endforeach
-
-                         </tbody>
+                            
+                        </tbody>
                     </table> 
                 </div>
             </div>
@@ -274,5 +292,6 @@
             <h3 style="color: #185a9f;; text-align: center; padding: 10px;">Resultados Actuales: 0</h3>
         @endif
     </div>  
+
 </body>
 </html>

@@ -82,9 +82,8 @@ Route::patch('/elecciones/{id}/guardar-edicion-resultados', [EleccionController:
   //return view('elecciones.registroResultados');
 //});
 
-Route::get('/reporte', function () {
-  return view('elecciones.reporte');
-});
+Route::get('/reporte', 'ReporteController@index');
+Route::get('/reporteGrafico/{id}', 'ReporteController@reporteGrafico');
 
 
 

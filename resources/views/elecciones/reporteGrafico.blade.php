@@ -151,6 +151,9 @@
             background-color: #c4babada;
         }
 
+        #mychart{
+            margin-left: 100px;
+        }
         .grafico {
             padding: 5px;
             background-color: #003770;
@@ -158,7 +161,6 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
 
         @media only screen and (max-width: 706px) {
             th,
@@ -224,8 +226,7 @@
                             {{--<option value="Numero de votantes" {{ $fechas['tipo'] === 'Numero de votantes' ? 'selected' : '' }}>Numero de Votantes</option>--}}
                             <option value="Reporte por frentes" {{ $fechas['tipo'] === 'Reporte por frentes' ? 'selected' : '' }}>Reporte por frentes</option>
                         </select>
-                    </div>
-                  
+                    </div>    
                 </div>          
                 <button type="submit" class="generar-reporte">Generar Reporte</button>        
         </form>
@@ -249,7 +250,7 @@
                         <tbody>
                             
                             @foreach ($registros as $registro)
-                                <tr class="fila-resaltada">
+                                <tr>
                                     <td>{{ $registro->id }}</td>
                                     <td>{{ $registro->nombre }}</td>
                                     <td>{{ $registro->motivo }}</td>
@@ -257,7 +258,7 @@
                                     <td>{{ $registro->tipodeeleccion }}</td>
                                     <td>{{ $registro->tipodevotantes }}</td>
                                     <td>{{ isset($nroVotantesPorRegistro[$registro->id]) ? $nroVotantesPorRegistro[$registro->id] : 0 }}</td>
-                                    <td>{{ isset($frentesG[$registro->id]) ? $frentesG[$registro->id]->nombrefrente : 'Sin dato' }}</td>
+                                    <td>{{ isset($frentesG[$registro->id]) ? $frentesG[$registro->id]->nombrefrente : '----' }}</td>
                                     <td>
                                         <form action="/reporteGrafico/{{ $registro->id }}" method="get">
                                             <button type="submit" class= "grafico">Gráfico</button>
@@ -265,14 +266,48 @@
                                     </td>
                                 </tr>
                             @endforeach
-
-                         </tbody>
+                            
+                        </tbody>
                     </table> 
                 </div>
+               
+                <canvas id="myChart"></canvas>
+
             </div>
         @else
             <h3 style="color: #185a9f;; text-align: center; padding: 10px;">Resultados Actuales: 0</h3>
         @endif
     </div>  
+
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var data = @json($data);
+
+        var myChart = new Chart(ctx, {
+            //type: 'doughnut', 
+            type: 'pie',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    data: data.values,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(255, 255, 0, 0.8)',  
+                        'rgba(169, 169, 169, 0.8)',
+                    ],
+                }]
+            },
+            options: {
+                responsive: false, // Desactiva la respuesta automática al tamaño del contenedor
+                maintainAspectRatio: false, // No mantenga la relación de aspecto fija
+                width: 400, // Ancho del gráfico
+                height: 300, // Alto del gráfico
+            }
+        });
+
+    </script>
 </body>
 </html>
+

@@ -193,7 +193,12 @@ class MesaController extends Controller
     $cantidadPresidente = 1;
 
     // Obtén los votantes disponibles para esta mesa
-    $votantes = Votante::where('ideleccion', $mesa->id_de_eleccion)->inRandomOrder()->limit($cantidadSuplentes + $cantidadTitulares + $cantidadPresidente)->get();
+    $votantes = Votante::where('ideleccion', $mesa->id_de_eleccion)
+        ->whereNotIn('codSis', Jurado::where('iddeeleccion', $mesa->id_de_eleccion)->pluck('codSis'))
+        ->whereNotIn('CI', Jurado::where('iddeeleccion', $mesa->id_de_eleccion)->pluck('CI'))
+        ->inRandomOrder()
+        ->limit($cantidadSuplentes + $cantidadTitulares + $cantidadPresidente)
+        ->get();
 
     // Baraja los votantes aleatoriamente
     $votantes = $votantes->shuffle();
