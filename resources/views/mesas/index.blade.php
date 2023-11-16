@@ -594,6 +594,7 @@ td:first-child {
                                 <th>Id de Eleccion</th>
                                 <th>N° de Mesa.</th>
                                 <th>Tipo Votante</th>
+                                <th>Votantes en mesa</th>
                                 <th>Facultad</th>
                                 <th>Ubicacion</th>
                                 <th>Nº de votantes</th>
@@ -606,6 +607,7 @@ td:first-child {
                                     <td>{{ $mesas->id_de_eleccion }}</td>
                                     <td>{{ $mesas->numeromesa}}</td>
                                     <td>{{ $mesas->votantemesa }}</td>
+                                    <td>{{ $mesas->votantesenmesa}}</td>
                                     <td>{{ $mesas->facultadmesa }}</td>
                                     <td>{{ $mesas->ubicacionmesa }}</td>
                                     <td>{{ $mesas->numerodevotantes }}</td>

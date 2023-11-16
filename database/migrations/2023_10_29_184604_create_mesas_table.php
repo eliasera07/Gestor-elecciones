@@ -22,6 +22,7 @@ class CreateMesasTable extends Migration
         $table->string('carreramesa')->nullable();;
         $table->string('ubicacionmesa')->nullable();;
         $table->string('numerodevotantes')->nullable();;
+        $table->string('votantesenmesa')->nullable();;
         $table->timestamps();
     });
 }

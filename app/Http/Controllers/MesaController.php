@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Optional;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Eleccion;
 use App\Models\Votante;
@@ -75,6 +76,21 @@ class MesaController extends Controller
         $datosMesas['numeromesa'] = 1; // Número de mesa
         $datosMesas['numerodevotantes'] = $totalVotantes; // Asigna todos los votantes
         $datosMesas['id_de_eleccion'] = $idDeEleccion; // Asigna el id de la elección
+
+        // Asignar el apellido del primer votante a la columna votantesenmesa
+        $primerVotante = Votante::where('ideleccion', $idDeEleccion)
+            ->orderBy('apellidoPaterno')
+            ->first();
+
+        // Asignar el apellido del último votante a la columna votantesenmesa
+        $ultimoVotante = Votante::where('ideleccion', $idDeEleccion)
+            ->orderByDesc('apellidoPaterno')
+            ->first();
+
+        if ($primerVotante && $ultimoVotante) {
+            $datosMesas['votantesenmesa'] = "De {$primerVotante->apellidoPaterno} Hasta {$ultimoVotante->apellidoPaterno}";
+        }
+
         Mesa::insert($datosMesas);
     } else {
         // Caso: Más de 99 votantes, asigna mesas equitativamente
@@ -94,6 +110,23 @@ class MesaController extends Controller
                 $datosMesas['numerodevotantes'] = ceil($totalVotantesEstudiantes / $cantidadMesas);
                 $datosMesas['id_de_eleccion'] = $idDeEleccion; // Asigna el id de la elección
                 $datosMesas['votantemesa'] = 'estudiante'; // Cambiado a la columna correcta
+
+                // Asignar el apellido del primer votante a la columna votantesenmesa
+                $primerVotante = Votante::where('ideleccion', $idDeEleccion)
+                    ->where('tipoVotante', 'estudiante')
+                    ->orderBy('apellidoPaterno')
+                    ->first();
+
+                // Asignar el apellido del último votante a la columna votantesenmesa
+                $ultimoVotante = Votante::where('ideleccion', $idDeEleccion)
+                    ->where('tipoVotante', 'estudiante')
+                    ->orderByDesc('apellidoPaterno')
+                    ->first();
+
+                if ($primerVotante && $ultimoVotante) {
+                    $datosMesas['votantesenmesa'] = "De {$primerVotante->apellidoPaterno} Hasta {$ultimoVotante->apellidoPaterno}";
+                }
+
                 Mesa::insert($datosMesas);
             }
 
@@ -104,6 +137,23 @@ class MesaController extends Controller
                 $datosMesas['numerodevotantes'] = $totalVotantesDocentes;
                 $datosMesas['id_de_eleccion'] = $idDeEleccion; // Asigna el id de la elección
                 $datosMesas['votantemesa'] = 'docente'; // Cambiado a la columna correcta
+
+                // Asignar el apellido del primer votante a la columna votantesenmesa
+                $primerVotanteDocente = Votante::where('ideleccion', $idDeEleccion)
+                    ->where('tipoVotante', 'docente')
+                    ->orderBy('apellidoPaterno')
+                    ->first();
+
+                // Asignar el apellido del último votante a la columna votantesenmesa
+                $ultimoVotanteDocente = Votante::where('ideleccion', $idDeEleccion)
+                    ->where('tipoVotante', 'docente')
+                    ->orderByDesc('apellidoPaterno')
+                    ->first();
+
+                if ($primerVotanteDocente && $ultimoVotanteDocente) {
+                    $datosMesas['votantesenmesa'] = "De {$primerVotanteDocente->apellidoPaterno} Hasta {$ultimoVotanteDocente->apellidoPaterno}";
+                }
+
                 Mesa::insert($datosMesas);
             }
         } else {
@@ -114,6 +164,21 @@ class MesaController extends Controller
                 $datosMesas['numerodevotantes'] = $votantesPorMesa;
                 $datosMesas['id_de_eleccion'] = $idDeEleccion; // Asigna el id de la elección
                 $datosMesas['votantemesa'] = ''; // Cambiado a la columna correcta (puedes asignar un valor según tu lógica)
+
+                // Asignar el apellido del primer votante a la columna votantesenmesa
+                $primerVotante = Votante::where('ideleccion', $idDeEleccion)
+                    ->orderBy('apellidoPaterno')
+                    ->first();
+
+                // Asignar el apellido del último votante a la columna votantesenmesa
+                $ultimoVotante = Votante::where('ideleccion', $idDeEleccion)
+                    ->orderByDesc('apellidoPaterno')
+                    ->first();
+
+                if ($primerVotante && $ultimoVotante) {
+                    $datosMesas['votantesenmesa'] = "De {$primerVotante->apellidoPaterno} Hasta {$ultimoVotante->apellidoPaterno}";
+                }
+
                 Mesa::insert($datosMesas);
             }
         }
@@ -188,45 +253,160 @@ class MesaController extends Controller
     }
 
     // Obtén la cantidad de jurados que deseas generar
-    $cantidadSuplentes = 3;
-    $cantidadTitulares = 3;
+    $cantidadSuplentes = 1;
+    $cantidadTitulares = 1;
     $cantidadPresidente = 1;
 
-    // Obtén los votantes disponibles para esta mesa
-    $votantes = Votante::where('ideleccion', $mesa->id_de_eleccion)
-        ->whereNotIn('codSis', Jurado::where('iddeeleccion', $mesa->id_de_eleccion)->pluck('codSis'))
-        ->whereNotIn('CI', Jurado::where('iddeeleccion', $mesa->id_de_eleccion)->pluck('CI'))
+    // Obtén la elección asociada a la mesa
+    $eleccion = Eleccion::find($mesa->id_de_eleccion);
+
+    if (!$eleccion) {
+        return redirect('/mesas')->with('error', 'No se encontró la elección asociada a esta mesa.');
+    }
+
+    // Verificar si la elección no es de tipo "General"
+    if ($eleccion->tipodevotantes !== 'General') {
+        // Si no es de tipo "General", asigna aleatoriamente los 5 jurados
+        $this->generateJuradosRandomly($mesa->numeromesa, $eleccion->id, $cantidadSuplentes + $cantidadTitulares + $cantidadPresidente);
+
+        return redirect('/mesas/' . $id . '/lista-jurados')->with('success', 'Se han generado los jurados con éxito.');
+    }
+
+    // Generar jurados de tipo 'Docente'
+    $this->generateJuradosByType($mesa->numeromesa, $eleccion->id, 'docente', $cantidadSuplentes, $cantidadTitulares, $cantidadPresidente);
+
+    // Generar jurados de tipo 'Estudiante'
+    $this->generateJuradosByType($mesa->numeromesa, $eleccion->id, 'estudiante', 1, 1, 0);
+
+    // Asignar los jurados que faltan en caso de elección no general
+    $this->assignAdditionalJurados($mesa->numeromesa, $eleccion->id, $cantidadSuplentes, $cantidadTitulares, $cantidadPresidente);
+
+    return redirect('/mesas/' . $id . '/lista-jurados')->with('success', 'Se han generado los jurados con éxito.');
+}
+
+// Nueva función para asignar jurados adicionales en caso de elección no general
+private function assignAdditionalJurados($idMesa, $idEleccion, $cantidadSuplentes, $cantidadTitulares, $cantidadPresidente)
+{
+    $totalJurados = $cantidadSuplentes + $cantidadTitulares + $cantidadPresidente;
+    $juradosActuales = Jurado::where('idmesa', $idMesa)->count();
+
+    // Calcular cuántos jurados faltan asignar
+    $faltanAsignar = $totalJurados - $juradosActuales;
+
+    if ($faltanAsignar > 0) {
+        $this->generateJuradosRandomly($idMesa, $idEleccion, $faltanAsignar);
+    }
+}
+
+// Función para generar jurados aleatoriamente
+private function generateJuradosRandomly($idMesa, $idEleccion, $cantidadJurados)
+{
+    $votantes = Votante::where('ideleccion', $idEleccion)
         ->inRandomOrder()
-        ->limit($cantidadSuplentes + $cantidadTitulares + $cantidadPresidente)
+        ->limit($cantidadJurados)
         ->get();
 
-    // Baraja los votantes aleatoriamente
-    $votantes = $votantes->shuffle();
+    // Contadores para cada tipo de jurado
+    $contadorSuplentes = 0;
+    $contadorTitulares = 0;
+    $contadorPresidente = 0;
 
-    $i = 0;
-    $tiposJurado = ['Suplente', 'Titular', 'Titular', 'Suplente', 'Titular', 'Suplente', 'Presidente'];
+    $i = 0; // Contador general
 
-    // Itera sobre los votantes para asignarlos como jurados
     foreach ($votantes as $votante) {
-        $tipoJurado = $tiposJurado[$i];
+        // Ajuste para el nombre del presidente
+        $tipoJurado = '';
+        $nombreJurado = '';
 
-        // Crea una nueva entrada en la tabla de jurados
+        // Asignar tipo de jurado según disponibilidad
+        if ($contadorSuplentes < 2) {
+            $tipoJurado = 'Suplente';
+            $nombreJurado = 'Suplente ' . ucfirst(strtolower($votante->tipoVotante));
+            $contadorSuplentes++;
+        } elseif ($contadorTitulares < 2) {
+            $tipoJurado = 'Titular';
+            $nombreJurado = 'Titular ' . ucfirst(strtolower($votante->tipoVotante));
+            $contadorTitulares++;
+        } elseif ($contadorPresidente < 1) {
+            $tipoJurado = 'Presidente';
+            $nombreJurado = 'Presidente';
+            $contadorPresidente++;
+        }
+
+        // Crear el jurado
         Jurado::create([
             'iddeeleccion' => $votante->ideleccion,
-            'idmesa' => $mesa->numeromesa,
+            'idmesa' => $idMesa,
             'nombres' => $votante->nombres,
             'apellidoPaterno' => $votante->apellidoPaterno,
             'apellidoMaterno' => $votante->apellidoMaterno,
             'codSis' => $votante->codSis,
             'CI' => $votante->CI,
-            'tipoJurado' => $tipoJurado,
+            'tipoJurado' => $nombreJurado,
+        ]);
+
+        // Incrementar el contador general
+        $i++;
+
+        // Detener la asignación si se alcanza la cantidad necesaria para cada tipo de jurado
+        if ($contadorSuplentes >= 2 && $contadorTitulares >= 2 && $contadorPresidente >= 1) {
+            break;
+        }
+    }
+
+    // Mensaje de depuración
+    dd("Se asignaron $i jurados: $contadorSuplentes suplentes, $contadorTitulares titulares, $contadorPresidente presidente");
+}
+
+// Función para generar jurados por tipo
+private function generateJuradosByType($idMesa, $idEleccion, $tipoVotante, $cantidadSuplentes, $cantidadTitulares, $cantidadPresidente)
+{
+    $query = Votante::where('ideleccion', $idEleccion);
+
+    if ($tipoVotante) {
+        $query->whereRaw('LOWER(tipoVotante) = ?', [$tipoVotante]);
+    }
+
+    $votantes = $query->inRandomOrder()
+        ->limit($cantidadSuplentes + $cantidadTitulares + $cantidadPresidente)
+        ->get();
+
+    $votantes = $votantes->shuffle();
+
+    $tiposJurado = ['Suplente', 'Titular', 'Presidente'];
+
+    $i = 0;
+
+    foreach ($votantes as $votante) {
+        $tipoJurado = $tiposJurado[$i];
+
+        // Ajuste para el nombre del presidente
+        if ($tipoJurado === 'Presidente') {
+            $nombreJurado = $tipoJurado;
+        } else {
+            $nombreJurado = $tipoJurado . ' ' . ucfirst($tipoVotante);
+        }
+
+        Jurado::create([
+            'iddeeleccion' => $votante->ideleccion,
+            'idmesa' => $idMesa,
+            'nombres' => $votante->nombres,
+            'apellidoPaterno' => $votante->apellidoPaterno,
+            'apellidoMaterno' => $votante->apellidoMaterno,
+            'codSis' => $votante->codSis,
+            'CI' => $votante->CI,
+            'tipoJurado' => $nombreJurado,
         ]);
 
         $i++;
-    }
 
-    return redirect('/mesas/' . $id . '/lista-jurados')->with('success', 'Se han generado los jurados con éxito.');
+        if ($i >= ($cantidadSuplentes + $cantidadTitulares + $cantidadPresidente)) {
+            break;
+        }
+    }
 }
+    
+    
 
 public function listaJurados($id)
 {
