@@ -21,7 +21,7 @@ class MesaController extends Controller
     public function index()
     {
         //
-        $mesascreadas = Mesa::orderBy('id_de_eleccion', 'asc')->paginate(20);
+        $mesascreadas = Mesa::orderBy('id_de_eleccion', 'asc')->paginate(100);
         return view('mesas.index', compact('mesascreadas'));
     }
 
@@ -45,144 +45,131 @@ class MesaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-{
-    // Validación
-    $request->validate([
-        'id_de_eleccion' => [
-            'required',
-            Rule::unique('mesas')->where(function ($query) use ($request) {
-                return $query->where('id_de_eleccion', $request->input('id_de_eleccion'));
-            }),
-        ],
-    ]);
-
-    $idDeEleccion = $request->input('id_de_eleccion');
-
-    // Encuentra el tipo de votantes de la elección
-    $eleccion = Eleccion::find($idDeEleccion);
-    $tipoVotantes = strtolower($eleccion->tipodevotantes); // Convertir a minúsculas
-
-    // Encuentra el número total de votantes registrados para esta elección
-    $totalVotantes = Votante::where('ideleccion', $idDeEleccion)->count();
-
-    // Calcula la cantidad de votantes por mesa
-    $cantidadMesas = ceil($totalVotantes / 100); // 100 votantes por mesa
-    $votantesPorMesa = ceil($totalVotantes / $cantidadMesas);
-
-    // Lógica de asignación de mesas
-    if ($totalVotantes <= 99) {
-        // Caso: Menos o igual a 99 votantes, crea una sola mesa
-        $datosMesas = request()->except('_token');
-        $datosMesas['numeromesa'] = 1; // Número de mesa
-        $datosMesas['numerodevotantes'] = $totalVotantes; // Asigna todos los votantes
-        $datosMesas['id_de_eleccion'] = $idDeEleccion; // Asigna el id de la elección
-
-        // Asignar el apellido del primer votante a la columna votantesenmesa
-        $primerVotante = Votante::where('ideleccion', $idDeEleccion)
-            ->orderBy('apellidoPaterno')
-            ->first();
-
-        // Asignar el apellido del último votante a la columna votantesenmesa
-        $ultimoVotante = Votante::where('ideleccion', $idDeEleccion)
-            ->orderByDesc('apellidoPaterno')
-            ->first();
-
-        if ($primerVotante && $ultimoVotante) {
-            $datosMesas['votantesenmesa'] = "De {$primerVotante->apellidoPaterno} Hasta {$ultimoVotante->apellidoPaterno}";
-        }
-
-        Mesa::insert($datosMesas);
-    } else {
-        // Caso: Más de 99 votantes, asigna mesas equitativamente
-
-        // Lógica específica para el tipo "General"
-        if ($tipoVotantes == 'general') {
-            // Calcula el número total de votantes por tipo (estudiante y docente)
-            $totalVotantesEstudiantes = Votante::where('ideleccion', $idDeEleccion)
-                ->where('tipoVotante', 'estudiante')->count();
-            $totalVotantesDocentes = Votante::where('ideleccion', $idDeEleccion)
-                ->where('tipoVotante', 'docente')->count();
-
-            // Asignar mesas para estudiantes
-            for ($i = 1; $i <= $cantidadMesas; $i++) {
-                $datosMesas = request()->except('_token');
-                $datosMesas['numeromesa'] = $i;
-                $datosMesas['numerodevotantes'] = ceil($totalVotantesEstudiantes / $cantidadMesas);
-                $datosMesas['id_de_eleccion'] = $idDeEleccion; // Asigna el id de la elección
-                $datosMesas['votantemesa'] = 'estudiante'; // Cambiado a la columna correcta
-
-                // Asignar el apellido del primer votante a la columna votantesenmesa
-                $primerVotante = Votante::where('ideleccion', $idDeEleccion)
-                    ->where('tipoVotante', 'estudiante')
-                    ->orderBy('apellidoPaterno')
-                    ->first();
-
-                // Asignar el apellido del último votante a la columna votantesenmesa
-                $ultimoVotante = Votante::where('ideleccion', $idDeEleccion)
-                    ->where('tipoVotante', 'estudiante')
-                    ->orderByDesc('apellidoPaterno')
-                    ->first();
-
-                if ($primerVotante && $ultimoVotante) {
-                    $datosMesas['votantesenmesa'] = "De {$primerVotante->apellidoPaterno} Hasta {$ultimoVotante->apellidoPaterno}";
-                }
-
-                Mesa::insert($datosMesas);
+    {
+        // Validación
+        $request->validate([
+            'id_de_eleccion' => [
+                'required',
+                Rule::unique('mesas')->where(function ($query) use ($request) {
+                    return $query->where('id_de_eleccion', $request->input('id_de_eleccion'));
+                }),
+            ],
+        ]);
+    
+        $idDeEleccion = $request->input('id_de_eleccion');
+    
+        // Encuentra el tipo de votantes de la elección
+        $eleccion = Eleccion::find($idDeEleccion);
+        $tipoVotantes = strtolower($eleccion->tipodevotantes); // Convertir a minúsculas
+    
+        // Encuentra el número total de votantes registrados para esta elección
+        $votantes = Votante::where('ideleccion', $idDeEleccion)->orderBy('apellidoPaterno')->get();
+        $totalVotantes = $votantes->count();
+    
+        // Calcula la cantidad de votantes por mesa
+        $cantidadMesas = ceil($totalVotantes / 100); // 100 votantes por mesa
+        $votantesPorMesa = ceil($totalVotantes / $cantidadMesas);
+    
+        // Lógica de asignación de mesas
+        if ($totalVotantes <= 99) {
+            // Caso: Menos o igual a 99 votantes, crea una sola mesa
+            $datosMesas = request()->except('_token');
+            $datosMesas['numeromesa'] = 1; // Número de mesa
+            $datosMesas['numerodevotantes'] = $totalVotantes; // Asigna todos los votantes
+            $datosMesas['id_de_eleccion'] = $idDeEleccion; // Asigna el id de la elección
+    
+            // Asignar el apellido del primer y último votante a la columna votantesenmesa
+            $primerVotante = $votantes->first();
+            $ultimoVotante = $votantes->last();
+    
+            if ($primerVotante && $ultimoVotante) {
+                $datosMesas['votantesenmesa'] = "De {$primerVotante->apellidoPaterno} Hasta {$ultimoVotante->apellidoPaterno}";
             }
-
-            // Asignar una mesa para todos los docentes (solo si hay docentes registrados)
-            if ($totalVotantesDocentes > 0) {
-                $datosMesas = request()->except('_token');
-                $datosMesas['numeromesa'] = $cantidadMesas + 1; // Se asigna una nueva mesa
-                $datosMesas['numerodevotantes'] = $totalVotantesDocentes;
-                $datosMesas['id_de_eleccion'] = $idDeEleccion; // Asigna el id de la elección
-                $datosMesas['votantemesa'] = 'docente'; // Cambiado a la columna correcta
-
-                // Asignar el apellido del primer votante a la columna votantesenmesa
-                $primerVotanteDocente = Votante::where('ideleccion', $idDeEleccion)
-                    ->where('tipoVotante', 'docente')
-                    ->orderBy('apellidoPaterno')
-                    ->first();
-
-                // Asignar el apellido del último votante a la columna votantesenmesa
-                $ultimoVotanteDocente = Votante::where('ideleccion', $idDeEleccion)
-                    ->where('tipoVotante', 'docente')
-                    ->orderByDesc('apellidoPaterno')
-                    ->first();
-
-                if ($primerVotanteDocente && $ultimoVotanteDocente) {
-                    $datosMesas['votantesenmesa'] = "De {$primerVotanteDocente->apellidoPaterno} Hasta {$ultimoVotanteDocente->apellidoPaterno}";
-                }
-
-                Mesa::insert($datosMesas);
-            }
+    
+            // Asignar el tipo de votantes a la columna votantemesa
+            $datosMesas['votantemesa'] = $primerVotante->tipoVotante;
+    
+            Mesa::insert($datosMesas);
         } else {
-            // Caso: Otros tipos de votantes, asigna mesas según la lógica actual
-            for ($i = 1; $i <= $cantidadMesas; $i++) {
-                $datosMesas = request()->except('_token');
-                $datosMesas['numeromesa'] = $i;
-                $datosMesas['numerodevotantes'] = $votantesPorMesa;
-                $datosMesas['id_de_eleccion'] = $idDeEleccion; // Asigna el id de la elección
-                $datosMesas['votantemesa'] = ''; // Cambiado a la columna correcta (puedes asignar un valor según tu lógica)
-
-                // Asignar el apellido del primer votante a la columna votantesenmesa
-                $primerVotante = Votante::where('ideleccion', $idDeEleccion)
-                    ->orderBy('apellidoPaterno')
-                    ->first();
-
-                // Asignar el apellido del último votante a la columna votantesenmesa
-                $ultimoVotante = Votante::where('ideleccion', $idDeEleccion)
-                    ->orderByDesc('apellidoPaterno')
-                    ->first();
-
-                if ($primerVotante && $ultimoVotante) {
-                    $datosMesas['votantesenmesa'] = "De {$primerVotante->apellidoPaterno} Hasta {$ultimoVotante->apellidoPaterno}";
+            // Caso: Más de 99 votantes, asigna mesas equitativamente
+    
+            // Lógica específica para el tipo "General"
+            if ($tipoVotantes == 'general') {
+                $votantesEstudiantes = $votantes->where('tipoVotante', 'estudiante');
+                $votantesDocentes = $votantes->where('tipoVotante', 'docente');
+    
+                $mesaActual = 1;
+    
+                // Asignar mesas para estudiantes
+                for ($i = 0; $i < $cantidadMesas; $i++) {
+                    $datosMesas = request()->except('_token');
+                    $datosMesas['numeromesa'] = $mesaActual;
+                    $datosMesas['numerodevotantes'] = $votantesPorMesa;
+                    $datosMesas['id_de_eleccion'] = $idDeEleccion; // Asigna el id de la elección
+                    $datosMesas['votantemesa'] = 'estudiante'; // Cambiado a la columna correcta
+    
+                    // Asignar el apellido del primer votante a la columna votantesenmesa
+                    $primerVotante = $votantesEstudiantes->slice($i * $votantesPorMesa)->first();
+    
+                    // Asignar el apellido del último votante a la columna votantesenmesa
+                    $ultimoVotante = $votantesEstudiantes->slice($i * $votantesPorMesa, $votantesPorMesa)->last();
+    
+                    if ($primerVotante && $ultimoVotante) {
+                        $datosMesas['votantesenmesa'] = "De {$primerVotante->apellidoPaterno} Hasta {$ultimoVotante->apellidoPaterno}";
+                    }
+    
+                    Mesa::insert($datosMesas);
+    
+                    $mesaActual++;
                 }
-
-                Mesa::insert($datosMesas);
+    
+                // Asignar una mesa para todos los docentes (solo si hay docentes registrados)
+                if ($votantesDocentes->count() > 0) {
+                    $datosMesas = request()->except('_token');
+                    $datosMesas['numeromesa'] = $mesaActual; // Se asigna una nueva mesa
+                    $datosMesas['numerodevotantes'] = $votantesDocentes->count();
+                    $datosMesas['id_de_eleccion'] = $idDeEleccion; // Asigna el id de la elección
+                    $datosMesas['votantemesa'] = 'docente'; // Cambiado a la columna correcta
+    
+                    // Asignar el apellido del primer votante a la columna votantesenmesa
+                    $primerVotanteDocente = $votantesDocentes->first();
+    
+                    // Asignar el apellido del último votante a la columna votantesenmesa
+                    $ultimoVotanteDocente = $votantesDocentes->last();
+    
+                    if ($primerVotanteDocente && $ultimoVotanteDocente) {
+                        $datosMesas['votantesenmesa'] = "De {$primerVotanteDocente->apellidoPaterno} Hasta {$ultimoVotanteDocente->apellidoPaterno}";
+                    }
+    
+                    Mesa::insert($datosMesas);
+                }
+            } else {
+                // Caso: Otros tipos de votantes, asigna mesas según la lógica actual
+                $mesaActual = 1;
+    
+                for ($i = 0; $i < $cantidadMesas; $i++) {
+                    $datosMesas = request()->except('_token');
+                    $datosMesas['numeromesa'] = $mesaActual;
+                    $datosMesas['numerodevotantes'] = $votantesPorMesa;
+                    $datosMesas['id_de_eleccion'] = $idDeEleccion; // Asigna el id de la elección
+                    $datosMesas['votantemesa'] = ''; // Cambiado a la columna correcta (puedes asignar un valor según tu lógica)
+    
+                    // Asignar el apellido del primer votante a la columna votantesenmesa
+                    $primerVotante = $votantes->slice($i * $votantesPorMesa)->first();
+    
+                    // Asignar el apellido del último votante a la columna votantesenmesa
+                    $ultimoVotante = $votantes->slice($i * $votantesPorMesa, $votantesPorMesa)->last();
+    
+                    if ($primerVotante && $ultimoVotante) {
+                        $datosMesas['votantesenmesa'] = "De {$primerVotante->apellidoPaterno} Hasta {$ultimoVotante->apellidoPaterno}";
+                    }
+    
+                    Mesa::insert($datosMesas);
+    
+                    $mesaActual++;
+                }
             }
         }
-    }
 
     return redirect('/mesas')->with('success', 'Las mesas se han guardado con éxito.');
 }
