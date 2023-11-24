@@ -172,7 +172,7 @@ return [
         ],
 
         'id_de_eleccion' => [
-            'unique' => 'Ya se asigno la(s) mesa(s) a esta elección escoja otra por favor.',
+            'unique' => 'Ya se asigno la(s) mesa(s) de esta carrera escoja otra por favor.',
         ],
     ],
 

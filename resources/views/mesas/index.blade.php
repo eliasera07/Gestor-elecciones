@@ -592,10 +592,11 @@ td:first-child {
                         <thead>
                             <tr>
                                 <th>Id de Eleccion</th>
-                                <th>N° de Mesa.</th>
+                                <th>N° de Mesa</th>
                                 <th>Tipo Votante</th>
                                 <th>Votantes en mesa</th>
                                 <th>Facultad</th>
+                                <th>Carrera</th>
                                 <th>Ubicacion</th>
                                 <th>Nº de votantes</th>
                                 <th>Acciones</th>
@@ -609,6 +610,7 @@ td:first-child {
                                     <td>{{ $mesas->votantemesa }}</td>
                                     <td>{{ $mesas->votantesenmesa}}</td>
                                     <td>{{ $mesas->facultadmesa }}</td>
+                                    <td>{{ $mesas->carreramesa }}</td>
                                     <td>{{ $mesas->ubicacionmesa }}</td>
                                     <td>{{ $mesas->numerodevotantes }}</td>
                                     
@@ -634,8 +636,10 @@ td:first-child {
                                 </button>
 
 
-                                    
-
+                                <button class="buttons-dentro-tabla" title="Previsualizar acta" 
+                                    onclick="window.location.href='{{ url('/mesas/' . $mesas->id . '/acta')}}'" class="buttons'">
+                                        <img src="/images/previ.png" alt="Previsualizar" class="formato-imagen" />
+                                    </button>
 
 
                                     <button class="buttons-dentro-tabla" title="Editar Elección"
@@ -700,9 +704,9 @@ td:first-child {
 
 </div>
 <div class="footer-der">
-    <a href="{{ url('/') }}">Acerca de</a>
-    <span>&nbsp;|&nbsp;</span> <!-- Para agregar un separador -->
-    <a href="{{ url('/') }}">Contactos</a>
+            <a href="{{ url('/acercade') }}">Acerca de | Contactos</a>
+            <!--<span>&nbsp;|&nbsp;</span> 
+            <a href="#">Contactos</a>-->
 
 </div>
 

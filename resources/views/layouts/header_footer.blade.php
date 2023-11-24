@@ -317,9 +317,9 @@
             <br>-->
         </div>
         <div class="footer-der">
-            <a href="#">Acerca de</a>
-            <span>&nbsp;|&nbsp;</span> 
-            <a href="#">Contactos</a>
+            <a href="{{ url('/acercade') }}">Acerca de | Contactos</a>
+            <!--<span>&nbsp;|&nbsp;</span> 
+            <a href="#">Contactos</a>-->
         </div>
     </div>
     

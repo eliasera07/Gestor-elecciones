@@ -519,7 +519,7 @@ td:first-child {
         <br>
         <br>
         <center>
-            <h1>Lista de Elecciones Creadas</h1>
+            <h1>Lista de Elecciones Activas</h1>
         </center>
         <br>
         <br>
@@ -549,11 +549,15 @@ td:first-child {
                 <a href="{{ url('/reporte') }}" class="buttons">Reportes</a>
             </div>
 
-
             <div class="botones">
+                <a href="{{ url('/generar-backup') }}" class="buttons" download="backup.sql">Generar Backup</a>
+            </div>
+
+
+            {{--<div class="botones">
                 <input type="text" id="search" placeholder="Buscar...">
                 <button class="buttons" onclick="search()">Buscar</button>
-            </div>
+            </div>--}}
         </div>
 
 
@@ -662,9 +666,9 @@ td:first-child {
 
                                         </div>
                                         <div class="footer-der">
-                                            <a href="{{ url('/') }}">Acerca de</a>
-                                            <span>&nbsp;|&nbsp;</span> <!-- Para agregar un separador -->
-                                            <a href="{{ url('/') }}">Contactos</a>
+                                        <a href="{{ url('/acercade') }}">Acerca de | Contactos</a>
+                                        <!--<span>&nbsp;|&nbsp;</span> 
+                                        <a href="#">Contactos</a>-->
 
                                         </div>
 

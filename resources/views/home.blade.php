@@ -420,9 +420,9 @@
 
         </div>
         <div class="footer-der">
-            <a href="{{ url('/') }}">Acerca de</a>
-            <span>&nbsp;|&nbsp;</span> <!-- Para agregar un separador -->
-            <a href="{{ url('/') }}">Contactos</a>
+            <a href="{{ url('/acercade') }}">Acerca de | Contactos</a>
+            <!--<span>&nbsp;|&nbsp;</span> 
+            <a href="#">Contactos</a>-->
 
         </div>
 

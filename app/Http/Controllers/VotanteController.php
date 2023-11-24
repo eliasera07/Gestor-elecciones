@@ -138,41 +138,7 @@ class VotanteController extends Controller
         return redirect('votante');
     }
 
-    public function import(Request $request)
-{
-    $request->validate([
-        'ideleccion' => 'required',
-        'cargarListaCSV' => 'required|file|mimes:csv,txt',
-    ]);
-
-    $file = $request->file('cargarListaCSV');
-
-    $handle = fopen($file->getPathname(), 'r');
-
-    if ($handle !== false) {
-        while (($row = fgetcsv($handle)) !== false) {
-            // Procesa y almacena cada fila del archivo CSV en la base de datos
-            Votante::create([
-                'ideleccion' => $request->ideleccion,
-                'nombres' => $row[0],
-                'apellidoPaterno' => $row[1],
-                'apellidoMaterno' => $row[2],
-                'codSis' => $row[3],
-                'CI' => $row[4],
-                'tipoVotante' => $row[5],
-                'carrera' => $row[6],
-                'profesion' => $row[7],
-                'cargoAdministrativo' => $row[8],
-                'facultad' => $row[9],
-                'celular' => $row[10],
-                'email' => $row[11],
-            ]);
-        }
-        fclose($handle);
-    }
-
-    return redirect('/elecciones')->with('success', 'Votantes importados exitosamente');
-}
+   
 
 public function showCarga(){
     
@@ -198,9 +164,28 @@ public function showCarga(){
 
     $handle = fopen($file->getPathname(), 'r');
 
+    // Variable de control para omitir la primera fila
+    $skipFirstRow = true;
+
     if ($handle !== false) {
         while (($row = fgetcsv($handle)) !== false) {
-            // Procesa y almacena cada fila del archivo CSV en la base de datos
+            // Omitir la primera fila
+            if ($skipFirstRow) {
+                $skipFirstRow = false;
+                continue;
+            }
+
+            $existingVotante = Votante::where('ideleccion', $request->ideleccion)
+                ->where(function ($query) use ($row) {
+                    $query->where('codSis', $row[3])
+                        ->orWhere('CI', $row[4]);
+                })
+                ->first();
+
+            if ($existingVotante) {
+                continue;
+            }
+
             Votante::create([
                 'ideleccion' => $request->ideleccion,
                 'nombres' => $row[0],
@@ -217,10 +202,11 @@ public function showCarga(){
                 'email' => $row[11],
             ]);
         }
+
         fclose($handle);
     }
 
-    return redirect('/elecciones')->with('success', 'Votantes importados exitosamente');
+    return redirect('/votante')->with('success', 'Votantes importados exitosamente');
 }
 
 

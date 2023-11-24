@@ -337,7 +337,7 @@
                 {{ method_field('PATCH') }}
             @endif
         <label for=""></label><br><br>
-        <h2 class="form-title">Registrar Mesa de Votacion</h2>
+        <h2 class="form-title">Registrar Mesas de Votacion</h2>
         <div class="column">
 
         <label for="id_de_eleccion">Elección asociada:</label>
@@ -354,23 +354,19 @@
               <span class="error-message">{{ $errors->first('id_de_eleccion') }}</span>
                <br><br>
 
+                <div class="campo-adicional" id="facultadmesa">
+                <label for="facultadmesa">Facultad de la mesa:</label>
+                <select name="facultadmesa" id="facultadmesaSelect" required>
+                <option value="">Selecciona una facultad</option>
+                 </select>
+                <span class="error-message">{{ $errors->first('facultadmesa') }}</span>
+                </div><br><br> 
 
-               
-
-
-                 <div class="campo-adicional" id="facultadmesa">
-                 <label for="facultadmesa">Facultad de la mesa:</label>
-                 <input type="text" placeholder="Escribe la fac aquí..." maxlength="40" 
-                   oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
-                   name="facultadmesa" value="{{ isset($mesas) ? $mesas->facultadmesa : '' }}" id="facultadmesa" ><br><br>
-                 </div>
-
-                 <div class="campo-adicional" id="carreramesa">
+                <div class="campo-adicional" id="carreramesa">
                  <label for="carreramesa">Carrera:</label>
-                  <input type="text" placeholder="Escribe la Carrera aquí..." maxlength="40" 
-                  oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
-                  name="carreramesa" value="{{ isset($mesas) ? $mesas->carreramesa : '' }}" id="carreramesa" ><br><br>
-                 </div>
+                <select name="carreramesa" id="carreramesaSelect" required>
+                </select>
+                </div><br><br> 
 
                  @if ($editar)
                   <label for="ubicacionmesa">Ubicacion de mesa:</label>
@@ -379,7 +375,12 @@
                     name="ubicacionmesa" value="{{ isset($mesas) ? $mesas->ubicacionmesa : '' }}" id="mesas" ><br><br>
                  @endif
 
-                
+                 <div class="campo-adicional">
+                 <label for="numeroMesas" id="cantidadMesasLabel" style="display: none;">Cantidad de Mesas:</label>
+                 <input type="number" name="numeroMesas" id="cantidadMesasInput" value="1" min="1" style="display: none;">
+                 </div>
+
+
                 {{--
                 <label for=""></label>
                 <div class="campo-adicional">
@@ -420,13 +421,194 @@
 
         </div>
         <div class="footer-der">
-            <a href="{{ url('/') }}">Acerca de</a>
-            <span>&nbsp;|&nbsp;</span> <!-- Para agregar un separador -->
-            <a href="{{ url('/') }}">Contactos</a>
+            <a href="{{ url('/acercade') }}">Acerca de | Contactos</a>
+            <!--<span>&nbsp;|&nbsp;</span> 
+            <a href="#">Contactos</a>-->
 
         </div>
 
     </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    // ...
+
+    var cantidadMesasLabel = document.getElementById('cantidadMesasLabel');
+    var cantidadMesasInput = document.getElementById('cantidadMesasInput');
+    var carreraSelect = document.getElementById('carreramesaSelect');
+
+    // ...
+
+    // Manejar el cambio en la selección de carrera
+    carreraSelect.addEventListener('change', function () {
+        // Obtener la carrera seleccionada
+        var selectedCarrera = carreraSelect.value;
+
+        // Mostrar u ocultar el texto y el campo "Cantidad de Mesas" según la selección
+        cantidadMesasLabel.style.display = selectedCarrera ? 'block' : 'none';
+        cantidadMesasInput.style.display = selectedCarrera ? 'block' : 'none';
+        
+        // Si se selecciona una carrera, habilitar el campo
+        if (selectedCarrera) {
+            cantidadMesasInput.disabled = false;
+        } else {
+            // Si no se selecciona una carrera, deshabilitar y reiniciar el valor
+            cantidadMesasInput.disabled = true;
+            cantidadMesasInput.value = '1';
+        }
+    });
+});
+</script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        var facultadSelect = document.getElementById('facultadmesaSelect');
+        var carreraSelect = document.getElementById('carreramesaSelect');
+
+    // Lista de facultades predefinidas
+    var facultadesPredefinidas = [
+        "Humanidades Y Cs. De Educación",
+        "Ciencias Jurídicas y Políticas",
+        "Arquitectura y Ciencias del Hábitat",
+        "Ciencias Económicas",
+        "Ciencias y Tecnología",
+        "Ciencias Sociales",
+        "Medicina",
+        "Odontología",
+        "Cs .Farmacéuticas Y Bioquímicas",
+        "Enfermería",
+        "Ciencias Agrícolas Y Pecuarias",
+        "Desarrollo Rural y Territorial",
+        "Ciencias Veterinarias",
+        "Politécnica del Valle Alto"
+    ];
+
+    var carrerasPorFacultad = {
+        "Humanidades Y Cs. De Educación": [
+                "Psicología",
+                "Ciencias de la Educación",
+                "Lingüística Aplicada a la Enseñanza de Lenguas",
+                "Comunicación Social",
+                "Trabajo Social",
+                "Música",
+                "Ciencias de la Actividad Física y Deportes",
+                "Licenciatura especial en Educación Intercultural Bilingüe"
+            ],
+            "Ciencias Jurídicas y Políticas": [
+                "Ciencias Jurídicas",
+                "Ciencias Políticas"
+            ],
+            "Arquitectura y Ciencias del Hábitat": [
+                "Arquitectura",
+                "Diseño gráfico y Comunicación Visual",
+                "Turismo",
+                "Diseño de Interiores y del Mobiliario",
+                "Planificación del Territorio y el Medio Ambiente",
+                "Construcciones"
+            ],
+            "Ciencias Económicas": [
+                "Economía",
+                "Administración de Empresas",
+                "Contaduría Pública",
+                "Ingeniería Comercial",
+                "Ingeniería Financiera"
+            ],
+            "Ciencias y Tecnología": [
+                "Alimentos",
+                "Biología",
+                "Civil",
+                "Mecánica",
+                "Electromecánica",
+                "Industrial",
+                "Eléctrica",
+                "Electrónica",
+                "Informática",
+                "Sistemas",
+                "Quimica",
+                "Matemáticas",
+                "Matemáticas",
+                "Física",
+                "Química",
+                "Petroquimica"
+            ],
+            "Ciencias Sociales": [
+                "Sociología",
+                "Antropología"
+            ],
+            "Medicina": [
+                "Medicina",
+                "Fisioterapia y kinesiología",
+                "Nutrición y Dietética"
+            ],
+            "Odontología": [
+                "Odontologia"
+            ],
+            "Farmacéuticas Y Bioquímicas": [
+                "Ciencias Farmacéuticas",
+                "Bioquimica"
+            ],
+            "Enfermería": [
+                "Enfermeria"
+            ],
+            "Ciencias Agrícolas Y Pecuarias": [
+                "Agronómica",
+                "Agroindustrial",
+                "Agrícola",
+                "Agronómica Fitotecnista",
+                "Agronómica Zootecnista",
+                "Tec. Sup. Gestión del Territorio Desarrollo Endógeno Sustentable",
+                "Forestal",
+                "Tec. Sup. Forestal",
+                "Medio Ambiente",
+                "Agrícola Tropical y Manejo de Recursos Renovables"
+            ],
+            "Desarrollo Rural y Territorial": [
+                "Tecnico Superior en Agronomia",
+                "Produccion Agraria y Desarrollo Territoria"
+            ],
+            "Ciencias Veterinarias": [
+                "Medicina Veterinaria y Zootecnia"
+            ],
+            "Politécnica del Valle Alto": [
+                "Técnico Universitario Superior en Construcción Civil",
+                "Progr Compl en Mecánica Automotriz y Maquinaria Agroindustrial",
+                "Técnico Universitario Superior en Mecánica Automotriz",
+                "Técnico Universitario Superior en Mecánica Industrial",
+                "Técnico Universitario Superior en Química Industrial",
+                "Técnico Universitario Superior en Industria de Alimentos",
+                "Técnico Universitario Medio en Enfermería"
+            ]
+        };
+
+    // Llenar el campo de facultad con las opciones predefinidas
+    facultadesPredefinidas.forEach(function (facultad) {
+            var opcionElemento = document.createElement('option');
+            opcionElemento.value = facultad;
+            opcionElemento.text = facultad;
+            facultadSelect.appendChild(opcionElemento);
+        });
+
+        // Manejar el cambio en la selección de facultad
+        facultadSelect.addEventListener('change', function () {
+            // Obtener la facultad seleccionada
+            var selectedFacultad = facultadSelect.value;
+            
+            // Limpiar las opciones actuales en el campo de carreras
+            carreraSelect.innerHTML = '<option value="">Selecciona una carrera</option>';
+
+            // Obtener las carreras correspondientes a la facultad seleccionada
+            var carreras = carrerasPorFacultad[selectedFacultad] || [];
+
+            // Llenar el campo de carreras con las opciones correspondientes
+            carreras.forEach(function (carrera) {
+                var opcionElemento = document.createElement('option');
+                opcionElemento.value = carrera;
+                opcionElemento.text = carrera;
+                carreraSelect.appendChild(opcionElemento);
+            });
+        });
+    });
+    </script>
     
     <script>
         function cancelacion() {
@@ -450,33 +632,6 @@
 
 
 </div>
-    <script>
-        function mostrarCampoAdicional() {
-            var tipoVotante = document.getElementById("tipoVotante").value;
-            var campoProfesion = document.getElementById("campoProfesion");
-            var campoCargo = document.getElementById("campoCargo");
-            var campoCarrera = document.getElementById("campoCarrera")
-            
-            campoProfesion.style.display = "none";
-            campoCargo.style.display = "none";
-            campoCarrera.style.display = "none";
-            
-            if (tipoVotante === "Estudiante") {
-                campoCarrera.style.display = "block";
-            } else if (tipoVotante === "Docente") {
-                campoProfesion.style.display = "block";
-            } else if (tipoVotante === "Administrativo") {
-                campoCargo.style.display = "block";
-            }
-        }
-
-        document.getElementById("tipoVotante").addEventListener("change", mostrarCampoAdicional);
-
-        mostrarCampoAdicional();
-    </script>
-
-
-
     
 </body>
 </html> 

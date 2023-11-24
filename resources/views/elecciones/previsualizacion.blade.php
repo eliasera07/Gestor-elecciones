@@ -407,7 +407,7 @@
             <li><a href="{{ url('/') }}">Inicio</a></li>
             <li><a href="{{ url('/elecciones') }}">Elecciones</a></li>
             <li><a href="{{ url('/comunicados') }}">Comunicados</a></li>
-            <li><a href="#">Documentación</a></li>
+            <li><a href="{{ url('/documentaciones') }}">Documentación</a></li>
             <li><a href="#">Ingreso</a></li>
             <img src="/images/img.png" class="company-logo">
         </ul>
@@ -433,10 +433,14 @@
         <div class="column2">
             
         <a href="{{ route('elecciones.registrarResultados', ['id' => $eleccion->id]) }}" class="boton-descarga-pdf">
-        Registrar resultados</a>
+          Registrar resultados</a>
 
         <a href="{{ route('elecciones.editarResultados', ['id' => $eleccion->id]) }}" class="boton-descarga-pdf">
-    Editar resultados</a>
+          Editar resultados</a>
+
+          <a href="{{ route('elecciones.pdf', ['id' => $eleccion->id]) }}" class="boton-descarga-pdf">
+        Generar reporte</a>
+
         </div>
     </div>
 
@@ -505,9 +509,9 @@
                 Copyright © 2023 Tribunal Electoral Universitario Todos los derechos Reservados
             </div>
             <div class="footer-der">
-                <a href="{{ url('/') }}">Acerca de</a>
-                <span>&nbsp;|&nbsp;</span>
-                <a href="{{ url('/') }}">Contactos</a>
+            <a href="{{ url('/acercade') }}">Acerca de | Contactos</a>
+            <!--<span>&nbsp;|&nbsp;</span> 
+            <a href="#">Contactos</a>-->
             </div>
         </div>
     </div>

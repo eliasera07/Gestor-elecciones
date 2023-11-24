@@ -45,7 +45,7 @@ class ComiteController extends Controller
         $datosComite = request()->except('_token');
     
         // Inserta los datos en la tabla votantes
-        Comite::insert($datosComite);
+        Comite::create($datosComite);
     
         return redirect('/comite')->with('success', 'El miembro del comite se ha guardado con éxito.');
     }

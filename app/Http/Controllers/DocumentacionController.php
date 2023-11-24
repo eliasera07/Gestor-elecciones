@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
-
 use Illuminate\Http\Request;
 use App\Models\Documentacion;
 use App\Models\Eleccion;
@@ -103,7 +101,9 @@ class DocumentacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
+
     $request->validate([
         'titulo' => 'required|max:255',
         'idEleccionD' => 'required',
