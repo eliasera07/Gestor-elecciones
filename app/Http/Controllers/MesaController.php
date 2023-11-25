@@ -90,24 +90,7 @@ class MesaController extends Controller
     $tipoVotantes = strtolower($eleccion->tipodevotantes); // Convertir a minúsculas
 
     // Lógica de asignación de mesas
-    if ($totalVotantes <= 99 && $numeroMesas > 0) {
-        // Caso: Menos o igual a 99 votantes, crea la cantidad de mesas indicadas por el usuario
-        for ($i = 1; $i <= $numeroMesas; $i++) {
-            // Encuentra el próximo número de mesa disponible
-            $mesaActual = $this->obtenerProximoNumeroMesa($numerosDeMesaExistente);
-
-            $datosMesas = $request->except('_token', 'numeroMesas');
-            $datosMesas['numeromesa'] = $mesaActual;
-            $datosMesas['id_de_eleccion'] = $idDeEleccion;
-
-            // Otras asignaciones que puedan necesitar aquí
-
-            Mesa::insert($datosMesas);
-
-            // Agrega el número de mesa actual a la lista
-            $numerosDeMesaExistente[] = $mesaActual;
-        }
-    } elseif ($totalVotantes > 99) {
+    if ($totalVotantes > 0) {
         // Caso: Más de 99 votantes, asigna mesas según la lógica actual
         // Obtén la última mesa asignada en la misma elección y carrera
         $ultimaMesaAsignada = Mesa::where('id_de_eleccion', $idDeEleccion)
