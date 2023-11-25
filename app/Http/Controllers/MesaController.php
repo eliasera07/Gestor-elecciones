@@ -76,7 +76,7 @@ class MesaController extends Controller
             'required',
             Rule::unique('mesas')->where(function ($query) use ($request, $carrera) {
                 return $query->where('id_de_eleccion', $request->input('id_de_eleccion'))
-                    ->whereRaw('LOWER(carreramesa) LIKE LOWER(?) COLLATE utf8_unicode_ci', [$carrera]);
+                    ->where('carreramesa', $carrera);
             }),
         ],
         'carreramesa' => 'required',
