@@ -76,7 +76,7 @@ class MesaController extends Controller
             'required',
             Rule::unique('mesas')->where(function ($query) use ($request, $carrera) {
                 return $query->where('id_de_eleccion', $request->input('id_de_eleccion'))
-                    ->where('carreramesa', $carrera);
+                    ->whereRaw('LOWER(carreramesa) LIKE LOWER(?) COLLATE utf8_unicode_ci', [$carrera]);
             }),
         ],
         'carreramesa' => 'required',
@@ -131,7 +131,16 @@ class MesaController extends Controller
             $mesaActual = $this->asignarMesasPorTipo($mesaActual, $votantesAdministrativos, $numeroMesas, $idDeEleccion, 'administrativo', $carrera, $request);
         } else {
             // Caso: Otros tipos de votantes, asigna mesas según la lógica actual
-            $mesaActual = $this->asignarMesasPorTipo($mesaActual, $votantes, $numeroMesas, $idDeEleccion, '', $carrera, $request);
+            $votantesEstudiantes = $votantes->where('tipoVotante', 'estudiante')->where('carrera', $carrera);
+            $votantesDocentes = $votantes->where('tipoVotante', 'docente')->where('carrera', $carrera);
+            $votantesAdministrativos = $votantes->where('tipoVotante', 'administrativo')->where('carrera', $carrera);
+
+            // Asignar mesas para estudiantes
+            $mesaActual = $this->asignarMesasPorTipo($mesaActual, $votantesEstudiantes, $numeroMesas, $idDeEleccion, 'estudiante', $carrera, $request);
+
+            $mesaActual = $this->asignarMesasParaDocentes($mesaActual, $votantesDocentes, $idDeEleccion, $request, $carrera);
+
+            $mesaActual = $this->asignarMesasPorTipo($mesaActual, $votantesAdministrativos, $numeroMesas, $idDeEleccion, 'administrativo', $carrera, $request);
         }
     }
 
@@ -141,7 +150,7 @@ class MesaController extends Controller
     // Función actualizada para asignar mesas por tipo
     private function asignarMesasPorTipo($mesaActual, $votantes, $numeroMesas, $idDeEleccion, $tipoVotante, $carrera, $request)
 {
-    $votantesTipo = $votantes->where('tipoVotante', $tipoVotante);
+    $votantesTipo = $votantes->where('tipoVotante', $tipoVotante)->where('carrera', $carrera);  // Asegúrate de agregar la condición de carrera aquí
 
     // Verificar si hay votantes del tipo especificado
     if ($votantesTipo->count() > 0) {
@@ -274,9 +283,9 @@ private function asignarMesasParaDocentes($mesaActual, $votantesDocentes, $idDeE
     }
 
     // Obtén la cantidad de jurados que deseas generar
-    $cantidadSuplentes = 1;
-    $cantidadTitulares = 2;
-    $cantidadPresidente = 2;
+    $cantidadSuplentes = 4;
+    $cantidadTitulares = 4;
+    $cantidadPresidente = 1;
 
     // Obtén la elección asociada a la mesa
     $eleccion = Eleccion::find($mesa->id_de_eleccion);
@@ -291,7 +300,7 @@ private function asignarMesasParaDocentes($mesaActual, $votantesDocentes, $idDeE
         $this->generateJuradosByType($mesa->numeromesa, $eleccion->id, 'docente', $cantidadSuplentes, $cantidadTitulares, $cantidadPresidente);
 
         // Generar jurados de tipo 'Estudiante'
-        $this->generateJuradosByType($mesa->numeromesa, $eleccion->id, 'estudiante', 1, 1, 0);
+        $this->generateJuradosByType($mesa->numeromesa, $eleccion->id, 'estudiante', 2, 2, 0);
     } else {
         // Generar jurados sin tener en cuenta el tipo de votante
         $this->generateJuradosByType($mesa->numeromesa, $eleccion->id, null, $cantidadSuplentes, $cantidadTitulares, $cantidadPresidente);
@@ -309,7 +318,7 @@ private function generateJuradosByType($idMesa, $idEleccion, $tipoVotante, $cant
         ->count();
 
     // Calcular la cantidad máxima de jurados que se pueden asignar
-    $cantidadMaxima = 5 - $juradosAsignados;
+    $cantidadMaxima = 9 - $juradosAsignados;
 
     // Si no hay espacio para más jurados, no hacer más asignaciones
     if ($cantidadMaxima <= 0) {
@@ -340,7 +349,7 @@ private function generateJuradosByType($idMesa, $idEleccion, $tipoVotante, $cant
 
     $votantes = $votantes->shuffle();
     
-    $tiposJurado = ['Suplente', 'Titular', 'Presidente'];
+    $tiposJurado = ['Suplente', 'Suplente', 'Titular', 'Titular', 'Presidente'];
 
     $i = 0;
 
