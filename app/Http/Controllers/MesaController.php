@@ -52,7 +52,7 @@ class MesaController extends Controller
 {
     $idDeEleccion = $request->input('id_de_eleccion');
     $numeroMesas = $request->input('numeroMesas');
-    $carrera = $request->input('carreramesa');
+    $carrera = strtolower($request->input('carreramesa'));
 
     // Encuentra el número más alto de mesa para esta elección
     $ultimaMesa = Mesa::where('id_de_eleccion', $idDeEleccion)->max('numeromesa');
@@ -82,16 +82,12 @@ class MesaController extends Controller
         'carreramesa' => 'required',
     ]);
 
-    // Obtén todos los números de mesa para esta elección
-    $numerosDeMesaExistente = Mesa::where('id_de_eleccion', $idDeEleccion)->pluck('numeromesa')->toArray();
-
     // Encuentra el tipo de votantes de la elección
     $eleccion = Eleccion::find($idDeEleccion);
     $tipoVotantes = strtolower($eleccion->tipodevotantes); // Convertir a minúsculas
 
     // Lógica de asignación de mesas
     if ($totalVotantes > 0) {
-        // Caso: Más de 99 votantes, asigna mesas según la lógica actual
         // Obtén la última mesa asignada en la misma elección y carrera
         $ultimaMesaAsignada = Mesa::where('id_de_eleccion', $idDeEleccion)
             ->where('carreramesa', $carrera)
@@ -102,29 +98,45 @@ class MesaController extends Controller
 
         // Lógica específica para el tipo "General"
         if ($tipoVotantes == 'general') {
-            $votantesEstudiantes = $votantes->where('tipoVotante', 'estudiante')->where('carrera', $carrera);
-            $votantesDocentes = $votantes->where('tipoVotante', 'docente')->where('carrera', $carrera);
-            $votantesAdministrativos = $votantes->where('tipoVotante', 'administrativo')->where('carrera', $carrera);
+    $votantesEstudiantes = $votantes->filter(function ($votante) use ($carrera) {
+        return strtolower($votante->carrera) === strtolower($carrera) && strtolower($votante->tipoVotante) === 'estudiante';
+    });
 
-            // Asignar mesas para estudiantes
-            $mesaActual = $this->asignarMesasPorTipo($mesaActual, $votantesEstudiantes, $numeroMesas, $idDeEleccion, 'estudiante', $carrera, $request);
+    $votantesDocentes = $votantes->filter(function ($votante) use ($carrera) {
+        return strtolower($votante->carrera) === strtolower($carrera) && strtolower($votante->tipoVotante) === 'docente';
+    });
 
-            $mesaActual = $this->asignarMesasParaDocentes($mesaActual, $votantesDocentes, $idDeEleccion, $request, $carrera);
+    $votantesAdministrativos = $votantes->filter(function ($votante) use ($carrera) {
+        return strtolower($votante->carrera) === strtolower($carrera) && strtolower($votante->tipoVotante) === 'administrativo';
+    });
 
-            $mesaActual = $this->asignarMesasPorTipo($mesaActual, $votantesAdministrativos, $numeroMesas, $idDeEleccion, 'administrativo', $carrera, $request);
-        } else {
-            // Caso: Otros tipos de votantes, asigna mesas según la lógica actual
-            $votantesEstudiantes = $votantes->where('tipoVotante', 'estudiante')->where('carrera', $carrera);
-            $votantesDocentes = $votantes->where('tipoVotante', 'docente')->where('carrera', $carrera);
-            $votantesAdministrativos = $votantes->where('tipoVotante', 'administrativo')->where('carrera', $carrera);
+    // Asignar mesas para estudiantes
+    $mesaActual = $this->asignarMesasPorTipo($mesaActual, $votantesEstudiantes, $numeroMesas, $idDeEleccion, 'estudiante', $carrera, $request);
 
-            // Asignar mesas para estudiantes
-            $mesaActual = $this->asignarMesasPorTipo($mesaActual, $votantesEstudiantes, $numeroMesas, $idDeEleccion, 'estudiante', $carrera, $request);
+    $mesaActual = $this->asignarMesasParaDocentes($mesaActual, $votantesDocentes, $idDeEleccion, $request, $carrera);
 
-            $mesaActual = $this->asignarMesasParaDocentes($mesaActual, $votantesDocentes, $idDeEleccion, $request, $carrera);
+    $mesaActual = $this->asignarMesasPorTipo($mesaActual, $votantesAdministrativos, $numeroMesas, $idDeEleccion, 'administrativo', $carrera, $request);
+} else {
+    // Caso: Otros tipos de votantes, asigna mesas según la lógica actual
+    $votantesEstudiantes = $votantes->filter(function ($votante) use ($carrera) {
+        return strtolower($votante->carrera) === strtolower($carrera) && strtolower($votante->tipoVotante) === 'estudiante';
+    });
 
-            $mesaActual = $this->asignarMesasPorTipo($mesaActual, $votantesAdministrativos, $numeroMesas, $idDeEleccion, 'administrativo', $carrera, $request);
-        }
+    $votantesDocentes = $votantes->filter(function ($votante) use ($carrera) {
+        return strtolower($votante->carrera) === strtolower($carrera) && strtolower($votante->tipoVotante) === 'docente';
+    });
+
+    $votantesAdministrativos = $votantes->filter(function ($votante) use ($carrera) {
+        return strtolower($votante->carrera) === strtolower($carrera) && strtolower($votante->tipoVotante) === 'administrativo';
+    });
+
+    // Asignar mesas para estudiantes
+    $mesaActual = $this->asignarMesasPorTipo($mesaActual, $votantesEstudiantes, $numeroMesas, $idDeEleccion, 'estudiante', $carrera, $request);
+
+    $mesaActual = $this->asignarMesasParaDocentes($mesaActual, $votantesDocentes, $idDeEleccion, $request, $carrera);
+
+    $mesaActual = $this->asignarMesasPorTipo($mesaActual, $votantesAdministrativos, $numeroMesas, $idDeEleccion, 'administrativo', $carrera, $request);
+}
     }
 
     return redirect('/mesas')->with('success', 'Las mesas se han guardado con éxito.');
@@ -133,7 +145,9 @@ class MesaController extends Controller
     // Función actualizada para asignar mesas por tipo
     private function asignarMesasPorTipo($mesaActual, $votantes, $numeroMesas, $idDeEleccion, $tipoVotante, $carrera, $request)
 {
-    $votantesTipo = $votantes->where('tipoVotante', $tipoVotante)->where('carrera', $carrera);  // Asegúrate de agregar la condición de carrera aquí
+    $votantesTipo = $votantes->filter(function ($votante) use ($carrera, $tipoVotante) {
+        return strtolower($votante->carrera) === $carrera && strtolower($votante->tipoVotante) === strtolower($tipoVotante);
+    });
 
     // Verificar si hay votantes del tipo especificado
     if ($votantesTipo->count() > 0) {
@@ -141,7 +155,7 @@ class MesaController extends Controller
             $datosMesas = $request->except('_token', 'numeroMesas');
             $datosMesas['numeromesa'] = $mesaActual;
             $datosMesas['id_de_eleccion'] = $idDeEleccion;
-            $datosMesas['votantemesa'] = $tipoVotante;
+            $datosMesas['votantemesa'] = ucfirst(strtolower($tipoVotante)); // Convertir la primera letra a mayúscula
 
             // Asignar el apellido del primer votante a la columna votantesenmesa
             $primerVotante = $votantesTipo->slice(($i - 1) * ceil($votantesTipo->count() / $numeroMesas))->first();
@@ -165,17 +179,20 @@ class MesaController extends Controller
 
     return $mesaActual;
 }
-    
+
+// Función actualizada para asignar mesas a docentes
 private function asignarMesasParaDocentes($mesaActual, $votantesDocentes, $idDeEleccion, $request, $carrera)
 {
-    // Verificar si hay votantes docentes con la carrera especificada
-    $votantesDocentesCarrera = $votantesDocentes->where('carrera', $carrera);
+    $votantesDocentesCarrera = $votantesDocentes->filter(function ($votante) use ($carrera) {
+        return strtolower($votante->carrera) === $carrera; // Asegúrate de agregar la condición de carrera aquí
+    });
 
+    // Verificar si hay votantes docentes con la carrera especificada
     if ($votantesDocentesCarrera->count() > 0) {
         $datosMesas = $request->except('_token', 'numeroMesas');
         $datosMesas['numeromesa'] = $mesaActual;
         $datosMesas['id_de_eleccion'] = $idDeEleccion;
-        $datosMesas['votantemesa'] = 'docente';
+        $datosMesas['votantemesa'] = 'Docente';
 
         // Obtener el primer y último docente
         $primerDocente = $votantesDocentesCarrera->first();
