@@ -15,7 +15,7 @@
             var confirmacion = confirm("¿Seguro que deseas cancelar? Los cambios no se guardarán.");
             if (confirmacion) {
 
-                window.location.href = "/elecciones";
+                window.location.href = "/mesas";
             }
         }
 
@@ -23,7 +23,7 @@
             var confirmacion = confirm("Estas seguro de registrar estos resultados?");
             if (confirmacion) {
 
-                window.location.href = "/elecciones";
+                window.location.href = "/mesas";
             }
         }
     </script>
@@ -409,13 +409,17 @@ input[type="reset"]:hover {
     <br>
    
     <div class="container">
-        <form action="{{ url('/elecciones/' . $eleccion->id . '/guardarResultados') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ url('/mesas/' . $eleccion->id . '/guardarResultados') }}" method="post" enctype="multipart/form-data">
             @csrf
             {{ method_field('PATCH') }}
 
             <div class="column1">
                 <h2 class="form-title"> {{ $eleccion->nombre }} </h2>
             </div>
+            <br>
+            <div class="column1">
+            <h2 class="form-title"> Mesa Nº: {{ $numeromesa }} </h2>
+        </div>
             <h2 class="form-title1">Editar resultados</h2>
             <br><br>
 
@@ -427,32 +431,61 @@ input[type="reset"]:hover {
 
              <div class="column">
                @for ($index = 1; $index <= $halfCount; $index++)
-                 @if (!empty($eleccion->{'nombrefrente' . $index}))
+                 @if (!empty($resultados->{'nombrefrente' . $index}))
                 <label for="nombrefrente{{ $index }}">Nombre frente {{ $index }}:</label><br>
-                <input type="text" name="nombrefrente{{ $index }}" value="{{ $eleccion->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;"><br><br>
+                <input type="text" name="nombrefrente{{ $index }}" value="{{ $resultados->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;"><br><br>
 
                 <label for="votosfrente{{ $index }}">Nº de votos frente {{ $index }}:</label><br>
-                <input type="number" name="votosfrente{{ $index }}" value="{{ $eleccion->{'votosfrente' . $index} }}" style="width: 200px;"><br><br>
+                <input type="number" name="votosfrente{{ $index }}" value="{{ $resultados->{'votosfrente' . $index} }}" style="width: 200px;"><br><br>
                  @endif
               @endfor
              </div>
 
               <div class="column">
                 @for ($index = $halfCount + 1; $index <= $numFrentes; $index++)
-                    @if (!empty($eleccion->{'nombrefrente' . $index}))
+                    @if (!empty($resultados->{'nombrefrente' . $index}))
                 <label for="nombrefrente{{ $index }}">Nombre frente {{ $index }}:</label><br>
-                <input type="text" name="nombrefrente{{ $index }}" value="{{ $eleccion->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;"><br><br>
+                <input type="text" name="nombrefrente{{ $index }}" value="{{ $resultados->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;"><br><br>
 
                 <label for="votosfrente{{ $index }}">Nº de votos frente {{ $index }}:</label><br>
-                <input type="number" name="votosfrente{{ $index }}" value="{{ $eleccion->{'votosfrente' . $index} }}" style="width: 200px;"><br><br>
+                <input type="number" name="votosfrente{{ $index }}" value="{{ $resultados->{'votosfrente' . $index} }}" style="width: 200px;"><br><br>
                     @endif
                  @endfor
               </div>
+
+              <div class="column">
+              <div class="file-upload-container">
+        <label for="acta">Acta de cierre (PDF):</label>
+          @if ($resultados->acta)
+            <span>{{ $resultados->acta }}</span>
+            <embed src="{{ asset('storage/' . $resultados->acta) }}" type=""><br><br>
+          @endif
+          <input type="file" accept="application/pdf" title="Subir archivo PDF" name="acta">
+          </div>
+          <br><br>
+
+           
+          
+
+
+
+
+
+
+           <label for="votosblancos">Votos en Blanco:</label><br>
+           <input type="number" name="votosblancos" id="votosblancos" value="{{ $resultados->votosblancos }}" style="width: 200px;"><br><br>
+
+             <label for="votosnulos">Votos Nulos:</label><br>
+             <input type="number" name="votosnulos" id="votosnulos" value="{{ $resultados->votosnulos }}" style="width: 200px;"><br><br>
+                    
+                
+             </div>
+
              </div>
 
 
             <div class="botones">
-                <input type="submit" value="{{ isset($elecciones) ? 'Actualizar' : 'Registrar' }}" onclick="confirmarConfirmacion()">
+                <input type="submit" value="{{ 'Actualizar' }}" onclick="confirmarConfirmacion()">
                 <input type="reset" value="Cancelar" onclick="confirmarCancelacion()">
             </div>
             <label for=""></label><br><br>

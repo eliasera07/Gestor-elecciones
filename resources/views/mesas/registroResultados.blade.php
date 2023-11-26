@@ -15,7 +15,7 @@
             var confirmacion = confirm("¿Seguro que deseas cancelar? Los cambios no se guardarán.");
             if (confirmacion) {
 
-                window.location.href = "/elecciones";
+                window.location.href = "/mesas";
             }
         }
 
@@ -23,7 +23,7 @@
             var confirmacion = confirm("Estas seguro de registrar estos resultados?");
             if (confirmacion) {
 
-                window.location.href = "/elecciones";
+                window.location.href = "/mesas";
             }
         }
     </script>
@@ -409,14 +409,18 @@ input[type="reset"]:hover {
     <br>
    
     <div class="container">
-    <form action="{{ url('/elecciones/' . $eleccion->id . '/guardarResultados') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ url('/mesas/' . $eleccion->id . '/guardarResultados') }}" method="post" enctype="multipart/form-data">
     @csrf
     {{ method_field('PATCH') }}
         
         <div class="column1">
             <h2 class="form-title"> {{ $eleccion->nombre }} </h2>
         </div>
-        <h2 class="form-title1">Registrar resultados</h2>
+        <br>
+        <div class="column1">
+            <h2 class="form-title"> Mesa Nº: {{ $numeromesa }} </h2>
+        </div>
+        <h2 class="form-title1">Registrar Resultados</h2>
         <br><br> 
             
         <div class="columns">
@@ -445,11 +449,32 @@ input[type="reset"]:hover {
             <input type="number" name="votosfrente{{ $index + 1 }}" style="width: 200px;"><br><br>
         @endforeach
     </div>
+
+    <div class="column">
+            <div class="file-upload-container">
+                        <label for="acta">Acta de cierre (PDF):</label>
+                        <input type="file" accept="application/pdf" title="Subir archivo PDF" name="acta">
+                        
+            </div>
+             <br><br>
+            <label for="votosblancos">Votos en Blanco:</label>
+                     <br>
+                    <input type="number" name="votosblancos" id="votosblancos" style="width: 200px;">
+                    
+                
+                <br><br>
+                <label for="votosnulos">Votos Nulos:</label>
+                     <br>
+                    <input type="number" name="votosnulos" id="votosnulos" style="width: 200px;">
+                    
+                
+    </div>
+    
 </div>
 
 
             <div class="botones">
-            <input type="submit" value="{{ isset($elecciones) ? 'Actualizar' : 'Registrar' }}"
+            <input type="submit" value="{{ 'Registrar' }}"
                 onclick="confirmarConfirmacion()">
             <input type="reset" value="Cancelar" onclick="confirmarCancelación()">
             </div>

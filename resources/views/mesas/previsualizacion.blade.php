@@ -421,73 +421,89 @@
     <div class="acomodar">
         <div class="column1">
             <h2 class="form-title1"> {{ $eleccion->nombre }}</h2>
-            @if ($numVotantes > 0)
-    <h2 class="form-title"> Nº de Votantes: {{ $numVotantes }}</h2>
-@else
-    <h2 class="form-title">
-        Nº de Votantes:
-        <span class="no-votantes">No hay votantes registrados en esta elección</span>
-    </h2>
-@endif
+            
+    <h2 class="form-title"> Mesa Nº: {{ $numeromesa }} </h2>
+             
         </div>
         <div class="column2">
             
-
-          <a href="{{ route('elecciones.pdf', ['id' => $eleccion->id]) }}" class="boton-descarga-pdf">
-        Generar reporte</a>
-
         </div>
     </div>
 
     <div class="container">
-        <form action="{{ isset($elecciones) ? url('/elecciones/' . $elecciones->id) : url('/elecciones') }}"
+        <form action="{{ isset($elecciones) ? url('/mesas/' . $elecciones->id) : url('/mesas') }}"
             method="post" enctype="multipart/form-data">
             @csrf
             @if (isset($elecciones))
                 {{ method_field('PATCH') }}
             @endif
+            
 
+            @php
+              $numFrentes = 4; // 
+              $halfCount = ceil($numFrentes / 2);
+           @endphp
+
+           
             <div class="columns">
                 <div class="column">
-                <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;">Motivo de eleccion:</h2>
+                <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;">Facultad de la Mesa:</h2>
 
-                <label for="nom" > {{ $eleccion->motivo }}</label>
+                <label for="nom" > {{ $resultados->facultadmesa}}</label>
                     <br><br>
-                    <h2 class="forms"style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;"> Cargo de Autoridad:</h2>
-                    <label for="nombre"> {{ $eleccion->cargodeautoridad }} </label>
+                    <h2 class="forms"style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;"> Carrera de la Mesa:</h2>
+                    <label for="nombre"> {{ $resultados->carreramesa }} </label>
                     <br><br>
-                    <h2 class="forms"style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;"> Gestion:</h2>
-                    <label for="nom">{{ $eleccion->gestioninicio }} - {{ $eleccion->gestionfin }} </label>
+                    <h2 class="forms"style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;"> Ubicacion Mesa:</h2>
+                    <label for="nom">{{ $resultados->ubicacionmesa }}</label>
                     <br><br>
-                    <h2 class="forms"style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;"> Tipo de Votantes:</h2>
-                    <label for="nom"> {{ $eleccion->tipodevotantes }}</label>
+                    <h2 class="forms"style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;"> Tipo de Votante:</h2>
+                    <label for="nom"> {{ $resultados->votantemesa }}</label>
                     <br><br>
-                    <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;"> Fecha de inscripcion de frentes:</h2>
-                    <label for="nom"> {{ $eleccion->fechainscripcion }}
+                    <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;"> Votantes en Mesa:</h2>
+                    <label for="nom"> {{ $resultados->votantesenmesa }}
                     <br><br>  
-                    <h2 class="forms"style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;">Fecha de eleccion:</h2>
-                    <label for="nom"> {{ $eleccion->fecha }}</label>
+                    <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;" >Votos en Blanco:</h2>
+                    <label for="nom"> {{ $resultados->votosblancos }}</label><br><br>
+                    <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;" >Votos Nulos:</h2>
+                    <label for="nom"> {{ $resultados->votosnulos }}</label>
                 </div>
 
                 <div class="column">
-                <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px; font-weight: 400; word-wrap: break-word;">Convocatoria (PDF):</h2>
+                <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px; font-weight: 400; word-wrap: break-word;">Acta (PDF):</h2>
 
-                 @if (isset($eleccion) && $eleccion->convocatoria)
+                 @if ($resultados->acta)
                   <div style="display: flex; align-items: center;">
-                  <p style="margin-bottom: 0; margin-right: 10px;">Nombre del archivo: {{ $eleccion->convocatoria }}</p>
-                    <a href="{{ asset('storage/' . $eleccion->convocatoria) }}" download="Convocatoria.pdf"> 
+                  <p style="margin-bottom: 0; margin-right: 10px;">Nombre del archivo: {{ $resultados->acta }}</p>
+                    <a href="{{ asset('storage/' . $resultados->acta) }}" download="Convocatoria.pdf"> 
                   <img src="{{ asset('/images/descargar.png') }}" alt="Botón Descargar PDF" class="boton_descargar" title="Descargar Convocatoria" style="cursor: pointer;">
                    </a>
                   </div>
                  @endif
-                 <embed src="{{ asset('storage/' . $eleccion->convocatoria) }}" type="">
-                 <br><br>
-                        
-                    <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;" >Tipo de Eleccion:</h2>
-                    <label for="nom"> {{ $eleccion->tipodeeleccion }}</label>
-                    <br><br>        
-                    <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;" >Descripcion:</h2>
-                    <label for="nom"> {{ $eleccion->descripcion }}</label>
+                 
+                 <br>
+
+                 @for ($index = 1; $index <= $halfCount; $index++)
+                 @if (!empty($resultados->{'nombrefrente' . $index}))
+                 <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;" >Nombre frente {{ $index }}:</h2>
+                <label for="nombrefrente{{ $index }}">{{ $resultados->{'nombrefrente' . $index} }}:</label><br><br>
+
+                <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;" >Nº de votos frente {{ $index }}:</h2>
+                <label for="nombrefrente{{ $index }}">{{ $resultados->{'votosfrente' . $index} }}</label><br><br>
+                 @endif
+                 @endfor
+
+                 @for ($index = $halfCount + 1; $index <= $numFrentes; $index++)
+                    @if (!empty($resultados->{'nombrefrente' . $index}))
+                    <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;" >Nombre frente {{ $index }}:</h2>
+                    <label for="nombrefrente{{ $index }}">{{ $resultados->{'nombrefrente' . $index} }}:</label><br><br>
+
+                    <h2 class="forms" style="color: rgba(4, 36, 60, 0.99); font-size: 20px;  font-weight: 400; word-wrap: break-word;" >Nº de votos frente {{ $index }}:</h2>
+                    <label for="nombrefrente{{ $index }}">{{ $resultados->{'votosfrente' . $index} }}</label><br><br>
+                    @endif
+                 @endfor
+                              
+                    
                 </div>
             </div>
         </form>

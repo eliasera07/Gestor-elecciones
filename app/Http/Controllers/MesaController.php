@@ -463,4 +463,123 @@ public function visualizaracta($id)
         return $pdf->stream();
     }
 
+    
+
+    public function registroResultados($id) {
+        // Obtén el ID de la elección asociada a la mesa
+        $idEleccionMesa = Mesa::find($id)->id_de_eleccion;
+    
+        // Obtén el número de mesa
+        $numeromesa = Mesa::find($id)->numeromesa;
+    
+        // Obtén los frentes asociados a esa elección en la tabla de mesas
+        $frentes = Frente::where('ideleccionfrente', $idEleccionMesa)->get();
+    
+        // Busca la elección por el ID proporcionado
+        $eleccion = Eleccion::find($idEleccionMesa);
+    
+        return view('mesas.registroResultados', compact('eleccion', 'frentes', 'numeromesa'));
+    }
+
+    public function guardarResultados(Request $request, $id)
+{
+    // Obtener la mesa por su ID
+    $mesa = Mesa::findOrFail($id);
+
+    // Iterar sobre los frentes y guardar los datos en la base de datos
+    for ($i = 1; $i <= 4; $i++) { // Asumiendo un máximo de 4 frentes
+        $nombreFrenteKey = 'nombrefrente' . $i;
+        $votosFrenteKey = 'votosfrente' . $i;
+
+        // Obtener el nombre y los votos del frente desde el formulario
+        $nombreFrente = $request->input($nombreFrenteKey);
+        $votosFrente = $request->input($votosFrenteKey);
+
+        // Guardar los datos en la mesa
+        $mesa->$nombreFrenteKey = $nombreFrente;
+        $mesa->$votosFrenteKey = $votosFrente;
+    }
+
+    // Guardar los campos adicionales
+    $mesa->votosblancos = $request->input('votosblancos');
+    $mesa->votosnulos = $request->input('votosnulos');
+     
+    $mesa->acta = $request->input('acta');
+
+    if ($request->hasFile('acta')) {
+        $mesa['acta'] = $request->file('acta')->store('uploads', 'public');
+    }
+    
+    // Guardar la mesa actualizada
+    $mesa->save();
+
+    // Redirigir a la vista de mesas u otra vista según sea necesario
+    return redirect('/mesas')->with('success', 'Los votos se han guardado con éxito.');
+}
+
+public function editarRegistroResultados($id)
+{
+    $resultados = Mesa::findOrFail($id);
+
+     $idEleccionMesa = Mesa::find($id)->id_de_eleccion;
+    
+        // Obtén el número de mesa
+        $numeromesa = Mesa::find($id)->numeromesa;
+    
+        // Busca la elección por el ID proporcionado
+        $eleccion = Eleccion::find($idEleccionMesa);
+
+    return view('mesas.editarResultados', compact('eleccion', 'numeromesa', 'resultados'));
+}
+
+public function guardarEdicionResultados(Request $request, $id)
+{
+    // Obtener la elección por su ID
+    $mesa = Mesa::findOrFail($id);
+
+    // Iterar sobre los frentes y guardar los datos en la base de datos
+    for ($i = 1; $i <= 4; $i++) { // Asumiendo un máximo de 4 frentes
+        $nombreFrenteKey = 'nombrefrente' . $i;
+        $votosFrenteKey = 'votosfrente' . $i;
+
+        // Obtener el nombre y los votos del frente desde el formulario
+        $nombreFrente = $request->input($nombreFrenteKey);
+        $votosFrente = $request->input($votosFrenteKey);
+
+        // Guardar los datos en la mesa
+        $mesa->$nombreFrenteKey = $nombreFrente;
+        $mesa->$votosFrenteKey = $votosFrente;
+    }
+
+    // Guardar los campos adicionales
+    $mesa->votosblancos = $request->input('votosblancos');
+    $mesa->votosnulos = $request->input('votosnulos');
+     
+    $mesa->acta = $request->input('acta');
+
+    if ($request->hasFile('acta')) {
+        $mesa['acta'] = $request->file('acta')->store('uploads', 'public');
+    }
+    
+    // Guardar la mesa actualizada
+    $mesa->save();
+
+    // Redirigir a la vista de mesas u otra vista según sea necesario
+    return redirect('/mesas')->with('success', 'Los votos se han guardado con éxito.');
+}
+
+public function mostrarPrevisualizacion($id) {
+    $resultados = Mesa::findOrFail($id);
+
+     $idEleccionMesa = Mesa::find($id)->id_de_eleccion;
+    
+        // Obtén el número de mesa
+        $numeromesa = Mesa::find($id)->numeromesa;
+    
+        // Busca la elección por el ID proporcionado
+        $eleccion = Eleccion::find($idEleccionMesa);
+
+    return view('mesas.previsualizacion', compact('eleccion', 'numeromesa', 'resultados'));
+}
+
 }

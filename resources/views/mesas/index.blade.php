@@ -595,7 +595,6 @@ td:first-child {
                                 <th>N° de Mesa</th>
                                 <th>Tipo Votante</th>
                                 <th>Votantes en mesa</th>
-                                <th>Facultad</th>
                                 <th>Carrera</th>
                                 <th>Ubicacion</th>
                                 <th>Nº de votantes</th>
@@ -609,7 +608,6 @@ td:first-child {
                                     <td>{{ $mesas->numeromesa}}</td>
                                     <td>{{ $mesas->votantemesa }}</td>
                                     <td>{{ $mesas->votantesenmesa}}</td>
-                                    <td>{{ $mesas->facultadmesa }}</td>
                                     <td>{{ $mesas->carreramesa }}</td>
                                     <td>{{ $mesas->ubicacionmesa }}</td>
                                     <td>{{ $mesas->numerodevotantes }}</td>
@@ -624,6 +622,21 @@ td:first-child {
                                     <a href="{{ url('/mesas/' . $mesas->id . '/lista-jurados') }}" class="buttons"
                                     style="background-color: 04243C; color: #FFF; padding: 5px 10px; border: none; cursor: pointer;">Lista de Jurados</a> --}}
 
+                                    <button class="buttons-dentro-tabla" title="Informacion Mesa" 
+                                    onclick="window.location.href='{{ route('mesas.previsualizacion', ['id' => $mesas->id]) }}'">
+                                        <img src="    " alt="Previsualizar" class="formato-imagen" />
+                                    </button>
+
+                                     <button class="buttons-dentro-tabla" title="Registrar Resultados"
+                                      onclick="window.location.href='{{ route('mesas.registroResultados', $mesas->id) }}'" class="buttons'" >
+                                     <img src="   " alt="Registrar Resultados" class="formato-imagen" />
+                                     </button>
+
+                                     <button class="buttons-dentro-tabla" title="Editar Resultados"
+                                      onclick="window.location.href='{{ route('mesas.editarResultados', $mesas->id) }}'" class="buttons'" >
+                                     <img src=" " alt="Registrar Resultados" class="formato-imagen" />
+                                     </button>
+                                    
                                     <button class="buttons-dentro-tabla" title="Generar Jurados"
                                     onclick="window.location.href='{{ url('/mesas/' . $mesas->id . '/generate-jurados') }}'" class="buttons'" >
                                    <img src="/images/generarjurados.png" alt="Editar" class="formato-imagen" />
@@ -658,20 +671,7 @@ td:first-child {
                                        </form>
                                  {{-- Fin función borrar --}}
                                  
-                                 </td>
-                            
-                                      
-
-
-
-
-          
-       
-
-
-
-
-
+                                 </td>                                                                  
 
                                 
                           </tr>
