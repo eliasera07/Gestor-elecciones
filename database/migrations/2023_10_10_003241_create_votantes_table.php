@@ -28,6 +28,7 @@ class CreateVotantesTable extends Migration
             $table->string('facultad')->nullable();
             $table->string('celular');
             $table->string('email');
+            $table->boolean('estado')->default(1);
             $table->timestamps();
         });
     }

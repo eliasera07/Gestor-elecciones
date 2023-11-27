@@ -77,6 +77,16 @@ Route::get('/elecciones/{id}/previsualizacion', 'EleccionController@mostrarPrevi
 
 
 
+Route::get('/elecciones/{id}/registrar-resultados', 'EleccionController@registroResultados')
+    ->name('elecciones.registrarResultados');
+
+Route::patch('/elecciones/{id}/guardarResultados', 'EleccionController@guardarResultados')->name('elecciones.guardarResultados');
+
+Route::get('/elecciones/{id}/editar-resultados', [EleccionController::class, 'editarRegistroResultados'])->name('elecciones.editarResultados');
+Route::patch('/elecciones/{id}/guardar-edicion-resultados', [EleccionController::class, 'guardarEdicionResultados'])->name('elecciones.guardarEdicionResultados');
+
+
+
 Route::get('/mesas/{id}/registroResultados', 'MesaController@registroResultados')->name('mesas.registroResultados');
 
 Route::patch('/mesas/{id}/guardarResultados', 'MesaController@guardarResultados')->name('mesas.guardarResultados');
@@ -97,8 +107,13 @@ Route::get('/generar-backup', [EleccionController::class, 'generarBackup']);
 Route::get('/mesas/{id}/actapdf', 'MesaController@pdf')->name('mesas.actapdf');
 
 Route::get('/generar-pdf/{id}','EleccionController@generarPDF')->name('elecciones.pdf');
+Route::get('/generar-pdf1/{id}','EleccionController@generarPDF1')->name('elecciones1.pdf');
 
 Route::get('/acercade', [AcercadeController::class, 'index']);
+
+Route::get('/historial', [EleccionController::class, 'historial'])->name('buscar');
+Route::get('/resultados', [EleccionController::class, 'buscar'])->name('resultados');
+
 
 
 

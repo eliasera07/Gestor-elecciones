@@ -432,10 +432,14 @@
         </div>
         <div class="column2">
             
+        <a href="{{ route('elecciones.registrarResultados', ['id' => $eleccion->id]) }}" class="boton-descarga-pdf">
+          Registrar resultados</a>
 
-          <a href="{{ route('elecciones.pdf', ['id' => $eleccion->id]) }}" class="boton-descarga-pdf">
+        <a href="{{ route('elecciones.editarResultados', ['id' => $eleccion->id]) }}" class="boton-descarga-pdf">
+          Editar resultados</a>
+
+        <a href="{{ route('elecciones1.pdf', ['id' => $eleccion->id]) }}" class="boton-descarga-pdf">
         Generar reporte</a>
-
         </div>
     </div>
 

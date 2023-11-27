@@ -23,6 +23,7 @@ class CreateComitesTable extends Migration
             $table->string('cargoComite');
             $table->string('profesion');
             $table->string('cargoUMSS')->nullable();
+            $table->boolean('estado')->default(1);
             $table->timestamps();
         });
     }

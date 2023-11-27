@@ -25,7 +25,7 @@ class MesaController extends Controller
     public function index()
     {
         //
-        $mesascreadas = Mesa::orderBy('id_de_eleccion', 'asc')->paginate(100);
+        $mesascreadas = Mesa::where('estadoR', 1)->orderBy('id_de_eleccion', 'asc')->paginate(100);
         return view('mesas.index', compact('mesascreadas'));
     }
 
@@ -462,7 +462,6 @@ public function visualizaracta($id)
         $pdf = PDF::loadView('mesas.actapdf', compact('mesa', 'eleccion', 'frentes', 'jurados','horaActual','fechaFormateada'));
         return $pdf->stream();
     }
-
     
 
     public function registroResultados($id) {
@@ -511,6 +510,7 @@ public function visualizaracta($id)
     }
     
     // Guardar la mesa actualizada
+    $mesa->estadoMesa = 1;
     $mesa->save();
 
     // Redirigir a la vista de mesas u otra vista según sea necesario
@@ -562,6 +562,7 @@ public function guardarEdicionResultados(Request $request, $id)
     }
     
     // Guardar la mesa actualizada
+    $mesa->estadoMesa = 1;
     $mesa->save();
 
     // Redirigir a la vista de mesas u otra vista según sea necesario

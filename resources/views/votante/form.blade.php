@@ -413,7 +413,7 @@
 
                 
         </div>
-        <input type="submit" value="Registrar"
+        <input type="submit" value="{{ isset($votante) ? 'Actualizar' : 'Registrar' }}"
                 onclick="confirmacion()">
           
         <input type="reset" value="Cancelar" onclick="cancelacion()">

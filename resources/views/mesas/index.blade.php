@@ -624,17 +624,17 @@ td:first-child {
 
                                     <button class="buttons-dentro-tabla" title="Informacion Mesa" 
                                     onclick="window.location.href='{{ route('mesas.previsualizacion', ['id' => $mesas->id]) }}'">
-                                        <img src="    " alt="Previsualizar" class="formato-imagen" />
+                                        <img src="/images/informacion.png" alt="Previsualizar" class="formato-imagen" />
                                     </button>
 
                                      <button class="buttons-dentro-tabla" title="Registrar Resultados"
                                       onclick="window.location.href='{{ route('mesas.registroResultados', $mesas->id) }}'" class="buttons'" >
-                                     <img src="   " alt="Registrar Resultados" class="formato-imagen" />
+                                     <img src="/images/registrarresultado.png" alt="Registrar Resultados" class="formato-imagen" />
                                      </button>
 
                                      <button class="buttons-dentro-tabla" title="Editar Resultados"
                                       onclick="window.location.href='{{ route('mesas.editarResultados', $mesas->id) }}'" class="buttons'" >
-                                     <img src=" " alt="Registrar Resultados" class="formato-imagen" />
+                                     <img src="/images/editarresultado.png" alt="Registrar Resultados" class="formato-imagen" />
                                      </button>
                                     
                                     <button class="buttons-dentro-tabla" title="Generar Jurados"

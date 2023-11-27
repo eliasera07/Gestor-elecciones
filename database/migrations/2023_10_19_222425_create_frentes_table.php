@@ -23,6 +23,7 @@ class CreateFrentesTable extends Migration
             $table->string('nombrecandidato2')->nullable();
             $table->string('nombrecandidato3')->nullable();
             $table->string('nombrecandidato4')->nullable();
+            $table->boolean('estado')->default(1);
             $table->timestamps();
         });
     }

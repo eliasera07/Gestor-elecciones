@@ -35,6 +35,8 @@ class CreateMesasTable extends Migration
         $table->integer('votosfrente4')->nullable();
         $table->integer('votosblancos')->nullable();
         $table->integer('votosnulos')->nullable();
+        $table->boolean('estadoR')->default(1);
+        $table->boolean('estadoMesa');
         $table->timestamps();
     });
 }

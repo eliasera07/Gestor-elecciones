@@ -16,7 +16,7 @@ class FrenteController extends Controller
     public function index()
     {
         //
-        $frentescreados = Frente::orderBy('ideleccionfrente', 'asc')->paginate(20);
+        $frentescreados = Frente::where('estado', 1)->orderBy('ideleccionfrente', 'asc')->paginate(50);
         return view('frente.index', compact('frentescreados'));
     }
 

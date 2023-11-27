@@ -23,7 +23,7 @@ class CreateEleccionsTable extends Migration
             $table->string('tipodevotantes');
             $table->string('facultad')->nullable();
             $table->string('carrera')->nullable();
-            $table->binary('convocatoria')->nullable();
+            $table->string('convocatoria')->nullable();
             $table->date('fecha');
             $table->date('fechainscripcion');
             $table->string('tipodeeleccion');
@@ -36,7 +36,10 @@ class CreateEleccionsTable extends Migration
             $table->integer('votosfrente3')->nullable();
             $table->string('nombrefrente4')->nullable();
             $table->integer('votosfrente4')->nullable();
-            $table->boolean('estado');
+            $table->integer('votosblancoselec')->nullable();
+            $table->integer('votosnuloselec')->nullable();
+            $table->boolean('estadoRegistro');
+            $table->boolean('estado')->default(1);
             $table->timestamps();
         });
     }

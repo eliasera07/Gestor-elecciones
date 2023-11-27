@@ -620,7 +620,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function confirmacion() {
-            var confirmacion = confirm("Estas seguro de registrar esta mesa?");
+            var confirmacion = confirm("Estas seguro de registrar esta(s) mesa(s)?");
             if (confirmacion) {
 
                 window.location.href = "/mesas";    

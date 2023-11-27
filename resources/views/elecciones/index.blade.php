@@ -553,6 +553,10 @@ td:first-child {
                 <a href="{{ url('/generar-backup') }}" class="buttons" download="backup.sql">Generar Backup</a>
             </div>
 
+            <div class="botones">
+                <a href="{{ url('/historial') }}" class="buttons" >Historial</a>
+            </div>
+
 
             {{--<div class="botones">
                 <input type="text" id="search" placeholder="Buscar...">
@@ -603,7 +607,7 @@ td:first-child {
                                         </button>
 
                                         <button class="buttons-dentro-tabla" title="Archivar Elección"
-                                            onclick="confirmArchivar('{{ url('/elecciones/' . $elecciones->id . '/archivar') }}')">
+                                            onclick="confirmarArchivado('{{ url('/elecciones/' . $elecciones->id . '/archivar') }}', {{ $elecciones->estadoRegistro }})">
                                             <img src="/images/archivar.png" alt="Archivar" class="formato-imagen" />
                                         </button>
 
@@ -631,16 +635,13 @@ td:first-child {
                                     </td>
 
                                     <script>
-                                        function confirmArchivar(archivarUrl) {
-                                            // Mostrar un cuadro de diálogo de confirmación
-                                            var confirmacion = confirm("¿Estás seguro de que deseas archivar esta elección?");
-
-                                            // Si el usuario hace clic en "Aceptar" en el cuadro de diálogo de confirmación
-                                            if (confirmacion) {
-                                                // Redirigir a la URL de archivar
-                                                window.location.href = archivarUrl;
+                                        function confirmarArchivado(url, estadoRegistro) {
+                                            if (estadoRegistro === 1) {
+                                                if (confirm("¿Estás seguro que deseas archivar esta elección?")) {
+                                                    window.location.href = url;
+                                                }
                                             } else {
-                                                // No se hace nada si el usuario hace clic en "Cancelar"
+                                                alert("No se puede archivar. Falta registrar los resultados a la elección.");
                                             }
                                         }
                                     </script>
