@@ -15,7 +15,11 @@ use Illuminate\Support\Str;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 use TCPDF;
+use PDO;
 
 class EleccionController extends Controller
 {
@@ -80,7 +84,7 @@ class EleccionController extends Controller
 
     $datosEleccion['estado'] = $request->input('estado', 1);
     $datosEleccion['estadoRegistro'] = $request->input('estadoRegistro', 0);
-    Eleccion::insert($datosEleccion);
+    Eleccion::create($datosEleccion);
 
     return redirect('/elecciones')->with('success', 'La elección se ha guardado con éxito.');
 }
@@ -301,6 +305,48 @@ public function generarBackup()
         return response()->json(['success' => false, 'message' => 'Error al generar el backup: ' . $e->getMessage()]);
     }
 }
+
+
+public function mostrarFormCargarBackup()
+{
+    return View::make('elecciones.cargabackup');
+}
+
+
+public function cargarBackup(Request $request)
+{
+    try {
+        // Obtén el archivo de respaldo desde la solicitud
+        $archivoBackup = $request->file('archivo_backup');
+
+        // Nombre del archivo de respaldo
+        $backupFileName = 'backup-' . Carbon::now()->format('Y-m-d_His') . '.sql';
+
+        // Ruta completa del archivo de respaldo
+        $backupPath = storage_path('app/backups/' . $backupFileName);
+
+        // Mover el archivo de respaldo a la ubicación deseada
+        $archivoBackup->move(storage_path('app/backups'), $backupFileName);
+
+        // Abrir y leer el contenido del archivo de respaldo
+        $sql = file_get_contents($backupPath);
+
+        // Eliminar todas las tablas existentes
+        $tables = DB::select('SHOW TABLES');
+        foreach ($tables as $table) {
+            $tableName = reset($table);
+            DB::unprepared("DROP TABLE IF EXISTS $tableName;");
+        }
+
+        // Ejecutar las instrucciones SQL en la base de datos
+        DB::unprepared($sql);
+
+        return redirect('/elecciones');
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => 'Error al restaurar la base de datos: ' . $e->getMessage()]);
+    }
+}
+
 
 public function generarPDF1($id){
 

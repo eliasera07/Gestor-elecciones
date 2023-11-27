@@ -115,6 +115,12 @@ Route::get('/historial', [EleccionController::class, 'historial'])->name('buscar
 Route::get('/resultados', [EleccionController::class, 'buscar'])->name('resultados');
 
 
+Route::get('/cargar-backup', [EleccionController::class, 'mostrarFormCargarBackup'])->name('cargar.backup.form');
+
+Route::post('/cargar-backup', [EleccionController::class, 'cargarBackup'])->name('cargar.backup');
+
+
+
 
 
 

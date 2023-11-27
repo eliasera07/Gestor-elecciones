@@ -554,6 +554,12 @@ td:first-child {
             </div>
 
             <div class="botones">
+    <a href="{{ route('cargar.backup.form') }}" class="buttons">Cargar Backup</a>
+</div>
+
+
+
+            <div class="botones">
                 <a href="{{ url('/historial') }}" class="buttons" >Historial</a>
             </div>
 

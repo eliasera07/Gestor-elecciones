@@ -6,7 +6,31 @@ use Illuminate\Database\Eloquent\Model;
 
 class Eleccion extends Model
 {
-    protected $fillable = [
+    protected $fillable = ['nombre', 
+    'motivo', 
+    'cargodeautoridad',
+    'gestioninicio',
+    'gestionfin',
+    'tipodevotantes',
+    'facultad',
+    'carrera',
+    'convocatoria',
+'fecha', 'fechainscripcion',
+'tipodeeleccion',
+'descripcion',
+'nombrefrente1',
+'votosfrente1',
+'nombrefrente2',
+'votosfrente2',
+'nombrefrente3',
+'votosfrente3',
+'nombrefrente4',
+'votosfrente4',
+'votosblancoselec',
+'votosnuloselec',
+'estadoRegistro',
+'estado',
+
         // 
     ];
 
