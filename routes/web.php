@@ -11,6 +11,7 @@ use App\Http\Controllers\MesaController;
 use App\Http\Controllers\JuradoController;
 use App\Http\Controllers\DocumentacionController;
 use App\Http\Controllers\AcercadeController;
+use App\Http\Controllers\LogController;
 use App\Models\Mesa;
 
 /*
@@ -119,6 +120,17 @@ Route::get('/cargar-backup', [EleccionController::class, 'mostrarFormCargarBacku
 
 Route::post('/cargar-backup', [EleccionController::class, 'cargarBackup'])->name('cargar.backup');
 
+Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
+Route::post('/logs/filter', [LogController::class, 'filter'])->name('logs.filter');
+
+Route::get('/registro', function () {
+  return view('auth.registroform');
+});
+Route::post('/registro', [RegisterController::class, 'registroform']);
+
+Route::get('/iniciarsesion', function () {
+  return view('auth.iniciarSe');
+});
 
 
 

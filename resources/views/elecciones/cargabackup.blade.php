@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Crear/Editar comunicado</title>
+        <title>Cargar Backup</title>
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
     </head>
     <style>
@@ -109,17 +109,21 @@
                 <div class="column">
 
                     <label for="titulo">Seleccionar Archivo de Backup (.sql):</label><br><br>
-                    <input type="file" name="archivo_backup" accept=".sql" required><br><br><br>
+                    <input type="file" name="archivo_backup" accept=".sql" required onchange="mostrarMensaje()">
+                    <br><br><br>
                     
 
-                    <input type="submit" value="{{ 'Cargar' }}" onclick="return confirm ('¿Está seguro que desea cargar este backup?')">
+                    
+           <input type="submit" value="{{ 'Cargar' }}" onclick="return confirm ('¿Está seguro que desea cargar este backup?')">
                     <input type="reset" value="Cancelar" onclick="cancelacion()">
                 </div>
             </form>
         </div>
     </body>
     <script>
-
+  function mostrarMensaje() {
+            alert('Archivo seleccionado. Si confirmas la carga de este archivo, entiendes y aceptas que se eliminara la informacion no guardada y sera remplazada por la que esta subiendo.');
+        }
         function cancelacion() {
         var confirmacion = confirm("¿Seguro que deseas cancelar?");
             if (confirmacion) {
@@ -127,6 +131,9 @@
                 window.location.href = "/elecciones";
             }
         }
-    </script>
-</html>
+    </script> 
 
+
+
+
+</html>

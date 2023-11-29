@@ -545,8 +545,12 @@ td:first-child {
                 <a href="{{ url('/mesas') }}" class="buttons">Lista de Mesas</a>
             </div>
 
-            <div class="botones">
+            {{-- <div class="botones">
                 <a href="{{ url('/reporte') }}" class="buttons">Reportes</a>
+            </div>--}}
+
+            <div class="botones">
+                <a href="{{ url('/historial') }}" class="buttons" >Historial</a>
             </div>
 
             <div class="botones">
@@ -554,14 +558,16 @@ td:first-child {
             </div>
 
             <div class="botones">
-    <a href="{{ route('cargar.backup.form') }}" class="buttons">Cargar Backup</a>
-</div>
-
-
+            <a href="{{ route('cargar.backup.form') }}" class="buttons">Cargar Backup</a>
+            </div>
 
             <div class="botones">
-                <a href="{{ url('/historial') }}" class="buttons" >Historial</a>
+                <a href="{{ url('/logs') }}" class="buttons" >Bitacora</a>
             </div>
+
+
+
+            
 
 
             {{--<div class="botones">

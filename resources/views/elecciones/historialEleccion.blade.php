@@ -301,10 +301,10 @@
                                                 </a>
                                             </button>    
                                             <button class="buttons-dentro-tabla" title="Imprimir Reporte">
-                                                <a  class="reporte">
-                                                    Convocatoria</a>
-                                            </button> 
-                                                                                                                    
+                                                <a href="{{ asset('storage/uploads/' . $resultado->id . '.pdf') }}" class="reporte" target="_blank">
+                                                    Convocatoria
+                                                </a>
+                                            </button>                   
                                         </td>
                                     </tr>
                                 @endif
@@ -351,11 +351,12 @@
                                         <button class="buttons-dentro-tabla" title="Imprimir Reporte">
                                             <a href="{{ route('elecciones.pdf', ['id' => $eleccion->id]) }}" class="reporte">
                                                 Reporte</a>
-                                        </button>     
+                                        </button> 
                                         <button class="buttons-dentro-tabla" title="Imprimir Reporte">
-                                            <a class="reporte">
-                                                Convocatoria</a>
-                                        </button>                                                                           
+                                            <a href="{{ asset('storage/uploads/' . $eleccion->id . '.pdf') }}" class="reporte" target="_blank">
+                                                Convocatoria
+                                            </a>
+                                        </button>                                                                        
                                     </td>
                                 </tr>
                             @endforeach
