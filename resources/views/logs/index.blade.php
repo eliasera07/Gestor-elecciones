@@ -151,6 +151,7 @@
         td:first-child {  
             background-color: #c4babada;
         }
+       
 
         .grafico {
             padding: 5px;
@@ -159,6 +160,19 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        /* .custom-table {
+    width: 10%;
+} */
+
+.custom-table th, .custom-table td {
+    /* Establecer un ancho máximo para las celdas */
+    max-width: 350px; /* Puedes ajustar este valor según tus necesidades */
+    overflow:scroll;
+    text-overflow:clip;
+    white-space: nowrap;
+}
+
+/* Estilo para las demás columnas */
 
 
         @media only screen and (max-width: 706px) {
@@ -231,14 +245,14 @@
         @if(isset($logs) && count($logs) > 0)
             <div class="container">
                 <div class="table-column">
-                    <table>
+                    <table class="custom-table">
                         <thead>
                             <tr>
-                                <th>Id Usuario</th>
-                                <th>Usuario</th>
-                                <th>Accion</th>
-                                <th>Registro Pasado</th>
-                                <th>Registro Nuevo</th>
+                                <th data-columna="user_id">Id Usuario</th>
+                                <th data-columna="user">Usuario</th>
+                                <th  data-columna="action">Accion</th>
+                                <th class="columna-ancho" data-columna="old_data">Registro Pasado</th>
+                                <th class="columna-ancho" data-columna="new_data">Registro Nuevo</th>
                                 <th>Fecha y Hora</th>
                             </tr>
                         </thead>
