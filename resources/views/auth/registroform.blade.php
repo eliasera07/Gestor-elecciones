@@ -287,6 +287,15 @@ nav ul li a:hover {
             cursor: pointer;   
             margin-bottom: 10px; 
         }
+        button[type="submit2"]{
+            background-color:#E30613;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;   
+            margin-bottom: 10px; 
+        }
         input[type="reset"]{
             background-color: #A70606;
             color: #fff;
@@ -325,7 +334,7 @@ nav ul li a:hover {
             <li></li><li></li>
             <li></li><li></li>
             <li></li><li></li>
-
+            @if(auth()->check())
         <li><a href="{{ url('/') }}">Inicio</a></li>
             <li><a href="{{ url('/elecciones') }}">Elecciones</a></li>
             <li><a href="{{ url('/comunicados') }}">Comunicados</a></li>
@@ -335,6 +344,7 @@ nav ul li a:hover {
             <li><a href="#">Ingreso</a></li>
             <img src="/images/img.png"  class="company-logo">
         </ul>
+        @endif
         <div class="menu-icon"></div>
     </nav>
     <header></header>
@@ -347,7 +357,7 @@ nav ul li a:hover {
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="form-title">{{ __('Registrar') }}</div>
+                    <div class="form-title" style="font-weight: bold;">{{ __('Registrar') }}</div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('register') }}">
@@ -357,7 +367,7 @@ nav ul li a:hover {
                                 <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus autofocus maxlength="50">
 
                                     @error('name')
                                         <span class="invalid-feedback" role="alert">
@@ -371,10 +381,10 @@ nav ul li a:hover {
                                 <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-
+                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email"autofocus maxlength="255">
+                                     <br>
                                     @error('email')
-                                        <span class="invalid-feedback" role="alert">
+                                        <span class="invalid-feedback" style="color: red; font-size: smaller;"role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
@@ -385,10 +395,10 @@ nav ul li a:hover {
                                 <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Contraseña') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" autofocus maxlength="50"><br>
 
                                     @error('password')
-                                        <span class="invalid-feedback" role="alert">
+                                        <span class="invalid-feedback" style="color: red; font-size: smaller;" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
@@ -399,7 +409,7 @@ nav ul li a:hover {
                                 <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirmar Contraseña') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password" autofocus maxlength="50">
                                 </div>
                             </div>
 
@@ -408,6 +418,9 @@ nav ul li a:hover {
                                     <button type="submit" class="btn btn-primary">
                                         {{ __('Registrar') }}
                                     </button>
+                                    <button type="submit2" class="btn btn-cancelar" onclick="window.location.href='/'">
+    {{ __('Cancelar') }}
+</button>
                                 </div>
                             </div>
                         </form>
@@ -418,6 +431,7 @@ nav ul li a:hover {
     </div>
         <br><br>
         <br><br>
+    
         <div class="footer">
 
             <div class="footer-izq">

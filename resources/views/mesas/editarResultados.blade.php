@@ -409,7 +409,7 @@ input[type="reset"]:hover {
     <br>
    
     <div class="container">
-        <form action="{{ url('/mesas/' . $eleccion->id . '/guardarResultados') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ url('/mesas/' . $resultados->id . '/guardarResultados') }}" method="post" enctype="multipart/form-data">
             @csrf
             {{ method_field('PATCH') }}
 
@@ -456,20 +456,13 @@ input[type="reset"]:hover {
               <div class="column">
               <div class="file-upload-container">
         <label for="acta">Acta de cierre (PDF):</label>
-          @if ($resultados->acta)
-            <span>{{ $resultados->acta }}</span>
-            <embed src="{{ asset('storage/' . $resultados->acta) }}" type=""><br><br>
-          @endif
+        @if ($resultados->acta)
+    <span>{{ $resultados->acta }}</span>
+    <embed src="{{ asset('storage/' . $resultados->acta) }}" type="application/pdf"><br><br>
+@endif
           <input type="file" accept="application/pdf" title="Subir archivo PDF" name="acta">
           </div>
           <br><br>
-
-           
-          
-
-
-
-
 
 
            <label for="votosblancos">Votos en Blanco:</label><br>

@@ -409,7 +409,7 @@ input[type="reset"]:hover {
     <br>
    
     <div class="container">
-    <form action="{{ url('/mesas/' . $eleccion->id . '/guardarResultados') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ url('/mesas/' . $resultados->id . '/guardarResultados') }}" method="post" enctype="multipart/form-data">
     @csrf
     {{ method_field('PATCH') }}
         

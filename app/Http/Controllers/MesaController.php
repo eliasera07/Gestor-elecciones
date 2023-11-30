@@ -466,6 +466,8 @@ public function visualizaracta($id)
 
     public function registroResultados($id) {
         // Obtén el ID de la elección asociada a la mesa
+        
+        $resultados = Mesa::findOrFail($id);
         $idEleccionMesa = Mesa::find($id)->id_de_eleccion;
     
         // Obtén el número de mesa
@@ -477,7 +479,7 @@ public function visualizaracta($id)
         // Busca la elección por el ID proporcionado
         $eleccion = Eleccion::find($idEleccionMesa);
     
-        return view('mesas.registroResultados', compact('eleccion', 'frentes', 'numeromesa'));
+        return view('mesas.registroResultados', compact('eleccion', 'frentes', 'numeromesa', 'resultados'));
     }
 
     public function guardarResultados(Request $request, $id)
@@ -506,11 +508,11 @@ public function visualizaracta($id)
     $mesa->acta = $request->input('acta');
 
     if ($request->hasFile('acta')) {
-        $mesa['acta'] = $request->file('acta')->store('uploads', 'public');
+        $mesa['acta'] = $request->file('acta')->store('uploads', 'public', 'mesa');
     }
     
     // Guardar la mesa actualizada
-    $mesa->estadoMesa = 1;
+    
     $mesa->save();
 
     // Redirigir a la vista de mesas u otra vista según sea necesario
@@ -558,11 +560,11 @@ public function guardarEdicionResultados(Request $request, $id)
     $mesa->acta = $request->input('acta');
 
     if ($request->hasFile('acta')) {
-        $mesa['acta'] = $request->file('acta')->store('uploads', 'public');
+        $mesa['acta'] = $request->file('acta')->store('uploads', 'public', 'mesa');
     }
     
     // Guardar la mesa actualizada
-    $mesa->estadoMesa = 1;
+    
     $mesa->save();
 
     // Redirigir a la vista de mesas u otra vista según sea necesario

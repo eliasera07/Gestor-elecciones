@@ -33,6 +33,10 @@ Auth::routes();
 
 Route::resource('/', 'WelcomeController');
 
+Route::get('/home', 'ConfirmacionController@index')->name('confirmacion');
+
+Route::group(['middleware' => 'auth'], function () {
+
 //Route::get('/elecciones', 'EleccionController@index');
 Route::get('/elecciones/{id}/archivar', 'EleccionController@archivar');
 
@@ -40,7 +44,7 @@ Route::resource('elecciones', 'EleccionController');
 
 //Route::get('/eleciones-creadas', 'EleccionController@index');
 
-Route::get('/home', 'ConfirmacionController@index')->name('confirmacion');
+
 
 Route::resource('votante', 'VotanteController');
 
@@ -110,10 +114,9 @@ Route::get('/mesas/{id}/actapdf', 'MesaController@pdf')->name('mesas.actapdf');
 Route::get('/generar-pdf/{id}','EleccionController@generarPDF')->name('elecciones.pdf');
 Route::get('/generar-pdf1/{id}','EleccionController@generarPDF1')->name('elecciones1.pdf');
 
-Route::get('/acercade', [AcercadeController::class, 'index']);
 
-Route::get('/historial', [EleccionController::class, 'historial'])->name('buscar');
-Route::get('/resultados', [EleccionController::class, 'buscar'])->name('resultados');
+
+
 
 
 Route::get('/cargar-backup', [EleccionController::class, 'mostrarFormCargarBackup'])->name('cargar.backup.form');
@@ -122,6 +125,10 @@ Route::post('/cargar-backup', [EleccionController::class, 'cargarBackup'])->name
 
 Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
 Route::post('/logs/filter', [LogController::class, 'filter'])->name('logs.filter');
+
+});
+
+Route::get('/acercade', [AcercadeController::class, 'index']);
 
 Route::get('/registro', function () {
   return view('auth.registroform');
@@ -133,7 +140,8 @@ Route::get('/iniciarsesion', function () {
 });
 
 
-
+Route::get('/historial', [EleccionController::class, 'historial'])->name('buscar');
+Route::get('/resultados', [EleccionController::class, 'buscar'])->name('resultados');
 
 
 
