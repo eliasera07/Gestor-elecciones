@@ -367,7 +367,20 @@ input[type="reset"]:hover {
             <li><a href="{{ url('/documentaciones') }}">Documentación</a></li>
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contacto</a></li> --}}
-            <li><a href="#">Ingreso</a></li>
+            <li>
+    @if(auth()->check())
+        {{-- Si el usuario ha iniciado sesión, mostrar el enlace de Cerrar Sesión --}}
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Cerrar Sesión
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    @else
+        {{-- Si el usuario no ha iniciado sesión, mostrar el enlace de Ingreso --}}
+        <a href="{{ url('/iniciarsesion') }}">Ingreso</a>
+    @endif
+</li>
             <img src="/images/img.png"  class="company-logo">
 
         </ul>
@@ -390,24 +403,25 @@ input[type="reset"]:hover {
 
                     <label for="iddeeleccion">Id Eleccion:</label>
                     <input type="number"  name="iddeeleccion"
-                        placeholder="Escribe el nombre del miembro aquí..."
-                        value="{{ isset($jurados) ? $jurados->iddeeleccion : '' }}" id="iddeeleccion" required>
+                        placeholder=""
+                        value="{{ isset($jurados) ? $jurados->iddeeleccion : '' }}" id="iddeeleccion" 
+                        style="background-color: #f0f0f0; border: 1px solid #ddd; cursor: not-allowed;" readonly required>
 
-                    <label for="idmesa">Id Mesa:</label>
+                    <label for="idmesa">N° Mesa:</label>
                     <input type="number" 
-                        name="idmesa" placeholder="Escribe el apellido paterno aquí..."
+                        name="idmesa" placeholder=""
                         value="{{ isset($jurados) ? $jurados->idmesa : '' }}" id="idmesa"
-                        required>
+                        style="background-color: #f0f0f0; border: 1px solid #ddd; cursor: not-allowed;" readonly required>
 
                         <label for="nombres">Nombres:</label>
                     <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')" maxlength="30"
-                        name="nombres" placeholder="Escribe el apellido materno aquí..."
+                        name="nombres" placeholder="Escribe el nombre aquí..."
                         value="{{ isset($jurados) ? $jurados->nombres : '' }}" id="nombres"
                         required>
 
-                        <label for="apellidoPaterno">Apellido Materno:</label>
+                        <label for="apellidoPaterno">Apellido Paterno:</label>
                     <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')" maxlength="30"
-                        name="apellidoPaterno" placeholder="Escribe el apellido materno aquí..."
+                        name="apellidoPaterno" placeholder="Escribe el apellido paterno aquí..."
                         value="{{ isset($jurados) ? $jurados->apellidoPaterno : '' }}" id="apellidoPaterno"
                         required>
 
@@ -439,7 +453,7 @@ input[type="reset"]:hover {
 
                 </div>
             <input type="submit" value="{{ isset($jurados) ? 'Actualizar' : 'Registrar' }}"
-                onclick="confirmarConfirmacion()">
+            onclick="return confirm ('¿Está seguro de registrar este jurado?')">
                 <a href="{{ url('/mesas') }}" class="buttons-cancel" id="cancelButton">Cancelar</a>
             
             <label for=""></label><br><br>

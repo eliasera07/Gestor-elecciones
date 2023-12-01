@@ -126,4 +126,16 @@ class FrenteController extends Controller
         Frente::destroy($id);
         return redirect('frente');
     }
+
+    public function obtenerCargoDeAutoridad($ideleccion)
+{
+    $eleccion = Eleccion::find($ideleccion);
+
+    if (!$eleccion) {
+        return response()->json(['error' => 'Eleccion no encontrada'], 404);
+    }
+
+    return response()->json(['cargodeautoridad' => $eleccion->cargodeautoridad]);
+}
+
 }

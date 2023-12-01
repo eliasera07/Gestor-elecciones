@@ -307,7 +307,20 @@
             <li><a href="{{ url('/documentaciones') }}">Documentación</a></li>
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contactos</a></li> --}}
-            <li><a href="#">Ingreso</a></li>
+            <li>
+    @if(auth()->check())
+        {{-- Si el usuario ha iniciado sesión, mostrar el enlace de Cerrar Sesión --}}
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Cerrar Sesión
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    @else
+        {{-- Si el usuario no ha iniciado sesión, mostrar el enlace de Ingreso --}}
+        <a href="{{ url('/iniciarsesion') }}">Ingreso</a>
+    @endif
+</li>
             <img src="/images/img.png"  class="company-logo">
         </ul>
         <div class="menu-icon"></div>
@@ -340,20 +353,20 @@
                 @enderror
 
                 <label for="nombrefrente">Nombre del frente:</label>
-<input type="text" placeholder="Escribe el nombre del frente aquí..." maxlength="40" oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
-       name="nombrefrente" value="{{ isset($frente) ? $frente->nombrefrente : old('nombrefrente') }}" required>
-@error('nombrefrente')
-<span class="error-message">{{ $message }}</span>
-@enderror<br><br>
+                  <input type="text" placeholder="Escribe el nombre del frente aquí..." maxlength="40" oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
+                   name="nombrefrente" value="{{ isset($frente) ? $frente->nombrefrente : old('nombrefrente') }}" required>
+                    @error('nombrefrente')
+                   <span class="error-message">{{ $message }}</span>
+                    @enderror<br><br>
 
                 <label for="cargopostulacion">Cargo de postulación:</label>
-                <input type="text" placeholder="Escribe el cargo de postulación aqui..." maxlength="40"
-                oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
-                 name="cargopostulacion" value="{{ isset($frente) ? $frente->cargopostulacion : '' }}" id="cargopostulacion" required><br><br>
-        
-        
-        
-        
+                    <input type="text" placeholder="cargo de postulación aquí..." maxlength="40"
+                    oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
+                    name="cargopostulacion" value="{{ isset($frente) ? $frente->cargopostulacion : '' }}"
+                    id="cargopostulacion" readonly required 
+                    style="background-color: #f0f0f0; border: 1px solid #ddd; cursor: not-allowed;"><br><br>
+
+
                 <label for="fotofrente">Logo del Frente:</label>
                     @if (isset($frente) && $frente->fotofrente)
                         <p>{{ $frente->fotofrente }}</p>
@@ -394,9 +407,6 @@
                 oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
                 name="nombrecandidato4" value="{{ isset($frente) ? $frente->nombrecandidato4 : old('nombrecandidato1') }}" id="codSis" >
                 </div>
-
-
-
                 
                 @error('nombrecandidato1')
                 <span class="error-message">{{ $message }}</span>
@@ -406,8 +416,8 @@
         
         </div>
 
-        <input type="submit" value="Registrar"
-                onclick="confirmacion()">
+        <input type="submit" value="{{ isset($frente) ? 'Actualizar' : 'Registrar' }}"
+          onclick="return confirm ('¿Está seguro que registrar estos resultados?')">
           
         <input type="reset" value="Cancelar" onclick="cancelacion()">
         <label for=""></label><br><br>
@@ -439,7 +449,38 @@
         </div>
 
     </div>
-    
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    function cargarCargoDeAutoridad() {
+        var ideleccion = document.getElementById("ideleccionfrente").value;
+        var cargopostulacion = document.getElementById("cargopostulacion");
+
+        if (ideleccion) {
+            // Realiza una petición AJAX para obtener el cargodeautoridad
+            $.get("/obtener-cargodeautoridad/" + ideleccion, function (data) {
+                if (data.error) {
+                    console.error(data.error);
+                } else {
+                    // Actualiza el valor del campo cargopostulacion
+                    cargopostulacion.value = data.cargodeautoridad;
+                }
+            });
+        } else {
+            // Si no se selecciona ninguna elección, reinicia el valor del campo cargopostulacion
+            cargopostulacion.value = "";
+        }
+    }
+
+    // Llama a la función al cargar la página y también cuando cambie la selección
+    $(document).ready(function() {
+        cargarCargoDeAutoridad();
+        $("#ideleccionfrente").change(cargarCargoDeAutoridad);
+    });
+</script>
+
+
+
     <script>
         function cancelacion() {
             var confirmacion = confirm("¿Seguro que deseas cancelar? Los cambios no se guardarán.");

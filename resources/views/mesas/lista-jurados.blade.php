@@ -32,7 +32,20 @@
             <li><a href="{{ url('/documentaciones') }}">Documentación</a></li>
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contactos</a></li> --}}
-            <li><a href="#">Ingreso</a></li>
+            <li>
+    @if(auth()->check())
+        {{-- Si el usuario ha iniciado sesión, mostrar el enlace de Cerrar Sesión --}}
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Cerrar Sesión
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    @else
+        {{-- Si el usuario no ha iniciado sesión, mostrar el enlace de Ingreso --}}
+        <a href="{{ url('/iniciarsesion') }}">Ingreso</a>
+    @endif
+</li>
             <img src="/images/img.png"  class="company-logo">
 
         </ul>

@@ -9,12 +9,18 @@ use App\User;
 class LogController extends Controller
 {
     public function index()
-    {
-        $logs = Log::latest()->paginate(20); // Puedes ajustar la paginación según tus necesidades
-        $usuariosRegistrados = User::all(); // Obtén todos los usuarios registrados
+{
+    $logs = Log::latest()->paginate(50); // Puedes ajustar la paginación según tus necesidades
+    $usuariosRegistrados = User::all(); // Obtén todos los usuarios registrados
 
-        return view('logs.index', compact('logs', 'usuariosRegistrados'));
-    }
+    // Asegúrate de definir las variables incluso si no están siendo utilizadas en este momento
+    $query = null;
+    $start_date = null;
+    $end_date = null;
+    $selected_user = null;
+
+    return view('logs.index', compact('logs', 'usuariosRegistrados', 'query', 'start_date', 'end_date', 'selected_user'));
+}
 
     public function filter(Request $request)
     {
@@ -55,12 +61,18 @@ class LogController extends Controller
         }
 
         // Obtener los resultados paginados
-        $logs = $logsQuery->latest()->paginate(20);
+        $logs = $logsQuery->latest()->paginate(50);
 
         // Obtén todos los usuarios registrados para el menú desplegable
         $usuariosRegistrados = User::all();
 
-        return view('logs.index', compact('logs', 'usuariosRegistrados'))
-            ->with('query', $query); // Pasa la consulta para mantenerla en el formulario
+    return view('logs.index', [
+        'logs' => $logs,
+        'usuariosRegistrados' => $usuariosRegistrados,
+        'query' => $query, // Pasa la consulta para mantenerla en el formulario
+        'start_date' => $request->input('start_date'),
+        'end_date' => $request->input('end_date'),
+        'selected_user' => $request->input('nombreusuario'),
+    ]);// Pasa la consulta para mantenerla en el formulario
     }
 }

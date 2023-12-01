@@ -395,7 +395,20 @@ input[type="reset"]:hover {
             <li><a href="{{ url('/documentaciones') }}">Documentación</a></li>
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contactos</a></li> --}}
-            <li><a href="#">Ingreso</a></li>
+            <li>
+    @if(auth()->check())
+        {{-- Si el usuario ha iniciado sesión, mostrar el enlace de Cerrar Sesión --}}
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Cerrar Sesión
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    @else
+        {{-- Si el usuario no ha iniciado sesión, mostrar el enlace de Ingreso --}}
+        <a href="{{ url('/iniciarsesion') }}">Ingreso</a>
+    @endif
+</li>
             <img src="/images/img.png"  class="company-logo">
         </ul>
         <div class="menu-icon"></div>
@@ -409,7 +422,7 @@ input[type="reset"]:hover {
     <br>
    
     <div class="container">
-        <form action="{{ url('/mesas/' . $resultados->id . '/guardarResultados') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ url('/mesas/' . $resultados->id . '/guardarResultados') }}" method="post" enctype="multipart/form-data">
             @csrf
             {{ method_field('PATCH') }}
 
@@ -418,7 +431,7 @@ input[type="reset"]:hover {
             </div>
             <br>
             <div class="column1">
-            <h2 class="form-title"> Mesa Nº: {{ $numeromesa }} </h2>
+            <h2 class="form-title"> Mesa Nº: {{ $resultados->numeromesa }} </h2>
         </div>
             <h2 class="form-title1">Editar resultados</h2>
             <br><br>
@@ -433,10 +446,11 @@ input[type="reset"]:hover {
                @for ($index = 1; $index <= $halfCount; $index++)
                  @if (!empty($resultados->{'nombrefrente' . $index}))
                 <label for="nombrefrente{{ $index }}">Nombre frente {{ $index }}:</label><br>
-                <input type="text" name="nombrefrente{{ $index }}" value="{{ $resultados->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;"><br><br>
+                <input type="text" name="nombrefrente{{ $index }}" value="{{ $resultados->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;" readonly required 
+                    ><br><br>
 
                 <label for="votosfrente{{ $index }}">Nº de votos frente {{ $index }}:</label><br>
-                <input type="number" name="votosfrente{{ $index }}" value="{{ $resultados->{'votosfrente' . $index} }}" style="width: 200px;"><br><br>
+                <input type="number" name="votosfrente{{ $index }}" value="{{ $resultados->{'votosfrente' . $index} }}" style="width: 200px;" required><br><br>
                  @endif
               @endfor
              </div>
@@ -445,31 +459,34 @@ input[type="reset"]:hover {
                 @for ($index = $halfCount + 1; $index <= $numFrentes; $index++)
                     @if (!empty($resultados->{'nombrefrente' . $index}))
                 <label for="nombrefrente{{ $index }}">Nombre frente {{ $index }}:</label><br>
-                <input type="text" name="nombrefrente{{ $index }}" value="{{ $resultados->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;"><br><br>
+                <input type="text" name="nombrefrente{{ $index }}" value="{{ $resultados->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;"readonly required 
+                    ><br><br>
 
                 <label for="votosfrente{{ $index }}">Nº de votos frente {{ $index }}:</label><br>
-                <input type="number" name="votosfrente{{ $index }}" value="{{ $resultados->{'votosfrente' . $index} }}" style="width: 200px;"><br><br>
+                <input type="number" name="votosfrente{{ $index }}" value="{{ $resultados->{'votosfrente' . $index} }}" style="width: 200px;"required><br><br>
                     @endif
                  @endfor
               </div>
 
               <div class="column">
               <div class="file-upload-container">
-        <label for="acta">Acta de cierre (PDF):</label>
-        @if ($resultados->acta)
-    <span>{{ $resultados->acta }}</span>
-    <embed src="{{ asset('storage/' . $resultados->acta) }}" type="application/pdf"><br><br>
-@endif
-          <input type="file" accept="application/pdf" title="Subir archivo PDF" name="acta">
-          </div>
-          <br><br>
+              <label for="acta">Acta de cierre (PDF 2MB max.):</label>
+                @if ($resultados->acta)
+              <span>{{ $resultados->acta }}</span>
+                 <embed src="{{ asset('storage/' . $resultados->acta) }}" type="application/pdf"><br><br>
+                @endif
+
+                <input type="file" accept=".pdf" title="Subir archivo PDF (máximo 2 MB)" name="acta" size="2000000" required> 
+                  </div>
+                   <br><br>
+
 
 
            <label for="votosblancos">Votos en Blanco:</label><br>
-           <input type="number" name="votosblancos" id="votosblancos" value="{{ $resultados->votosblancos }}" style="width: 200px;"><br><br>
+           <input type="number" name="votosblancos" id="votosblancos" value="{{ $resultados->votosblancos }}" style="width: 200px;" required><br><br>
 
              <label for="votosnulos">Votos Nulos:</label><br>
-             <input type="number" name="votosnulos" id="votosnulos" value="{{ $resultados->votosnulos }}" style="width: 200px;"><br><br>
+             <input type="number" name="votosnulos" id="votosnulos" value="{{ $resultados->votosnulos }}" style="width: 200px;" required><br><br>
                     
                 
              </div>
@@ -478,7 +495,7 @@ input[type="reset"]:hover {
 
 
             <div class="botones">
-                <input type="submit" value="{{ 'Actualizar' }}" onclick="confirmarConfirmacion()">
+                <input type="submit" value="{{ 'Actualizar' }}" onclick="return confirm ('¿Está seguro de registrar esta Mesa?')">
                 <input type="reset" value="Cancelar" onclick="confirmarCancelacion()">
             </div>
             <label for=""></label><br><br>
@@ -487,6 +504,10 @@ input[type="reset"]:hover {
             <br><br>
 
         </form>
+
+        
+
+
 
         <div class="footer">
 

@@ -319,7 +319,20 @@
             <li><a href="{{ url('/documentaciones') }}">Documentación</a></li>
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contactos</a></li> --}}
-            <li><a href="#">Ingreso</a></li>
+            <li>
+    @if(auth()->check())
+        {{-- Si el usuario ha iniciado sesión, mostrar el enlace de Cerrar Sesión --}}
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Cerrar Sesión
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    @else
+        {{-- Si el usuario no ha iniciado sesión, mostrar el enlace de Ingreso --}}
+        <a href="{{ url('/iniciarsesion') }}">Ingreso</a>
+    @endif
+</li>
             <img src="/images/img.png"  class="company-logo">
 
         </ul>
@@ -372,12 +385,12 @@
                   <label for="ubicacionmesa">Ubicacion de mesa:</label>
                   <input type="text" placeholder="Escribe la ubicacion aquí..." maxlength="40" 
                     oninput="this.value = this.value.replace(/[^A-Za-z,. 0-9]+/g, '')"
-                    name="ubicacionmesa" value="{{ isset($mesas) ? $mesas->ubicacionmesa : '' }}" id="mesas" ><br><br>
+                    name="ubicacionmesa" value="{{ isset($mesas) ? $mesas->ubicacionmesa : '' }}" id="mesas" required><br><br>
                  @endif
 
                  <div class="campo-adicional">
                  <label for="numeroMesas" id="cantidadMesasLabel" style="display: none;">Cantidad de Mesas:</label>
-                 <input type="number" name="numeroMesas" id="cantidadMesasInput" value="1" min="1" style="display: none;">
+                 <input type="number" name="numeroMesas" id="cantidadMesasInput" value="1" min="1" style="display: none;" required>
                  </div>
 
 
@@ -395,7 +408,7 @@
                 
         </div>
         <div class="botones centered">
-            <input type="submit" value="{{ isset($mesas) ? 'Actualizar' : 'Crear' }}" onclick="confirmacion()">
+            <input type="submit" value="{{ isset($mesas) ? 'Actualizar' : 'Crear' }}"  onclick="return confirm ('¿Está seguro que registrar esta(s) Mesa(s)?')">>
             <input type="reset" value="Cancelar" onclick="cancelacion()">
             <label for=""></label><br><br>
             <label for=""></label><br><br>

@@ -395,7 +395,20 @@ input[type="reset"]:hover {
             <li><a href="{{ url('/documentaciones') }}">Documentación</a></li>
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contactos</a></li> --}}
-            <li><a href="#">Ingreso</a></li>
+            <li>
+    @if(auth()->check())
+        {{-- Si el usuario ha iniciado sesión, mostrar el enlace de Cerrar Sesión --}}
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Cerrar Sesión
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    @else
+        {{-- Si el usuario no ha iniciado sesión, mostrar el enlace de Ingreso --}}
+        <a href="{{ url('/iniciarsesion') }}">Ingreso</a>
+    @endif
+</li>
             <img src="/images/img.png"  class="company-logo">
         </ul>
         <div class="menu-icon"></div>
@@ -425,14 +438,26 @@ input[type="reset"]:hover {
               $halfCount = ceil($numFrentes / 2);
            @endphp
 
+
+           <div class="column">
+            
+             <label for="votosblancoselec">Votos en Blanco:</label><br>
+           <input type="number" name="votosblancoselec" id="votosblancoselec" value="{{ $eleccion->votosblancoselec }}" style="width: 200px;" required><br><br>
+
+             <label for="votosnuloselec">Votos Nulos:</label><br>
+             <input type="number" name="votosnuloselec" id="votosnuloselec" value="{{ $eleccion->votosnuloselec }}" style="width: 200px;" required><br><br>
+                    
+                
+            </div>
+
              <div class="column">
                @for ($index = 1; $index <= $halfCount; $index++)
                  @if (!empty($eleccion->{'nombrefrente' . $index}))
                 <label for="nombrefrente{{ $index }}">Nombre frente {{ $index }}:</label><br>
-                <input type="text" name="nombrefrente{{ $index }}" value="{{ $eleccion->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;"><br><br>
+                <input type="text" name="nombrefrente{{ $index }}" value="{{ $eleccion->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;" readonly required><br><br>
 
                 <label for="votosfrente{{ $index }}">Nº de votos frente {{ $index }}:</label><br>
-                <input type="number" name="votosfrente{{ $index }}" value="{{ $eleccion->{'votosfrente' . $index} }}" style="width: 200px;"><br><br>
+                <input type="number" name="votosfrente{{ $index }}" value="{{ $eleccion->{'votosfrente' . $index} }}" style="width: 200px;" required><br><br>
                  @endif
               @endfor
              </div>
@@ -441,18 +466,20 @@ input[type="reset"]:hover {
                 @for ($index = $halfCount + 1; $index <= $numFrentes; $index++)
                     @if (!empty($eleccion->{'nombrefrente' . $index}))
                 <label for="nombrefrente{{ $index }}">Nombre frente {{ $index }}:</label><br>
-                <input type="text" name="nombrefrente{{ $index }}" value="{{ $eleccion->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;"><br><br>
+                <input type="text" name="nombrefrente{{ $index }}" value="{{ $eleccion->{'nombrefrente' . $index} }}" maxlength="100" style="width: 200px;" readonly required><br><br>
 
                 <label for="votosfrente{{ $index }}">Nº de votos frente {{ $index }}:</label><br>
-                <input type="number" name="votosfrente{{ $index }}" value="{{ $eleccion->{'votosfrente' . $index} }}" style="width: 200px;"><br><br>
+                <input type="number" name="votosfrente{{ $index }}" value="{{ $eleccion->{'votosfrente' . $index} }}" style="width: 200px;" required><br><br>
                     @endif
                  @endfor
               </div>
              </div>
 
+             
+
 
             <div class="botones">
-                <input type="submit" value="{{ isset($elecciones) ? 'Actualizar' : 'Registrar' }}" onclick="confirmarConfirmacion()">
+                <input type="submit" value="{{ 'Actualizar' }}" onclick="return confirm ('¿Está seguro que registrar estos resultados?')">
                 <input type="reset" value="Cancelar" onclick="confirmarCancelacion()">
             </div>
             <label for=""></label><br><br>

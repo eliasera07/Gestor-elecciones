@@ -209,12 +209,20 @@
             }
         }
 
+        #no-results-message {
+    display: none;
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 30px; /* Puedes ajustar este valor según tus preferencias */
+}
+
 
     </style>
 </head>
 <body>
     <div class="contenedor">
-        <form action="{{ route('logs.filter') }}" method="GET">
+    <form action="{{ route('logs.filter') }}" method="GET" onsubmit="saveFormValues()">
             @csrf
             <div class="titulo">
                 <h1>Bitácora del Sistema</h1>  
@@ -222,12 +230,12 @@
             <div class="entradas">
                 <div class="input-container">
                     <label for="start_date">Fecha de inicio:</label>
-                    <input type="date" name="start_date" required value="{{ old('start_date') }}">
+                    <input type="date" name="start_date" required value="{{ old('start_date', $start_date) }}">
                 </div>
 
                 <div class="input-container">
                     <label for="end_date">Fecha de final:</label>
-                    <input type="date" name="end_date" required value="{{ old('end_date') }}">
+                    <input type="date" name="end_date" required value="{{ old('end_date', $end_date) }}">
                 </div>
 
                 <div class="input-container">
@@ -235,13 +243,29 @@
                     <select name="nombreusuario" id="nombreusuario" required>
                         <option value="">Selecciona un usuario</option>
                         @foreach ($usuariosRegistrados as $usuario)
-                            <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                            <option value="{{ $usuario->id }}" {{ old('nombreusuario', $selected_user) == $usuario->id ? 'selected' : '' }}>
+                                {{ $usuario->name }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
             </div>          
-            <button type="submit" class="generar-reporte">Buscar Registros</button>        
+            <button type="submit" class="generar-reporte">Buscar Registros</button>
         </form>
+        
+        <div class="search-container">
+    <label for="search">Buscar en la lista:</label>
+    <input type="text" id="search" name="search" placeholder="Escribe una palabra...">
+    <button type="button" class="buscar" style="background-color: #003770; color: #fff; padding: 10px 20px; border: none; border-radius: 3px; cursor: pointer;" onclick="searchTable()">Buscar</button>
+    <button type="button" class="borrar" style="background-color: #E30613; color: #fff; padding: 10px 20px; border: none; border-radius: 3px; cursor: pointer;" onclick="clearSearch()">Borrar</button>
+</div>
+
+
+
+<div id="no-results-message" style="display: none; color: red; text-align: center; margin-top: 10px; font-size: 18px;">Sin resultados</div>
+
+
+
         @if(isset($logs) && count($logs) > 0)
             <div class="container">
                 <div class="table-column">
@@ -275,5 +299,98 @@
             <h3 style="color: #185a9f; text-align: center; padding: 10px;">Resultados Actuales: 0</h3>
         @endif
     </div>  
+
+    <script>
+    function searchTable() {
+    var input, filter, table, tr, td, i, j, txtValue;
+    input = document.getElementById("search");
+    filter = input.value.toUpperCase();
+    table = document.querySelector(".custom-table");
+    tr = table.getElementsByTagName("tr");
+
+    // Agrega una variable para verificar si se encontraron resultados
+    var foundResults = false;
+
+    for (i = 0; i < tr.length; i++) {
+        if (i === 0) {
+            continue; // Saltar la primera fila (encabezados de la tabla)
+        }
+
+        let found = false; // Indicador de si se encontró la cadena en alguna columna
+
+        // Recorrer todas las celdas excepto Usuario e Id Usuario
+        for (j = 0; j < tr[i].cells.length; j++) {
+            if (j !== 0 && j !== 1) { // Ignorar las columnas Usuario e Id Usuario
+                td = tr[i].cells[j];
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    found = true; // Se encontró la cadena en esta columna
+                    foundResults = true; // Se encontraron resultados en general
+                    break; // No es necesario verificar más columnas
+                }
+            }
+        }
+
+        // Mostrar u ocultar cada celda según si se encontró la cadena en esa columna
+        for (j = 0; j < tr[i].cells.length; j++) {
+            td = tr[i].cells[j];
+            if (j !== 0 && j !== 1) { // Ignorar las columnas Usuario e Id Usuario
+                td.style.display = found ? "" : "none";
+            }
+        }
+
+        // Mostrar u ocultar toda la fila si se encontró la cadena en alguna columna
+        tr[i].style.display = found ? "" : "none";
+    }
+
+    // Mostrar u ocultar el mensaje "Sin resultados" según si se encontraron resultados en general
+    var noResultsMessage = document.getElementById("no-results-message");
+    noResultsMessage.style.display = foundResults ? "none" : "block";
+}
+</script>
+<script>
+        // Función para guardar los valores del formulario en cookies
+        function saveFormValues() {
+            document.cookie = "start_date=" + encodeURIComponent(document.getElementsByName('start_date')[0].value);
+            document.cookie = "end_date=" + encodeURIComponent(document.getElementsByName('end_date')[0].value);
+            document.cookie = "nombreusuario=" + encodeURIComponent(document.getElementsByName('nombreusuario')[0].value);
+        }
+
+        // Función para leer el valor de una cookie
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+        }
+
+        // Función para establecer los valores del formulario al cargar la página
+        window.onload = function () {
+            var start_date_cookie = getCookie("start_date");
+            if (start_date_cookie) {
+                document.getElementsByName('start_date')[0].value = decodeURIComponent(start_date_cookie);
+            }
+
+            var end_date_cookie = getCookie("end_date");
+            if (end_date_cookie) {
+                document.getElementsByName('end_date')[0].value = decodeURIComponent(end_date_cookie);
+            }
+
+            var nombreusuario_cookie = getCookie("nombreusuario");
+            if (nombreusuario_cookie) {
+                document.getElementsByName('nombreusuario')[0].value = decodeURIComponent(nombreusuario_cookie);
+            }
+        };
+    </script>
+
+    <script>
+    
+    function clearSearch() {
+    document.getElementById("search").value = "";
+    searchTable(); // Puedes llamar a la función de búsqueda para actualizar los resultados después de borrar.
+}
+</script>
+
 </body>
+
+
 </html>

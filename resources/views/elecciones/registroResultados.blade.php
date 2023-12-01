@@ -395,7 +395,20 @@ input[type="reset"]:hover {
             <li><a href="{{ url('/documentaciones') }}">Documentación</a></li>
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contactos</a></li> --}}
-            <li><a href="#">Ingreso</a></li>
+            <li>
+    @if(auth()->check())
+        {{-- Si el usuario ha iniciado sesión, mostrar el enlace de Cerrar Sesión --}}
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Cerrar Sesión
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    @else
+        {{-- Si el usuario no ha iniciado sesión, mostrar el enlace de Ingreso --}}
+        <a href="{{ url('/iniciarsesion') }}">Ingreso</a>
+    @endif
+</li>
             <img src="/images/img.png"  class="company-logo">
         </ul>
         <div class="menu-icon"></div>
@@ -424,14 +437,30 @@ input[type="reset"]:hover {
         $halfCount = ceil(count($frentes) / 2);
     @endphp
 
+    
+    <div class="column">
+            
+            <label for="votosblancoselec">Votos en Blanco:</label>
+                     <br>
+                    <input type="number" name="votosblancoselec" id="votosblancoselec" style="width: 200px;" required>
+                    
+                
+                <br><br>
+                <label for="votosnuloselec">Votos Nulos:</label>
+                     <br>
+                    <input type="number" name="votosnuloselec" id="votosnuloselec" style="width: 200px;" required>
+                    
+                
+    </div>
+    
     <div class="column">
         @foreach ($frentes->take($halfCount) as $index => $frente)
             <label for="nombrefrente{{ $index + 1 }}">Nombre frente {{ $index + 1 }}:</label><br>
             <input type="text" name="nombrefrente{{ $index + 1 }}" value="{{ $frente->nombrefrente }}" maxlength="100"
-                style="width: 200px;"><br><br>
+                style="width: 200px;" readonly required><br><br>
 
             <label for="votosfrente{{ $index + 1 }}">Nº de votos frente {{ $index + 1 }}:</label><br>
-            <input type="number" name="votosfrente{{ $index + 1 }}" style="width: 200px;"><br><br>
+            <input type="number" name="votosfrente{{ $index + 1 }}" style="width: 200px;"required><br><br>
         @endforeach
     </div>
 
@@ -439,19 +468,22 @@ input[type="reset"]:hover {
         @foreach ($frentes->slice($halfCount) as $index => $frente)
             <label for="nombrefrente{{ $index + 1 }}">Nombre frente {{ $index + 1 }}:</label><br>
             <input type="text" name="nombrefrente{{ $index + 1 }}" value="{{ $frente->nombrefrente }}" maxlength="100"
-                style="width: 200px;"><br><br>
+                style="width: 200px;" readonly required><br><br>
 
             <label for="votosfrente{{ $index + 1 }}">Nº de votos frente {{ $index + 1 }}:</label><br>
-            <input type="number" name="votosfrente{{ $index + 1 }}" style="width: 200px;"><br><br>
+            <input type="number" name="votosfrente{{ $index + 1 }}" style="width: 200px;" required><br><br>
         @endforeach
     </div>
+
+
+    
+    
 </div>
 
 
             <div class="botones">
-            <input type="submit" value="{{ isset($elecciones) ? 'Actualizar' : 'Registrar' }}"
-                onclick="confirmarConfirmacion()">
-            <input type="reset" value="Cancelar" onclick="confirmarCancelación()">
+                <input type="submit" value="{{ 'Registrar' }}" onclick="return confirm ('¿Está seguro que registrar estos resultados?')">
+                <input type="reset" value="Cancelar" onclick="confirmarCancelacion()">
             </div>
             <label for=""></label><br><br>
             <label for=""></label><br><br>

@@ -117,6 +117,10 @@
             border-radius: 3px;
             cursor: pointer;
         }
+
+        .botones-imprimir {
+            text-align: right;
+        }
         
 
 
@@ -124,7 +128,10 @@
 </head>
 <body>
     <div class="contenedor">
-
+        <div class="botones-imprimir">
+            <input type="submit" value="{{ 'Imprimir' }}" onclick="imprimirBoleta()" id="botonImprimir">
+            <input type="button" value="Volver a elecciones" onclick="confirmarCancelacion()" class= "cancelar">
+        </div>
         <br>
         <h2>Reporte de la elección</h2>
         <br><br>
@@ -237,10 +244,7 @@
 
   
         
-        <div class="botones-imprimir">
-            <input type="submit" value="{{ 'Imprimir' }}" onclick="imprimirBoleta()" id="botonImprimir">
-            <input type="button" value="Volver a elecciones" onclick="confirmarCancelacion()" class= "cancelar">
-        </div>
+        
     </div>  
 
     <script>

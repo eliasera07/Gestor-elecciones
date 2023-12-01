@@ -484,6 +484,11 @@ public function visualizaracta($id)
 
     public function guardarResultados(Request $request, $id)
 {
+    
+    $request->validate([
+        'acta' => 'file|mimes:pdf|max:2048', 
+    ]);
+    
     // Obtener la mesa por su ID
     $mesa = Mesa::findOrFail($id);
 
@@ -506,9 +511,14 @@ public function visualizaracta($id)
     $mesa->votosnulos = $request->input('votosnulos');
      
     $mesa->acta = $request->input('acta');
+    
 
     if ($request->hasFile('acta')) {
-        $mesa['acta'] = $request->file('acta')->store('uploads', 'public', 'mesa');
+        // Generar un nombre personalizado para el archivo PDF
+        $nombreArchivo = 'acta_mesa_' . $mesa->id . '.pdf';
+
+        // Guardar el archivo con el nombre personalizado
+        $mesa['acta'] = $request->file('acta')->storeAs('uploads/mesa', $nombreArchivo, 'public');
     }
     
     // Guardar la mesa actualizada
@@ -521,17 +531,14 @@ public function visualizaracta($id)
 
 public function editarRegistroResultados($id)
 {
-    $resultados = Mesa::findOrFail($id);
+        $resultados = Mesa::findOrFail($id);
 
-     $idEleccionMesa = Mesa::find($id)->id_de_eleccion;
-    
-        // Obtén el número de mesa
-        $numeromesa = Mesa::find($id)->numeromesa;
+        $idEleccionMesa = Mesa::find($id)->id_de_eleccion;
     
         // Busca la elección por el ID proporcionado
         $eleccion = Eleccion::find($idEleccionMesa);
 
-    return view('mesas.editarResultados', compact('eleccion', 'numeromesa', 'resultados'));
+    return view('mesas.editarResultados', compact('eleccion', 'resultados'));
 }
 
 public function guardarEdicionResultados(Request $request, $id)

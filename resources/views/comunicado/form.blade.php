@@ -134,7 +134,7 @@
                     <label for="fin">Fecha Fín:</label>
                     <input type="date" id="fin" name="fin"
                     value="{{ isset($comunicado) ? $comunicado->fin : '' }}"
-                    min="{{ now()->addDay(1)->format('Y-m-d') }}">
+                    min="{{ now()->addDay(1)->format('Y-m-d') }}" required>
 
                     <input type="submit" value="{{ isset($comunicado) ? 'Actualizar' : 'Registrar' }}" onclick="return confirm ('¿Está seguro que registrar este comunicado?')">
                     <input type="reset" value="Cancelar" onclick="cancelacion()">

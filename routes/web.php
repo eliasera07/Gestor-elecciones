@@ -124,7 +124,15 @@ Route::get('/cargar-backup', [EleccionController::class, 'mostrarFormCargarBacku
 Route::post('/cargar-backup', [EleccionController::class, 'cargarBackup'])->name('cargar.backup');
 
 Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
+
+Route::get('/logs/filter', 'LogController@filter');
 Route::post('/logs/filter', [LogController::class, 'filter'])->name('logs.filter');
+
+Route::get('/logs/filter', [LogController::class, 'filter'])->name('logs.filter');
+
+
+Route::get('/obtener-cargodeautoridad/{ideleccion}', 'FrenteController@obtenerCargoDeAutoridad');
+
 
 });
 

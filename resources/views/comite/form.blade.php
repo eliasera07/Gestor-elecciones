@@ -350,10 +350,24 @@ input[type="reset"]:hover {
 
         <li><a href="{{ url('/') }}">Inicio</a></li>
             <li><a href="{{ url('/elecciones') }}">Elecciones</a></li>
+            <li><a href="{{ url('/comunicados') }}">Comunicados</a></li>
             <li><a href="{{ url('/documentaciones') }}">Documentación</a></li>
             {{-- <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contacto</a></li> --}}
-            <li><a href="#">Ingreso</a></li>
+            <li>
+    @if(auth()->check())
+        {{-- Si el usuario ha iniciado sesión, mostrar el enlace de Cerrar Sesión --}}
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Cerrar Sesión
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    @else
+        {{-- Si el usuario no ha iniciado sesión, mostrar el enlace de Ingreso --}}
+        <a href="{{ url('/iniciarsesion') }}">Ingreso</a>
+    @endif
+</li>
             <img src="/images/img.png"  class="company-logo">
         </ul>
         <div class="menu-icon"></div>
@@ -413,11 +427,12 @@ input[type="reset"]:hover {
 
                 </div>
                 <div class="column">
+                    <br><br>
                 <label for="cargoComite">Cargo en Comite:</label>
                     <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
                         name="cargoComite" placeholder="Escribe el cargo aquí..."
                         value="{{ isset($comite) ? $comite->cargoComite : '' }}" id="cargoComite"
-                        required><br><br>
+                        required><br>
                     <label for="profesion">Profesion:</label>
                     <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
                         name="profesion" placeholder="Escribe la profesion aquí..."
@@ -432,7 +447,7 @@ input[type="reset"]:hover {
                 </div>
             </div>
             <input type="submit" value="{{ isset($comite) ? 'Actualizar' : 'Registrar' }}"
-                onclick="confirmarConfirmacion()">
+                onclick="return confirm ('¿Está seguro que registrar este miembro del comite?')">
             <input type="reset" value="Cancelar" onclick="confirmarCancelación()">
             
             <label for=""></label><br><br>

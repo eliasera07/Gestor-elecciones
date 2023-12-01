@@ -419,7 +419,6 @@
         <input type="reset" value="Cancelar" onclick="cancelacion()">
         <label for=""></label><br><br>
         <label for=""></label><br><br>
-        
     </form>
 
     
