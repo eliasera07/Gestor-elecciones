@@ -108,7 +108,7 @@
                 <h2 class="form-title">Registrar Documento</h2>
 
                 <div class="column">
-                <label for="idEleccionD">Eleccion:</label>
+                <label for="idEleccionD">Elección:</label>
                     <select name="idEleccionD" id="idEleccionD" required>
                         <option value="">Selecciona una elección</option>
                             @if (isset($elecciones))

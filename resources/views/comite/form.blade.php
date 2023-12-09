@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear/Editar comite</title>
+    <title>Crear/Editar Miembro Comite</title>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
 
@@ -383,7 +383,7 @@ input[type="reset"]:hover {
             @if (isset($comite))
                 {{ method_field('PATCH') }}
             @endif
-            <h2 class="form-title">Registrar Comite</h2>
+            <h2 class="form-title">Registrar Miembro del Comite</h2>
             <br>
             <div class="columns">
                 <div class="column">
@@ -401,25 +401,26 @@ input[type="reset"]:hover {
                        </select><br><br>
 
                     <label for="nombreMiembro">Nombre Miembro Comite:</label>
-                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')" name="nombreMiembro"
-                        placeholder="Escribe el nombre del miembro aquí..."
+                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')" name="nombreMiembro" maxlength="40"
+                        placeholder="Escribe el Nombre del Miembro aquí..."
                         value="{{ isset($comite) ? $comite->nombreMiembro : '' }}" id="nombreMiembro" required>
 
                     <label for="apellidoPaterno">Apellido Paterno:</label>
-                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')"
-                        name="apellidoPaterno" placeholder="Escribe el apellido paterno aquí..."
+                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')" maxlength="40"
+                        name="apellidoPaterno" placeholder="Escribe el Apellido Paterno aquí..."
                         value="{{ isset($comite) ? $comite->apellidoPaterno : '' }}" id="apellidoPaterno"
                         required>
 
                         <label for="apellidoMaterno">Apellido Materno:</label>
-                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')"
-                        name="apellidoMaterno" placeholder="Escribe el apellido materno aquí..."
+                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')" maxlength="40"
+                        name="apellidoMaterno" placeholder="Escribe el Apellido Materno aquí..."
                         value="{{ isset($comite) ? $comite->apellidoMaterno : '' }}" id="apellidoMaterno"
                         required>
 
                         <label for="CI">CI:</label>
                     <input type="text" 
-                        name="CI" placeholder="Escribe el carnet de identidad"
+                        name="CI" placeholder="Escribe el Carnet de Identidad" maxlength="9"
+                        oninput="this.value = this.value.replace(/[^0-9]+/g, '')"
                         value="{{ isset($comite) ? $comite->CI : '' }}" id="CI"
                         required>
 
@@ -429,33 +430,33 @@ input[type="reset"]:hover {
                 <div class="column">
                     <br><br>
                 <label for="cargoComite">Cargo en Comite:</label>
-                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
-                        name="cargoComite" placeholder="Escribe el cargo aquí..."
+                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')" maxlength="40"
+                        name="cargoComite" placeholder="Escribe el Cargo aquí..."
                         value="{{ isset($comite) ? $comite->cargoComite : '' }}" id="cargoComite"
                         required><br>
                     <label for="profesion">Profesion:</label>
-                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
-                        name="profesion" placeholder="Escribe la profesion aquí..."
+                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')" maxlength="40"
+                        name="profesion" placeholder="Escribe la Profesion aquí..."
                         value="{{ isset($comite) ? $comite->profesion : '' }}" id="profesion"
                         required>
 
                         <label for="cargoUMSS">Cargo en UMSS:</label>
-                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
-                        name="cargoUMSS" placeholder="Escribe el cargo que ejerce en la universidad"
+                    <input type="text" oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')" maxlength="40"
+                        name="cargoUMSS" placeholder="Escribe el Cargo que ejerce en la Universidad"
                         value="{{ isset($comite) ? $comite->cargoUMSS : '' }}" id="cargoUMSS">
 
                 </div>
             </div>
             <input type="submit" value="{{ isset($comite) ? 'Actualizar' : 'Registrar' }}"
                 onclick="return confirm ('¿Está seguro que registrar este miembro del comite?')">
-            <input type="reset" value="Cancelar" onclick="confirmarCancelación()">
+            <input type="reset" value="Cancelar" onclick="cancelacion()">
             
             <label for=""></label><br><br>
         </form>
         <div class="footer">
 
             <div class="footer-izq">
-                Av. Oquendo y calle Jordán asd
+                Av. Oquendo y calle Jordán 
                 <br>
                 Mail: Tribunal_electoral@umss.edu
                 <br>
@@ -479,5 +480,14 @@ input[type="reset"]:hover {
         </div>
     </div>
 </body>
-
+<script>
+   
+          function cancelacion() {
+          var confirmacion = confirm("¿Seguro que deseas cancelar?");
+              if (confirmacion) {
+          
+                  window.location.href = "/comite";
+              }
+          }
+      </script> 
 </html>

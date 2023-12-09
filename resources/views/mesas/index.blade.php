@@ -9,7 +9,7 @@
     <br>
     <br>
     <br>
-    <title>Mesas</title>
+    <title>Lista de Mesas</title>
     
     
 </head>
@@ -580,10 +580,11 @@ td:first-child {
         <br>
         <br>
         <center>
-            <h1>Lista de mesas</h1>
+            <h1>Lista de Mesas</h1>
         </center>
         <br>
         <br>
+        @if(auth()->user()->name == 'admin')
         <div class="container botonesss">
 
 
@@ -594,7 +595,7 @@ td:first-child {
 
 
         </div>
-
+            @endif
 
 
         <br>
@@ -609,9 +610,11 @@ td:first-child {
                                 <th>Tipo Votante</th>
                                 <th>Votantes en mesa</th>
                                 <th>Carrera</th>
-                                <th>Ubicacion</th>
+                                <th>Ubicación</th>
                                 <th>Nº de votantes</th>
+                                @if(auth()->user()->name == 'admin')
                                 <th>Acciones</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -625,7 +628,7 @@ td:first-child {
                                     <td>{{ $mesas->ubicacionmesa }}</td>
                                     <td>{{ $mesas->numerodevotantes }}</td>
                                     
-
+                                    @if(auth()->user()->name == 'admin')
                                     <td class="celda-botones">
                                     
                                     {{-- <a href="{{ url('/mesas/' . $mesas->id . '/generate-jurados') }}" class="buttons" 
@@ -685,7 +688,7 @@ td:first-child {
                                  {{-- Fin función borrar --}}
                                  
                                  </td>                                                                  
-
+                                 @endif
                                 
                           </tr>
                           @endforeach
@@ -702,7 +705,7 @@ td:first-child {
         <div class="footer">
 
 <div class="footer-izq">
-    Av. Oquendo y calle Jordán asd
+    Av. Oquendo y calle Jordán 
     <br>
     Mail: Tribunal_electoral@umss.edu
     <br>

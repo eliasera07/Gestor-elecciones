@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RegistrarFrente</title>
+    <title>Registrar Frente</title>
     <script src="{{ asset('js/Elecciones_Creadas.js') }}"></script>
 
     <style>
@@ -427,7 +427,7 @@
     <div class="footer">
 
         <div class="footer-izq">
-            Av. Oquendo y calle Jordán asd
+            Av. Oquendo y calle Jordán 
             <br>
             Mail: Tribunal_electoral@umss.edu
             <br>
@@ -486,7 +486,7 @@
             var confirmacion = confirm("¿Seguro que deseas cancelar? Los cambios no se guardarán.");
             if (confirmacion) {
 
-                window.location.href = "/elecciones";
+                window.location.href = "/frente";
             }
         }
 

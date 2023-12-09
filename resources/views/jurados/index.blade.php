@@ -112,10 +112,11 @@
 </head>
 <body>
 <div>
+@if(auth()->user()->name == 'admin')
 <div>
   <button id="crearJurados" class="styled-button">Crear</button>
 </div>
-
+@endif
 </div>
 
 

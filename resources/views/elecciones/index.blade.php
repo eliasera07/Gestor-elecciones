@@ -536,12 +536,13 @@ td:first-child {
         </center>
         <br>
         <br>
-
+       
         <div class="container botonesss">
+        @if(auth()->user()->name == 'admin')
             <div class="botones">
                 <a href="{{ route('elecciones.create') }}" class="buttons">Crear nueva elección</a>
             </div>
-
+        @endif
             <div class="botones">
                 <a href="{{ url('/votante') }}" class="buttons">Lista de votantes</a>
             </div>
@@ -565,19 +566,19 @@ td:first-child {
             <div class="botones">
                 <a href="{{ url('/historial') }}" class="buttons" >Historial</a>
             </div>
-
+            @if(auth()->user()->name == 'admin')
             <div class="botones">
                 <a href="{{ url('/generar-backup') }}" class="buttons" download="backup.sql">Generar Backup</a>
             </div>
 
-            <div class="botones">
+            {{-- <div class="botones">
             <a href="{{ route('cargar.backup.form') }}" class="buttons">Cargar Backup</a>
-            </div>
+            </div>--}}
 
             <div class="botones">
                 <a href="{{ url('/logs') }}" class="buttons" >Bitacora</a>
             </div>
-
+            @endif
 
 
             
@@ -601,7 +602,9 @@ td:first-child {
                                 <th>Nombre de elección</th>
                                 <th>Cargo de Autoridad</th>
                                 <th>Gestion</th>
+                                @if(auth()->user()->name == 'admin')
                                 <th>Acciones</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -612,7 +615,7 @@ td:first-child {
                                     <td>{{ $elecciones->cargodeautoridad }}</td>
                                     <td>{{ $elecciones->gestioninicio }} - {{ $elecciones->gestionfin }}</td>
                                     
-
+                                    @if(auth()->user()->name == 'admin')
                                     <td class="celda-botones">
 
                                     <button class="buttons-dentro-tabla" title="Previsualizar registro" 
@@ -658,7 +661,7 @@ td:first-child {
                                         {{-- Fin función borrar --}}
 
                                     </td>
-
+                                    @endif
                                     <script>
                                         function confirmarArchivado(url, estadoRegistro) {
                                             if (estadoRegistro === 1) {
@@ -676,7 +679,7 @@ td:first-child {
                                     <div class="footer">
 
                                         <div class="footer-izq">
-                                            Av. Oquendo y calle Jordán asd
+                                            Av. Oquendo y calle Jordán
                                             <br>
                                             Mail: Tribunal_electoral@umss.edu
                                             <br>

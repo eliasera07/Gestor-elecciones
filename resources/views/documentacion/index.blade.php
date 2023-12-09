@@ -524,26 +524,28 @@ td:first-child {
         </center>
         <br>
         <br>
-
+        @if(auth()->user()->name == 'admin')
         <div class="container botonesss">
             <div class="botones">
                 <a href="{{ url('documentaciones/create') }}" class="buttons">Añadir</a>
 
             </div>
         </div>
-
+        @endif
         <div class="container">
             <div class="row">
                 <div class="table-responsive">
                     <table id="eleccionesTable" class="vistatabla">
                         <thead>
                             <tr>
-                                <th>id de Eleccion</th>
+                                <th>Id de Elección</th>
                                 <th>Título</th>
                                 <th>Elección</th>
                                 <th>Tipo de documento</th>
                                 <th>Añadido el:</th>
+                                @if(auth()->user()->name == 'admin')
                                 <th>Acciones</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -559,8 +561,8 @@ td:first-child {
                                 @else
                                    Sin fecha
                                 @endif
-                            </td>
-
+                            </td> 
+                            @if(auth()->user()->name == 'admin')
                                     <td class="celda-botones">
                                     <button class="buttons-dentro-tabla" title="Editar documento" onclick="window.location.href='{{ url('/documentaciones/' . $documentacion->id . '/edit') }}'">
                                         <img src="/images/editar.png" alt="Editar" class="formato-imagen" />
@@ -574,6 +576,7 @@ td:first-child {
                                         </button>
                                     </form>
                                 </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table> 
@@ -582,7 +585,7 @@ td:first-child {
         </div>
         <div class="footer">
             <div class="footer-izq">
-                Av. Oquendo y calle Jordán asd
+                Av. Oquendo y calle Jordán
                 <br>
                 Mail: Tribunal_electoral@umss.edu
                 <br>

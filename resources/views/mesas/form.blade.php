@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RegistrarMesa</title>
+    <title>Registrar Mesa</title>
     <style>
         * {
             margin: 0;
@@ -408,7 +408,7 @@
                 
         </div>
         <div class="botones centered">
-            <input type="submit" value="{{ isset($mesas) ? 'Actualizar' : 'Crear' }}"  onclick="return confirm ('¿Está seguro que registrar esta(s) Mesa(s)?')">>
+            <input type="submit" value="{{ isset($mesas) ? 'Actualizar' : 'Crear' }}"  onclick="return confirm ('¿Está seguro que registrar esta(s) Mesa(s)?')">
             <input type="reset" value="Cancelar" onclick="cancelacion()">
             <label for=""></label><br><br>
             <label for=""></label><br><br>
@@ -419,7 +419,7 @@
     <div class="footer">
 
         <div class="footer-izq">
-            Av. Oquendo y calle Jordán asd
+            Av. Oquendo y calle Jordán 
             <br>
             Mail: Tribunal_electoral@umss.edu
             <br>

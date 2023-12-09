@@ -15,12 +15,24 @@ class VotanteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-        $votantescreados = Votante::where('estado', 1)->orderBy('ideleccion', 'asc')->paginate(500);
-        return view('votante.index', compact('votantescreados'));
-    }
+    public function index(Request $request)
+{
+    // Obtener todos los votantes y ordenar por apellidoPaterno de manera ascendente
+    $votantes = Votante::where('estado', 1)
+        ->when($request->input('eleccion'), function ($query) use ($request) {
+            return $query->where('ideleccion', $request->input('eleccion'));
+        })
+        ->orderBy('apellidoPaterno', 'asc')
+        ->paginate(500);
+
+    // Obtener todas las elecciones para el menú desplegable
+    $elecciones = Eleccion::all();
+
+    // Obtener el ID de la elección seleccionada
+    $eleccionId = $request->input('eleccion');
+
+    return view('votante.index', compact('votantes', 'elecciones', 'eleccionId'));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -209,5 +221,27 @@ public function showCarga(){
     return redirect('/votante')->with('success', 'Votantes importados exitosamente');
 }
 
+
+public function filter(Request $request)
+{
+    // Validación de datos
+    $request->validate([
+        'eleccion' => 'required|exists:eleccions,id',
+    ]);
+
+    // Obtener el ID de la elección seleccionada
+    $eleccionId = $request->input('eleccion');
+
+    // Obtener los votantes de la elección seleccionada y ordenar por apellidoPaterno
+    $votantes = Votante::where('ideleccion', $eleccionId)
+        ->orderBy('apellidoPaterno', 'asc')
+        ->get();
+
+    // Obtener todas las elecciones para el menú desplegable
+    $elecciones = Eleccion::all();
+
+    return view('votante.index', compact('votantes', 'elecciones'))
+        ->with('eleccionId', $eleccionId);
+}
 
 }

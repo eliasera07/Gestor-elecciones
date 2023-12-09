@@ -134,6 +134,11 @@ Route::get('/logs/filter', [LogController::class, 'filter'])->name('logs.filter'
 Route::get('/obtener-cargodeautoridad/{ideleccion}', 'FrenteController@obtenerCargoDeAutoridad');
 
 
+
+Route::get('/votantes/filter', 'VotanteController@filter')->name('votantes.filter');
+
+
+
 });
 
 Route::get('/acercade', [AcercadeController::class, 'index']);
@@ -152,6 +157,18 @@ Route::get('/historial', [EleccionController::class, 'historial'])->name('buscar
 Route::get('/resultados', [EleccionController::class, 'buscar'])->name('resultados');
 
 
+
+
+Route::get('storage-link', function(){
+  if (file_exists(public_path('storage'))){
+    return ' el directorio ya existe';
+  }
+  app('files')->link(
+    storage_path('app/public'), public_path('storage')
+  );
+
+  return 'El directorio fue creado con exito';
+ });
 
 
 

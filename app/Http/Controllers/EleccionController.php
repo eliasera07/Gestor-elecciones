@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 use TCPDF;
 use PDO;
 
@@ -57,7 +58,15 @@ class EleccionController extends Controller
      */
     public function store(Request $request)
 {
-    // Verificar si ya existe una elección con el mismo nombre, motivo y cargo de autoridad
+    $request->validate([
+        'nombre' => 'required',
+        'convocatoria' => 'max:2048',
+    ], [
+        'convocatoria.max' => 'El archivo PDF no debe superar los 2 MB.',
+        'convocatoria.uploaded' => 'PDF m�ximo: 2048 KB.',
+    ]);    
+
+    // Verificar si ya existe una elecci�n con el mismo nombre, motivo y cargo de autoridad
     $existingEleccion = Eleccion::where('nombre', $request->input('nombre'))
         ->where('motivo', $request->input('motivo'))
         ->where('cargodeautoridad', $request->input('cargodeautoridad'))
@@ -65,7 +74,7 @@ class EleccionController extends Controller
         ->where('gestionfin', $request->input('gestionfin'))
         ->first();
 
-    // Si ya existe una elección con esos valores, mostrar los mensajes de validación
+    // Si ya existe una elecci�n con esos valores, mostrar los mensajes de validaci�n
     if ($existingEleccion) {
         $request->validate([
             'nombre' => 'required|unique:eleccions,nombre',
@@ -77,7 +86,7 @@ class EleccionController extends Controller
     $datosEleccion = request()->except('_token');
 
     if ($request->hasFile('convocatoria')) {
-        $id = $request->input('id');
+        $id = Str::slug($request->input('nombre'));
         $pdfPath = $request->file('convocatoria')->storeAs('uploads', $id . '.pdf', 'public');
         $datosEleccion['convocatoria'] = $pdfPath;
     }    
@@ -93,7 +102,7 @@ class EleccionController extends Controller
     }
 
 
-    return redirect('/elecciones')->with('success', 'La elección se ha guardado con éxito.');
+    return redirect('/elecciones')->with('success', 'La elecci�n se ha guardado con �xito.');
 }
 
     /**
@@ -117,8 +126,8 @@ class EleccionController extends Controller
 {
     $elecciones = Eleccion::findOrFail($id);
     
-    // Agrega la lógica para obtener las carreras por facultad
-    $carrerasPorFacultad = []; // Asegúrate de obtener las carreras correctas aquí
+    // Agrega la l�gica para obtener las carreras por facultad
+    $carrerasPorFacultad = []; // Aseg�rate de obtener las carreras correctas aqu�
     
     return view('elecciones.edit', compact('elecciones', 'carrerasPorFacultad'));
 }
@@ -221,11 +230,11 @@ class EleccionController extends Controller
 
     public function guardarResultados(Request $request, $id)
 {
-    // Obtener la elección por su ID
+    // Obtener la elecci�n por su ID
     $eleccion = Eleccion::findOrFail($id);
 
     // Iterar sobre los frentes y guardar los datos en la base de datos
-    for ($i = 1; $i <= 4; $i++) { // Asumiendo un máximo de 4 frentes
+    for ($i = 1; $i <= 4; $i++) { // Asumiendo un m�ximo de 4 frentes
         $nombreFrenteKey = 'nombrefrente' . $i;
         $votosFrenteKey = 'votosfrente' . $i;
 
@@ -241,10 +250,10 @@ class EleccionController extends Controller
     $eleccion->votosnuloselec = $request->input('votosnuloselec');
 
     $eleccion->estadoRegistro = 1;
-    // Guardar la elección actualizada
+    // Guardar la elecci�n actualizada
        $eleccion->save();
 
-    // Redirigir a la vista de elecciones u otra vista según sea necesario
+    // Redirigir a la vista de elecciones u otra vista seg�n sea necesario
     return redirect()->route('elecciones1.pdf', ['id' => $id]);
 }
 
@@ -257,11 +266,11 @@ public function editarRegistroResultados($id)
 
 public function guardarEdicionResultados(Request $request, $id)
 {
-    // Obtener la elección por su ID
+    // Obtener la elecci�n por su ID
     $eleccion = Eleccion::findOrFail($id);
 
     // Iterar sobre los frentes y actualizar los datos en la base de datos
-    for ($i = 1; $i <= 4; $i++) { // Asumiendo un máximo de 4 frentes
+    for ($i = 1; $i <= 4; $i++) { // Asumiendo un m�ximo de 4 frentes
         $nombreFrenteKey = 'nombrefrente' . $i;
         $votosFrenteKey = 'votosfrente' . $i;
 
@@ -278,42 +287,51 @@ public function guardarEdicionResultados(Request $request, $id)
     $eleccion->votosnuloselec = $request->input('votosnuloselec');
 
     $eleccion->estadoRegistro = 1;
-    // Guardar la elección actualizada
+    // Guardar la elecci�n actualizada
     $eleccion->save();
 
-    // Redirigir a la vista de elecciones u otra vista según sea necesario
+    // Redirigir a la vista de elecciones u otra vista seg�n sea necesario
     return redirect()->route('elecciones.pdf', ['id' => $id]);
 }
 
 public function generarBackup()
 {
     try {
+        
         $backupFileName = 'backup-' . Carbon::now()->format('Y-m-d_His') . '.sql';
+
         $backupPath = storage_path('app/backups/' . $backupFileName);
-
+        
         $tables = DB::select('SHOW TABLES');
-        $tableNames = array_map('current', json_decode(json_encode($tables), true));
 
-        // Si existe la tabla 'users', muévela al principio del array
-        if (($key = array_search('users', $tableNames)) !== false) {
-            unset($tableNames[$key]);
-            array_unshift($tableNames, 'users');
-        }
-
-        foreach ($tableNames as $tableName) {
+        foreach ($tables as $table) {
+            $tableName = reset($table);
+        
             $structure = DB::select('SHOW CREATE TABLE ' . $tableName)[0]->{'Create Table'};
+        
             $data = DB::table($tableName)->get()->toArray();
-            
-            $sql = "";
-            foreach ($data as $row) {
-                $values = implode("', '", (array)$row);
-                $sql .= "INSERT INTO $tableName VALUES ('$values');\n";
+        
+            if ($tableName == 'comunicados') {
+                $columnNames = Schema::getColumnListing($tableName);
+                $sql = "INSERT INTO $tableName (" . implode(', ', $columnNames) . ") VALUES ";
+                foreach ($data as $row) {
+                    $values = implode("', '", (array) $row);
+                    $sql .= "('$values'), ";
+                }
+                // Remove the trailing comma and space
+                $sql = rtrim($sql, ', ');
+            } else {
+                $sql = "";
+                foreach ($data as $row) {
+                    $values = implode("', '", (array) $row);
+                    $sql .= "INSERT INTO $tableName VALUES ('$values');\n";
+                }
             }
-
+        
             file_put_contents($backupPath, "-- Table: $tableName\n", FILE_APPEND);
             file_put_contents($backupPath, "$structure;\n", FILE_APPEND);
             file_put_contents($backupPath, "-- Data for $tableName\n", FILE_APPEND);
-            file_put_contents($backupPath, "$sql\n", FILE_APPEND);
+            file_put_contents($backupPath, "$sql;\n", FILE_APPEND);
         }
 
         return response()->download($backupPath, $backupFileName, ['Content-Type' => 'application/sql']);
@@ -332,7 +350,7 @@ public function mostrarFormCargarBackup()
 public function cargarBackup(Request $request)
 {
     try {
-        // Obtén el archivo de respaldo desde la solicitud
+        // Obt�n el archivo de respaldo desde la solicitud
         $archivoBackup = $request->file('archivo_backup');
 
         // Nombre del archivo de respaldo
@@ -341,7 +359,7 @@ public function cargarBackup(Request $request)
         // Ruta completa del archivo de respaldo
         $backupPath = storage_path('app/backups/' . $backupFileName);
 
-        // Mover el archivo de respaldo a la ubicación deseada
+        // Mover el archivo de respaldo a la ubicaci�n deseada
         $archivoBackup->move(storage_path('app/backups'), $backupFileName);
 
         // Abrir y leer el contenido del archivo de respaldo
@@ -582,7 +600,7 @@ public function historial()
                     return stripos(implode(' ', $item->getAttributes()), $query) !== false;
                 })->isNotEmpty()
             ) {
-                // Si hay resultados en alguna de las tablas relacionadas, agregar la elección
+                // Si hay resultados en alguna de las tablas relacionadas, agregar la elecci�n
                 $resultados->push($eleccion);
             }
         }

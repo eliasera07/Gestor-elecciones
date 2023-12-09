@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RegistrarVotante</title>
+    <title>Registrar Votante</title>
     <style>
         * {
             margin: 0;
@@ -338,7 +338,7 @@
 @enderror
 
                 <label for="nombres">Nombre:</label>
-                <input type="text" placeholder="Escribe el nombre aqui..." maxlength="40" oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
+                <input type="text" placeholder="Escribe el Nombre aqui..." maxlength="40" oninput="this.value = this.value.replace(/[^A-Za-z,. ]+/g, '')"
                 name="nombres" value="{{ isset($votante) ? $votante->nombres : '' }}" required><br><br>
 
                 <label for="apellidoPaterno">Apellido Paterno:</label>
@@ -351,8 +351,8 @@
                 oninput="this.value = this.value.replace(/[^A-Za-z,.]+/g, '')"
                 name="apellidoMaterno" value="{{ isset($votante) ? $votante->apellidoMaterno : '' }}" id="apellidoMaterno" required><br><br>
 
-                <label for="codSis">Codigo Sis:</label>
-                <input type="text" placeholder="Escribe el Codigo Sis aquí..." maxlength="9"
+                <label for="codSis">Código SIS:</label>
+                <input type="text" placeholder="Escribe el Codigo SIS aquí..." maxlength="9"
                 oninput="this.value = this.value.replace(/[^0-9]+/g, '')"
                 name="codSis" value="{{ isset($votante) ? $votante->codSis : old('codSis') }}" id="codSis" required>
                 @error('codSis')
@@ -406,8 +406,8 @@
                 <input type="number" placeholder="Escribe el Número de Celular aquí..." min="60000000" max=""79999999 
                 name="celular" value="{{ isset($votante) ? $votante->celular : '' }}" id="celular" required><br><br>
 
-                <label for="email">e-mail:</label>
-                <input type="email" placeholder="Escribe el e-Mail aquí..." maxlength="40" 
+                <label for="email">E-Mail:</label>
+                <input type="email" placeholder="Escribe el E-Mail aquí..." maxlength="40" 
                 name="email" value="{{ isset($votante) ? $votante->email : '' }}" id="email" required><br><br>
 
 
@@ -428,7 +428,7 @@
     <div class="footer">
 
         <div class="footer-izq">
-            Av. Oquendo y calle Jordán asd
+            Av. Oquendo y calle Jordán 
             <br>
             Mail: Tribunal_electoral@umss.edu
             <br>
@@ -452,13 +452,7 @@
     </div>
     
     <script>
-        function cancelacion() {
-            var confirmacion = confirm("¿Seguro que deseas cancelar? Los cambios no se guardarán.");
-            if (confirmacion) {
-
-                window.location.href = "/elecciones";
-            }
-        }
+ 
 
         function confirmacion() {
             var confirmacion = confirm("Estas seguro de registrar este votante?");
@@ -501,4 +495,14 @@
         mostrarCampoAdicional();
     </script>
 </body>
+<script>
+   
+    function cancelacion() {
+    var confirmacion = confirm("¿Seguro que deseas cancelar?");
+        if (confirmacion) {
+    
+            window.location.href = "/votante";
+        }
+    }
+</script> 
 </html> 

@@ -108,15 +108,15 @@
 
                 <div class="column">
 
-                    <label for="titulo">Seleccionar Archivo de Backup (.sql):</label><br><br>
+                <label for="titulo">Seleccionar Archivo de Backup (.sql):</label><br><br>
                     <input type="file" name="archivo_backup" accept=".sql" required onchange="mostrarMensaje()">
                     <br><br><br>
-                    
 
                     
-           <input type="submit" value="{{ 'Cargar' }}" onclick="return confirm ('¿Está seguro que desea cargar este backup?')">
+           
+                    <input type="submit" value="{{ 'Cargar' }}" onclick="return confirm ('¿Está seguro que desea cargar este backup?')">
                     <input type="reset" value="Cancelar" onclick="cancelacion()">
-                </div>
+                    </div>
             </form>
         </div>
     </body>

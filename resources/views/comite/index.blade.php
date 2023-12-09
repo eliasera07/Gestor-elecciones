@@ -9,7 +9,7 @@
     <br>
     <br>
     <br>
-    <title>Miembros del Comite</title>
+    <title>Lista de Miembros del Comite</title>
    
 
 </head>
@@ -527,22 +527,22 @@ td:first-child {
         <br>
         <br>
         <center>
-            <h1>Miembros del Comite</h1>
+            <h1>Lista de Miembros del Comite</h1>
         </center>
         <br>
         <br>
-
+        @if(auth()->user()->name == 'admin')
         <div class="container botonesss">
 
 
             <div class="botones">
-                <a href="{{ url('comite/create') }}" class="buttons">Añadir miembro de comite</a>
+                <a href="{{ url('comite/create') }}" class="buttons">Añadir Miembro de Comite</a>
 
             </div>
 
 
         </div>
-
+                @endif
         <br>
         <div class="container">
             <div class="row">
@@ -555,7 +555,9 @@ td:first-child {
                                 <th>Apellido Paterno</th>
                                 <th>Apellido Materno</th>
                                 <th>Cargo en Comite</th>
+                                @if(auth()->user()->name == 'admin')
                                 <th>Acciones</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -566,7 +568,7 @@ td:first-child {
                                     <td>{{ $comite->apellidoPaterno }}</td>
                                     <td>{{ $comite->apellidoMaterno }}</td>
                                     <td>{{ $comite->cargoComite }}</td>
-
+                                    @if(auth()->user()->name == 'admin')
                                     <td class="celda-botones">
                                     {{-- <button class="buttons" style="background-color: 04243C; color: #FFF; padding: 5px 10px; border: none; cursor: pointer;" 
                                     onclick="window.location.href='{{ url('/comite/' . $comite->id . '/edit') }}'">Editar</button> --}}
@@ -603,7 +605,7 @@ td:first-child {
 
 
                                     </td>
-                                
+                                @endif
 
                                 
                                 
@@ -631,7 +633,7 @@ td:first-child {
             <br>
 
             <div class="footer-izq">
-                Av. Oquendo y calle Jordán asd
+                Av. Oquendo y calle Jordán 
                 <br>
                 Mail: Tribunal_electoral@umss.edu
                 <br>

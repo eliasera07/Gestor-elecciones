@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear/Editar una elección</title>
+    <title>Crear/Editar una Elección</title>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="{{ asset('js/Elecciones_Creadas.js') }}"></script>
 
@@ -434,29 +434,25 @@ input[type="reset"]:hover {
                    @enderror
 
                    <label for="gestioninicio">Gestión (Inicio y Fin):</label>
-                   <select name="gestioninicio" id="gestionicio" required>
-                   <option value="">Selecciona un año</option>
-                    @for ($year = date('Y'); $year <= 2150; $year++)
-                       <option value="{{ $year }}"
-                         @if (isset($elecciones) && $elecciones->gestion && $year == explode(' - ', $elecciones->gestioninicio)[0])
-                    selected
-                    @endif>
-                    {{ $year }}
-                       </option>
-                    @endfor
-                    </select>
--
-                    <select name="gestionfin" id="gestionfin" required>
-                    <option value="">Selecciona un año</option>
-                    @for ($year = date('Y'); $year <= 2150; $year++)
-                        <option value="{{ $year }}"
-                          @if (isset($elecciones) && $elecciones->gestion && $year == explode(' - ', $elecciones->gestionfin)[1])
-                    selected
-                    @endif>
-                    {{ $year }}
+                    <select name="gestioninicio" id="gestioninicio" required>
+                        <option value="">Selecciona un año</option>
+                        @for ($yearIni = date('Y'); $yearIni <= 2150; $yearIni++)
+                        <option value="{{ $yearIni }}" @if (isset($elecciones) && $elecciones->gestion && $yearIni == explode(' - ', $elecciones->gestioninicio)[0])
+                            selected @endif>
+                            {{ $yearIni }}
                         </option>
-                    @endfor
-                     </select>
+                        @endfor
+                    </select>
+                    -
+                    <select name="gestionfin" id="gestionfin" required>
+                        <option value="">Selecciona un año</option>
+                        @for ($year = date('Y'); $year >= $yearIni; $year--)
+                        <option value="{{ $year }}" @if (isset($elecciones) && $elecciones->gestion && $year == explode(' - ', $elecciones->gestionfin)[1])
+                            selected @endif>
+                            {{ $year }}
+                        </option>
+                        @endfor
+                    </select>
 
                       <br><br>
 
@@ -498,9 +494,9 @@ input[type="reset"]:hover {
                      </select><br><br>
                       </div>
 
-                            <label for="fechainscripcion">Fecha de inscripcion de frentes:</label>
+                      <label for="fechainscripcion">Fecha de inscripcion de frentes:</label>
                     <input type="date" name="fechainscripcion" value="{{ isset($elecciones) ? $elecciones->fechainscripcion : '' }}"
-                        id="fechainscripcion" required min="<?php echo date('Y-m-d'); ?>">
+                        id="fechainscripcion" required min="<?php echo date('Y-m-d'); ?>" onchange="fechaEleccion()">
 
                 </div>
                 <div class="column">
@@ -511,13 +507,14 @@ input[type="reset"]:hover {
                     @endif
                     <input type="file" accept="application/pdf" title="Subir Archivo PDF" name="convocatoria"
                         {{ isset($elecciones) && $elecciones->convocatoria ? '' : 'required' }}>
+                        @error('convocatoria')<span style="color:red">{{ $message }}</span> @enderror
             <br>
             <br>
             <br>
             <br>
-                    <label for="fecha">Fecha de eleccion:</label>
+            <label for="fecha">Fecha de eleccion:</label>
                     <input type="date" name="fecha" value="{{ isset($elecciones) ? $elecciones->fecha : '' }}"
-                        id="fecha" required min="<?php echo date('Y-m-d'); ?>">
+                        id="fecha" required min="<?php echo date('Y-m-d'); ?>" disabled>
 
 
                         <label for="tipodeeleccion">Tipo de Elección:</label>
@@ -536,7 +533,7 @@ input[type="reset"]:hover {
             </div>
             <input type="submit" value="{{ isset($elecciones) ? 'Actualizar' : 'Registrar' }}"
             onclick="return confirm ('¿Está seguro que registrar esta eleccion?')">
-            <input type="reset" value="Cancelar" onclick="confirmarCancelación()">
+            <input type="reset" value="Cancelar" onclick="confirmarCancelacion()">
             <label for=""></label><br><br>
             <label for=""></label><br><br>
         </form>
@@ -723,8 +720,45 @@ input[type="reset"]:hover {
         }
     }
 
+    document.addEventListener('DOMContentLoaded', function () {
 
+        var gestionInicioSelect = document.getElementById('gestioninicio');
+        var gestionFinSelect = document.getElementById('gestionfin');
 
+        gestionInicioSelect.addEventListener('change', function () {
+
+        var inicioSeleccionado = parseInt(this.value);
+
+        gestionFinSelect.innerHTML = '<option value="">Selecciona un año</option>';
+        for (var year = inicioSeleccionado+1; year <= 2150; year++) {
+            var option = document.createElement('option');
+            option.value = year;
+            option.text = year;
+            gestionFinSelect.add(option);
+        }
+        });
+
+        gestionInicioSelect.dispatchEvent(new Event('change'));
+    });
+
+</script>
+
+<script>
+    function fechaEleccion() {
+        var fechaInscripcion = new Date(document.getElementById('fechainscripcion').value);
+        var fechaEleccionInput = document.getElementById('fecha');
+
+        var fechaEleccion = new Date(fechaInscripcion);
+        fechaEleccion.setDate(fechaEleccion.getDate() + 1);
+
+        if (fechaInscripcion && !isNaN(fechaInscripcion.getTime())) {
+            fechaEleccionInput.disabled = false;
+            fechaEleccionInput.min = fechaEleccion.toISOString().split('T')[0];
+        } else {
+            fechaEleccionInput.disabled = true;
+            fechaEleccionInput.value = '';
+        }
+    }
 </script>
 
 

@@ -526,14 +526,14 @@ td:first-child {
         </center>
         <br>
         <br>
-
+        @if(auth()->user()->name == 'admin')
         <div class="container botonesss">
             <div class="botones">
                 <a href="{{ url('comunicados/create') }}" class="buttons">Añadir</a>
 
             </div>
         </div>
-
+        @endif
         <div class="container">
             <div class="row">
                 <div class="table-responsive">
@@ -544,7 +544,9 @@ td:first-child {
                                 <th>Título</th>
                                 <th>Añadido el:</th>
                                 <th>Finaliza el:</th>
+                                @if(auth()->user()->name == 'admin')
                                 <th>Acciones</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -552,6 +554,7 @@ td:first-child {
                                 <tr>
                                     <td>{{ $comunicado->id}}</td>
                                     <td>{{ $comunicado->titulo}}
+
                                     <td>
                                         @if ($comunicado->inicio)
                                             {{ \Carbon\Carbon::parse($comunicado->inicio)->format('d/m/y') }}
@@ -566,7 +569,7 @@ td:first-child {
                                             Sin fecha de fin
                                         @endif
                                     </td>
-
+                                    @if(auth()->user()->name == 'admin')
                                     <td class="celda-botones">
                                     <button class="buttons-dentro-tabla" title="Editar Comite" onclick="window.location.href='{{ url('/comunicados/' . $comunicado->id . '/edit') }}'">
                                         <img src="/images/editar.png" alt="Editar" class="formato-imagen" />
@@ -580,8 +583,10 @@ td:first-child {
                                         </button>
                                     </form>
                                 </tr>
+                                @endif
                             @endforeach
                         </tbody>
+                        
                     </table> 
                     <!--{{ $comunicados->links() }}-->
                 </div>
@@ -592,7 +597,7 @@ td:first-child {
         <div class="footer">
 
             <div class="footer-izq">
-                Av. Oquendo y calle Jordán asd
+                Av. Oquendo y calle Jordán 
                 <br>
                 Mail: Tribunal_electoral@umss.edu
                 <br>
