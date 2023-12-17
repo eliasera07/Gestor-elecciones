@@ -153,7 +153,9 @@
 
         <h4 style="font-weight: bold">Resultados</h4>
 
-        <h4>Número de votos: <label class="outputs">{{$suma}}</label></h4>
+        {{--<h4>Número de votos validos: <label class="outputs">{{$suma}}</label></h4>
+        <h4>Número de votos blancos: <label class="outputs">{{$registro->votosblancoselec}}</label></h4>
+        <h4>Número de votos nulos: <label class="outputs">{{$registro->votosnuloselec}}</label></h4>--}}
         {{--<h4>Número de No votantes: <label class="outputs">{{$nroVotantes-$suma}}</label></h4>--}}
         <h4>Frente Ganador: <label class="outputs">{{$frenteGanador}}</label></h4>
 
@@ -163,11 +165,39 @@
                     <thead>
                         <tr>
                             <th>Nro</th>
-                            <th>Nombre del frente</th>
+                            <th>Nombre</th>
                             <th>Nro de votos</th>
                             <th>Porcentaje</th>
                         </tr>
+                        <tr>
+                            <th>Votos</th>
+                        </tr>
                     </thead>
+
+                    @if($registro->votosblancoselec)
+                        <tr>
+                            <td>1</td>
+                            <td>Votos Blancos</td>
+                            <td>{{$registro->votosblancoselec}}</td>
+                            <td>{{ $registro->votosblancoselec / $suma * 100}} %</td>
+                        </tr>
+                    @endif
+
+                    @if($registro->votosnuloselec)
+                        <tr>
+                            <td>2</td>
+                            <td>Votos Nulos</td>
+                            <td>{{$registro->votosnuloselec}}</td>
+                            <td>{{ $registro->votosnuloselec / $suma * 100}} %</td>
+                        </tr>
+                    @endif
+
+                    <thead>
+                        <tr>
+                            <th>Frentes</th>
+                        </tr>
+                    </thead>
+
                     <tbody>
                         @if($registro->nombrefrente1)
                             <tr>
@@ -452,9 +482,14 @@
                         'rgba(255, 99, 132, 0.8)',
                         'rgba(54, 162, 235, 0.8)',
                         'rgba(255, 206, 86, 0.8)',
-                        'rgba(255, 255, 0, 0.8)',  
+                        'rgba(255, 255, 0, 0.8)',
                         'rgba(169, 169, 169, 0.8)',
-                    ],
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(255, 140, 0, 0.8)',
+                        'rgba(0, 128, 0, 0.8)',
+                        'rgba(70, 130, 180, 0.8)',
+                        'rgba(255, 0, 255, 0.8)',
+                        ],
                 }]
             },
             options: {

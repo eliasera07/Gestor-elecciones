@@ -498,23 +498,23 @@ public function generarPDF($id){
 
     if($frente1 != null && $frente2 != null && $frente3 != null && $frente4 != null){
         $data = [
-            'labels' => [$grafico->nombrefrente1, $grafico->nombrefrente2, $grafico->nombrefrente3, $grafico->nombrefrente4],
-            'values' => [$frente1, $frente2, $frente3,$frente4],
+            'labels' => [$grafico->nombrefrente1, $grafico->nombrefrente2, $grafico->nombrefrente3, $grafico->nombrefrente4,'Blancos', 'Nulos'],
+            'values' => [$frente1, $frente2, $frente3,$frente4,$registro->votosblancoselec,$registro->votosnuloselec],
         ];
     }else if($frente1 != null && $frente2 != null && $frente3 != null){
         $data = [
-            'labels' => [$grafico->nombrefrente1, $grafico->nombrefrente2, $grafico->nombrefrente3],
-            'values' => [$frente1, $frente2, $frente3],
+            'labels' => [$grafico->nombrefrente1, $grafico->nombrefrente2, $grafico->nombrefrente3,'Blancos', 'Nulos'],
+            'values' => [$frente1, $frente2, $frente3,$registro->votosblancoselec,$registro->votosnuloselec],
         ];
     }else if($frente1 != null && $frente2 != null){
         $data = [
-            'labels' => [$grafico->nombrefrente1, $grafico->nombrefrente2],
-            'values' => [$frente1, $frente2],
+            'labels' => [$grafico->nombrefrente1, $grafico->nombrefrente2,'Blancos', 'Nulos'],
+            'values' => [$frente1, $frente2,$registro->votosblancoselec,$registro->votosnuloselec],
         ];
     }else if($frente1 != null){
         $data = [
-            'labels' => [$grafico->nombrefrente1],
-            'values' => [$frente1],
+            'labels' => [$grafico->nombrefrente1,'Blancos', 'Nulos'],
+            'values' => [$frente1,$registro->votosblancoselec,$registro->votosnuloselec],
         ];
     }else{
         $data = [
@@ -522,7 +522,7 @@ public function generarPDF($id){
             'values' => [$frente1],
         ];
     }
-    $suma=$frente1+$frente2+$frente3+$frente4;
+    $suma=$frente1+$frente2+$frente3+$frente4+$registro->votosblancoselec+$registro->votosnuloselec;
 
     /*$options = new Options();
     $options->set('isHtml5ParserEnabled', true);
