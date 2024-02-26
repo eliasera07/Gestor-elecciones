@@ -22,12 +22,13 @@ class CreateVotantesTable extends Migration
             $table->string('codSis');
             $table->string('CI');
             $table->string('tipoVotante');
-            $table->string('carrera')->nullable();
+            $table->string('carrera')->collation('utf8mb4_general_ci');
             $table->string('profesion')->nullable();
             $table->string('cargoAdministrativo')->nullable();
             $table->string('facultad')->nullable();
             $table->string('celular');
             $table->string('email');
+            $table->boolean('estado')->default(1);
             $table->timestamps();
         });
     }

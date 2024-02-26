@@ -23,6 +23,7 @@ class CreateJuradosTable extends Migration
             $table->string('codSis');
             $table->string('CI');
             $table->string('tipojurado');
+            $table->boolean('estado')->default(1);
             $table->timestamps();
         });
     }

@@ -16,7 +16,7 @@ class FrenteController extends Controller
     public function index()
     {
         //
-        $frentescreados = Frente::orderBy('ideleccionfrente', 'asc')->paginate(20);
+        $frentescreados = Frente::where('estado', 1)->orderBy('ideleccionfrente', 'asc')->paginate(50);
         return view('frente.index', compact('frentescreados'));
     }
 
@@ -126,4 +126,16 @@ class FrenteController extends Controller
         Frente::destroy($id);
         return redirect('frente');
     }
+
+    public function obtenerCargoDeAutoridad($ideleccion)
+{
+    $eleccion = Eleccion::find($ideleccion);
+
+    if (!$eleccion) {
+        return response()->json(['error' => 'Eleccion no encontrada'], 404);
+    }
+
+    return response()->json(['cargodeautoridad' => $eleccion->cargodeautoridad]);
+}
+
 }

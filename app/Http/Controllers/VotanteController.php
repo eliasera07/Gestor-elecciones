@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use App\Models\Eleccion;
 use App\Models\Votante;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class VotanteController extends Controller
 {
@@ -12,12 +15,24 @@ class VotanteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-        $votantescreados = Votante::orderBy('ideleccion', 'asc')->paginate(20);
-        return view('votante.index', compact('votantescreados'));
-    }
+    public function index(Request $request)
+{
+    // Obtener todos los votantes y ordenar por apellidoPaterno de manera ascendente
+    $votantes = Votante::where('estado', 1)
+        ->when($request->input('eleccion'), function ($query) use ($request) {
+            return $query->where('ideleccion', $request->input('eleccion'));
+        })
+        ->orderBy('apellidoPaterno', 'asc')
+        ->paginate(500);
+
+    // Obtener todas las elecciones para el menú desplegable
+    $elecciones = Eleccion::all();
+
+    // Obtener el ID de la elección seleccionada
+    $eleccionId = $request->input('eleccion');
+
+    return view('votante.index', compact('votantes', 'elecciones', 'eleccionId'));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -134,4 +149,99 @@ class VotanteController extends Controller
         Votante::destroy($id);
         return redirect('votante');
     }
+
+   
+
+public function showCarga(){
+    
+    $elecciones = Eleccion::where('estado', 1)->get();
+    return view('votante.carga', compact('elecciones'));
+}
+
+
+    /**
+     * Process the uploaded CSV file to import voters.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function importCsv(Request $request)
+{
+    $request->validate([
+        'ideleccion' => 'required',
+        'cargarListaCSV' => 'required|file|mimes:csv,txt',
+    ]);
+
+    $file = $request->file('cargarListaCSV');
+
+    $handle = fopen($file->getPathname(), 'r');
+
+    // Variable de control para omitir la primera fila
+    $skipFirstRow = true;
+
+    if ($handle !== false) {
+        while (($row = fgetcsv($handle)) !== false) {
+            // Omitir la primera fila
+            if ($skipFirstRow) {
+                $skipFirstRow = false;
+                continue;
+            }
+
+            $existingVotante = Votante::where('ideleccion', $request->ideleccion)
+                ->where(function ($query) use ($row) {
+                    $query->where('codSis', $row[3])
+                        ->orWhere('CI', $row[4]);
+                })
+                ->first();
+
+            if ($existingVotante) {
+                continue;
+            }
+
+            Votante::create([
+                'ideleccion' => $request->ideleccion,
+                'nombres' => $row[0],
+                'apellidoPaterno' => $row[1],
+                'apellidoMaterno' => $row[2],
+                'codSis' => $row[3],
+                'CI' => $row[4],
+                'tipoVotante' => $row[5],
+                'carrera' => $row[6],
+                'profesion' => $row[7],
+                'cargoAdministrativo' => $row[8],
+                'facultad' => $row[9],
+                'celular' => $row[10],
+                'email' => $row[11],
+            ]);
+        }
+
+        fclose($handle);
+    }
+
+    return redirect('/votante')->with('success', 'Votantes importados exitosamente');
+}
+
+
+public function filter(Request $request)
+{
+    // Validación de datos
+    $request->validate([
+        'eleccion' => 'required|exists:eleccions,id',
+    ]);
+
+    // Obtener el ID de la elección seleccionada
+    $eleccionId = $request->input('eleccion');
+
+    // Obtener los votantes de la elección seleccionada y ordenar por apellidoPaterno
+    $votantes = Votante::where('ideleccion', $eleccionId)
+        ->orderBy('apellidoPaterno', 'asc')
+        ->get();
+
+    // Obtener todas las elecciones para el menú desplegable
+    $elecciones = Eleccion::all();
+
+    return view('votante.index', compact('votantes', 'elecciones'))
+        ->with('eleccionId', $eleccionId);
+}
+
 }
